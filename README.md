@@ -1,6 +1,6 @@
 ## ⚠️⚠️ To run ⚠️⚠️
 
-Open the project directory in the moneygowhere_fe cmd prompt, you can run the command below to start:
+Open the project directory in the folder directory cmd prompt, you can run the command below to start:
 
 ### `npm run start`
 
