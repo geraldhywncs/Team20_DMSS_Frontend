@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./styles/index.css";
+import HomeSample from "./components/pages/home/home";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* Title Class is from index.css styles */}
+      <div className="title">Money Go Where</div>
+
+      {/* This are the tailWind Styles without a class (Inline Styles) */}
+      <div className="text-teal-600 text-4xl text-center">WELCOME 🌭</div>
+
+      {/* {Do not code here, put your components HomeSample for reference. App is only for rendering components. Will delete the above} */}
+      <HomeSample />
     </div>
   );
 }
