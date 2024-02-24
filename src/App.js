@@ -1,6 +1,9 @@
 import React from "react";
 import "./styles/index.css";
 import HomeSample from "./components/pages/home/home";
+import SplitExpenseComponent from "./lib/expenses/splitExpenseAmount";
+import CurrencyConverterComponent from "./lib/expenses/convertCurrencyAmount";
+
 
 function App() {
   return (
@@ -13,6 +16,10 @@ function App() {
 
       {/* {Do not code here, put your components HomeSample for reference. App is only for rendering components. Will delete the above} */}
       <HomeSample />
+
+      <SplitExpenseComponent />
+
+      <CurrencyConverterComponent />
     </div>
   );
 }
