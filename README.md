@@ -20,9 +20,23 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### Guide to creating files
+### Project Structure and File Organization Guidelines
 
-1. Components should be in jsx format (App.js/index.js are exceptions)
-2. Store shared components in the shared folder eg.Navbar (dir: src>components>shared)
-3. CSS only store global css styles in the App.css file, custom css should be stored respectively in the styles folder based on your component name. (dir: src>styles)
-4. Store hardcoded variables/ strings into the constants components.
+Here are some guidelines to follow when creating files in this project:
+
+1. **Component File Format:**
+   - Components should be written in JSX format.
+   - Exceptions include `App.js` and `index.js`.
+
+2. **Shared Components:**
+   - Store shared components in the `shared` folder within the `components` directory.
+   - Example: `src/components/shared/Navbar`.
+
+3. **CSS File Organization:**
+   - Place global CSS styles in the `App.css` file.
+   - Custom CSS for individual components should be stored in the `styles` folder based on the component name.
+     - Example: `src/styles/ComponentName.css`.
+
+4. **Constants Component:**
+   - Create a separate `constants` component to store hardcoded variables and strings.
+   - Example: `src/constants/constants.js`.
