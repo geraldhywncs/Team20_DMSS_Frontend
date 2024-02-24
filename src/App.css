@@ -1,17 +1,17 @@
-
-{{/* Color Scheme
+/* Color Scheme:
   Grey: #e9e9e9
   Purple: #5D60EF
   Red: red
   Black: black
   White: #ffffff
- */}}
+ */
 
 .App {
   text-align: center;
 }
 
-.Main-header{
+/* Header Nav Bar ✨*/
+.Main-header {
   @apply bg-customPurple;
   width: 100vw;
 }
@@ -22,7 +22,7 @@
     text-base 
     h-24 
     sm:text-lg lg:text-xl;
-    width: 90vw;
+  width: 90vw;
 }
 
 .Header-text {
@@ -38,9 +38,10 @@
   margin-top: 1rem;
 }
 
+/* Vertical Nav Bar ✨*/
 .Nav-bar {
   height: 100%;
-  flex: 1; /* Set to 20% width */
+  flex: 0.5;
   font-size: 1rem;
   display: flex;
   flex-direction: column;
@@ -70,9 +71,20 @@
   background-color: #e9e9e9;
 }
 
+/* Content Area ✨ */
 .Content-area {
-  flex: 4; /* Set to 80% width */
+  width: 100%;
+  height: 100%;
   background-color: #ffffff;
-  padding: 1rem;
+  padding: 0rem 1rem;
   box-sizing: border-box;
+  flex: 4.5;
+  display: flex;
+  flex-direction: column;
+}
+
+.Content-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: left;
 }
