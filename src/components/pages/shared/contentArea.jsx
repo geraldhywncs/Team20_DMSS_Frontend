@@ -1,14 +1,22 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import "../../../redux/userNavReducer";
 
-function contentArea() {
+function ContentArea() {
+  const navButtons = useSelector((state) => state.userNavbarStore.buttons);
+
   return (
     <section className="Content-area">
       <h2 className="Content-title">Content Title</h2>
-      <div>Content</div>
-      {/* Add your content above accordingly, retrieve the reducer state and render */}
+      <div>
+        {navButtons.map((button) => (
+          <div key={button.name}>
+            {button.name} is {button.active ? "active" : "inactive"}
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
 
-export default contentArea;
+export default ContentArea;
