@@ -24,7 +24,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### Project Structure and File Organization Guidelines
+### `Project Structure and File Organization Guidelines`
 
 Here are some guidelines to follow when creating files in this project:
 
