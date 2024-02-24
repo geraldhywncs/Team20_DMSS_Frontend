@@ -21,11 +21,11 @@ function App() {
 
 
       {/* {Do not code here, put your components HomeSample for reference. App is only for rendering components. Will delete the above} */}
-      <HomeSample />
+      {/* <HomeSample />
 
       <SplitExpenseComponent />
 
-      <CurrencyConverterComponent />
+      <CurrencyConverterComponent /> */}
 
     </div>
   );
