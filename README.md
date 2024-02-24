@@ -1,13 +1,13 @@
 ## ⚠️⚠️ To run ⚠️⚠️
 
-> > If you get the react-scripts issue <<
-> > 🥓 Run this command in cmd prompt: npm install react-scripts --save-dev
+Open the project directory in the folder directory cmd prompt, you can run the command below to start:
 
 ## `npm install`
 
-Run this command to install dependencies from package.json
+Run this command each time to install dependencies from package.json
 
-Open the project directory in the folder directory cmd prompt, you can run the command below to start:
+> > If you get the react-scripts issue <<
+> > 🥓 Run this command in cmd prompt: npm install react-scripts --save-dev
 
 ### `npm run start`
 
