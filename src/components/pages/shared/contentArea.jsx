@@ -1,11 +1,13 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 function contentArea() {
   return (
-    <div className="Content-area">
-      <div>Title</div>
+    <section className="Content-area">
+      <h2 className="Content-title">Content Title</h2>
       <div>Content</div>
-    </div>
+      {/* Add your content above accordingly, retrieve the reducer state and render */}
+    </section>
   );
 }
 
