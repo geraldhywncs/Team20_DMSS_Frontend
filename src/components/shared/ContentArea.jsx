@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import "../../../redux/userNavReducer";
-import Profile from "../Profile";
+import "../../redux/userNavReducer";
+import Profile from "../pages/Profile";
 
 function ContentArea() {
   const navButtons = useSelector((state) => state.userNavbarStore.buttons);

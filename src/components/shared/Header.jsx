@@ -1,6 +1,6 @@
 import React from "react";
-import "../../../App.css";
-import constants from "../../../constants/constants";
+import "../../App.css";
+import constants from "../../constants/constants";
 
 function Header() {
   return (

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "../../styles/pages/Profile.css";
-import Section from "./shared/Section";
-import Friends from "./shared/Friends";
-import Button from "./shared/Button";
+import Section from "../shared/Section";
+import Friends from "../shared/Friends";
+import Button from "../shared/Button";
 
 function Profile() {
   const friends = [

@@ -1,8 +1,8 @@
 import React from "react";
 import "../../App.css";
-import Header from "./shared/Header";
-import Navbar from "./shared/Navbar";
-import ContentArea from "./shared/ContentArea";
+import Header from "../shared/Header";
+import Navbar from "../shared/Navbar";
+import ContentArea from "../shared/ContentArea";
 
 function MainDisplay() {
   /*

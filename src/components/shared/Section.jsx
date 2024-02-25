@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../../src/App.css";
+import "../../App.css";
 
 // NOTE: children needs to be a react element
 // See src/components/pages/Profile.jsx on how to use
