@@ -8,8 +8,6 @@ function ContentArea() {
 
   return (
     <section className="Content-area">
-      {/* TODO - remove content title because in each page, each section has a title, page has no title */}
-      <h2 className="Content-title">Content Title</h2>
       <div>
         {navButtons.map((button) => {
           if (button.active) {
