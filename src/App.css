@@ -152,7 +152,7 @@
   text-align: left;
 }
 
-/* Section Component */
+/* Section */
 .section-container {
   display: flex;
   flex-direction: column;
@@ -162,4 +162,21 @@
 
 .section-header {
   padding-bottom: 15px;
+}
+
+/* Friends */
+.friends-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  width: 100%;
+}
+
+.friend-container {
+  display: flex;
+  background: var(--grey);
+  border-radius: 10px;
+  padding: 20px 40px;
+  justify-content: space-between;
+  align-items: center;
 }

@@ -1,1 +1,10 @@
+.profile-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
+.profile-info {
+  color: var(--black);
+  text-align: left;
+}
