@@ -6,7 +6,7 @@ import "../../../../src/App.css";
 function Section({ children, headerName }) {
   return (
     <div className="section-container">
-      <div className="section-header">{headerName}</div>
+      <div className="section-header body-xlarge font-medium">{headerName}</div>
       {children}
     </div>
   );
