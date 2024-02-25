@@ -1,3 +1,6 @@
 .container {
   background-color: var(--blue);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-height-small);
 }
