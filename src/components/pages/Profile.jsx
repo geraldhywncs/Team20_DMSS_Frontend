@@ -10,13 +10,20 @@ function Profile() {
     { name: "Jedrek", username: "jedrek", isFriend: true },
     { name: "Weii Zee", username: "weiizee", isFriend: false },
   ];
+  const groups = [
+    {
+      name: "The Bois",
+      usernames: ["junjie", "weijie", "jedrek", "weiizee"],
+    },
+    { name: "The Girls", usernames: ["girl1", "girl2", "girl3"] },
+  ];
   return (
     <>
       <MyProfile />
+      <Groups groups={groups} />
       <Section headerName={"Friends"}>
         <Friends friends={friends} />
       </Section>
-      <Groups />
     </>
   );
 }
@@ -35,10 +42,17 @@ function MyProfile() {
   );
 }
 
-function Groups() {
+function Groups(props) {
+  const { groups } = props;
   return (
     <Section headerName={"Groups"}>
-      <div>test</div>
+      <div className="groups-container">
+        {groups.map((group) => (
+          <div className="group-container body-large font-medium">
+            {`${group.name} | ${group.usernames.map((username) => `@${username}`).join(", ")}`}
+          </div>
+        ))}
+      </div>
     </Section>
   );
 }

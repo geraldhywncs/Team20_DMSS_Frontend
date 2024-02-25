@@ -8,3 +8,20 @@
   color: var(--black);
   text-align: left;
 }
+
+.groups-container {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+  width: 100%;
+}
+
+.group-container {
+  display: flex;
+  background: var(--grey);
+  border-radius: 10px;
+  padding: 20px 40px;
+  align-items: center;
+  text-wrap: wrap;
+  text-align: left;
+}
