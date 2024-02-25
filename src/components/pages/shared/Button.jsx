@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../../../src/App.css";
 
 function Button(props) {
@@ -8,6 +8,8 @@ function Button(props) {
       return <div className={`blue-btn body-medium font-bold`}>{text}</div>;
     case "white":
       return <div className={`white-btn body-medium font-bold`}>{text}</div>;
+    default:
+      return <div className={`blue-btn body-medium font-bold`}>{text}</div>;
   }
 }
 

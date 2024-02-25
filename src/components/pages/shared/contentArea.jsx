@@ -22,6 +22,8 @@ function ContentArea() {
                   </div>
                 );
             }
+          } else {
+            return <></>;
           }
         })}
       </div>
