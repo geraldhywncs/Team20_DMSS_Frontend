@@ -134,6 +134,32 @@
   background-color: var(--grey);
 }
 
+/* Buttons  */
+.blue-btn {
+  background-color: var(--blue);
+  color: var(--white);
+  width: 100%;
+  padding: 16px 8px;
+  border-radius: 10px;
+}
+
+.blue-btn:hover {
+  cursor: pointer;
+}
+
+.white-btn {
+  background-color: var(--white);
+  color: var(--blue);
+  width: 100%;
+  padding: 16px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--blue);
+}
+
+.white-btn:hover {
+  cursor: pointer;
+}
+
 /* Content Area ✨ */
 .Content-area {
   width: 100%;
