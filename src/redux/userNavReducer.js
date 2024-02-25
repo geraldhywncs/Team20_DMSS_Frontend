@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   buttons: [
-    { name: "Home", active: false },
+    { name: "Home", active: true },
     { name: "Dashboard", active: false },
     { name: "Transactions", active: false },
     { name: "Friends", active: false },
