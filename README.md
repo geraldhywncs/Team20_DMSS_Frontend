@@ -1,9 +1,13 @@
 ## ⚠️⚠️ To run ⚠️⚠️
 
+Open the project directory in the folder directory cmd prompt, you can run the command below to start:
+
+## `npm install`
+
+Run this command each time to install dependencies from package.json
+
 > > If you get the react-scripts issue <<
 > > 🥓 Run this command in cmd prompt: npm install react-scripts --save-dev
-
-Open the project directory in the folder directory cmd prompt, you can run the command below to start:
 
 ### `npm run start`
 
@@ -20,7 +24,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### Project Structure and File Organization Guidelines
+### `Project Structure and File Organization Guidelines`
 
 Here are some guidelines to follow when creating files in this project:
 
