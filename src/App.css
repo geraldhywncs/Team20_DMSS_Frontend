@@ -110,3 +110,17 @@
   font-weight: 600;
   text-align: left;
 }
+
+/* Section Component */
+.section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.section-header {
+  line-height: var(--font-height-xlarge);
+  font-size: var(--font-size-xlarge);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 15px;
+}
