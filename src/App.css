@@ -206,3 +206,27 @@
   justify-content: space-between;
   align-items: center;
 }
+
+/*Dashboard*/
+.dashboard-container{
+  display:flex;
+  flex-direction:column;
+}
+
+.graph-container{
+  display:flex;
+  height: 57vh;
+  @apply mx-auto;
+}
+
+.bar-chartContainer{
+  display:flex;
+  flex-direction: column;
+}
+
+.bar{
+  width: 50px; 
+  background-color: #3498db;
+  transition: height 0.5s;
+  margin: 0 0.4rem;
+}
