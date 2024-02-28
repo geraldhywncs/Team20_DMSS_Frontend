@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import "../../redux/userNavReducer";
 import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
+import Friends from "../pages/Friends";
 
 function ContentArea() {
   const navButtons = useSelector((state) => state.userNavbarStore.buttons);
@@ -16,7 +17,9 @@ function ContentArea() {
               case "Profile":
                 return <Profile />;
               case "Dashboard":
-                return <Dashboard/>;
+                return <Dashboard />;
+              case "Friends":
+                return <Friends />;
               // TODO - add your other components in this switch case
               default:
                 return (

@@ -20,9 +20,9 @@ function FriendCard(props) {
   return (
     <div className="friend-container">
       <div className="friend-info body-large font-medium">{`${name} | @${username}`}</div>
-      <span className="material-icons">
+      <button className="material-icons">
         {isFriend ? "person_remove" : "person_add"}
-      </span>
+      </button>
     </div>
   );
 }
