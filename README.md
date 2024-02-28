@@ -8,6 +8,8 @@ Switch to the main branch and run this command during startup to install depende
 > > If you get the react-scripts issue <<
 > > 🥓 Run this command in cmd prompt: npm install react-scripts --save-dev
 
+> > C:\Users\D{ID}\.npmrc (Comment out registery= https://)
+
 ### `npm run start`
 
 Runs the app in the development mode.\
