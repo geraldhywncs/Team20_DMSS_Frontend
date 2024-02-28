@@ -3,8 +3,7 @@
 Open the project directory in the folder directory cmd prompt, you can run the command below to start:
 
 ## `npm install`
-
-Run this command each time to install dependencies from package.json
+Switch to the main branch and run this command during startup to install dependencies from package.json
 
 > > If you get the react-scripts issue <<
 > > 🥓 Run this command in cmd prompt: npm install react-scripts --save-dev

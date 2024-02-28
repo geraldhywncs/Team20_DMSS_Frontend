@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleButton } from "../../../redux/userNavReducer";
+import { toggleButton } from "../../redux/userNavReducer";
 
 function Navbar() {
   const dispatch = useDispatch();

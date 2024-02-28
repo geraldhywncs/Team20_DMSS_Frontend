@@ -1,9 +1,6 @@
 import React from "react";
 import "./styles/index.css";
-import SplitExpenseComponent from "./lib/expenses/splitExpenseAmount";
-import CurrencyConverterComponent from "./lib/expenses/convertCurrencyAmount";
-
-import MainDisplay from "./components/pages/mainDisplay/mainDisplay";
+import MainDisplay from "./components/pages/MainDisplay";
 
 function App() {
   return (
