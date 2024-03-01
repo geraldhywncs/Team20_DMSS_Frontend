@@ -48,29 +48,7 @@ const CurrencyConverterComponent = () => {
     }
   };
 
-  return (
-    <div>
-      <div>
-        <label>From Currency:</label>
-        <input type="text" value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)} />
-      </div>
-      <div>
-        <label>To Currency:</label>
-        <input type="text" value={toCurrency} onChange={(e) => setToCurrency(e.target.value)} />
-      </div>
-      <div>
-        <label>From Amount:</label>
-        <input type="text" value={fromAmount} onChange={(e) => setFromAmount(e.target.value)} />
-      </div>
-
-      {toAmount && (
-        <div>
-          <h2>Converted Amount:</h2>
-          <p>{toAmount}</p>
-        </div>
-      )}
-    </div>
-  );
+  return toAmount;
 }
 
 export default CurrencyConverterComponent;
