@@ -3,6 +3,7 @@ import "../../styles/pages/Profile.css";
 import Section from "../shared/Section";
 import Friends from "../shared/Friends";
 import Button from "../shared/Button";
+import AddTransactionButton from "../functionality/AddTransactionButton";
 
 function Profile() {
   const friends = [
@@ -25,6 +26,7 @@ function Profile() {
       <Section headerName={"Friends"}>
         <Friends friends={friends} />
       </Section>
+      <AddTransactionButton/>
     </>
   );
 }

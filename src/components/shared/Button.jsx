@@ -2,14 +2,28 @@ import React from "react";
 import "../../App.css";
 
 function Button(props) {
-  const { color, text } = props;
+  const { color, text, onClick } = props;
+
+  // Use a button element for interactivity
   switch (color) {
     case "blue":
-      return <div className={`blue-btn body-medium font-bold`}>{text}</div>;
+      return (
+        <button className={`blue-btn body-medium font-bold`} onClick={onClick}>
+          {text}
+        </button>
+      );
     case "white":
-      return <div className={`white-btn body-medium font-bold`}>{text}</div>;
+      return (
+        <button className={`white-btn body-medium font-bold`} onClick={onClick}>
+          {text}
+        </button>
+      );
     default:
-      return <div className={`blue-btn body-medium font-bold`}>{text}</div>;
+      return (
+        <button className={`blue-btn body-medium font-bold`} onClick={onClick}>
+          {text}
+        </button>
+      );
   }
 }
 
