@@ -26,7 +26,8 @@ function Profile() {
       <Section headerName={"Friends"}>
         <Friends friends={friends} />
       </Section>
-      <AddTransactionButton/>
+      <AddTransactionButton />
+
     </>
   );
 }

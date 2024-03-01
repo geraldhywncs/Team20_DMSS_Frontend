@@ -4,7 +4,6 @@ import "../../App.css";
 function Button(props) {
   const { color, text, onClick } = props;
 
-  // Use a button element for interactivity
   switch (color) {
     case "blue":
       return (
