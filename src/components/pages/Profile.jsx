@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "../../styles/pages/Profile.css";
 import Section from "../shared/Section";
 import Friends from "../shared/Friends";
@@ -23,7 +23,7 @@ function Profile() {
     <>
       <MyProfile />
       <Groups groups={groups} />
-      <Section headerName={"Friends"}>
+      <Section headerName="Friends">
         <Friends friends={friends} />
       </Section>
       <AddTransactionButton />
@@ -41,7 +41,7 @@ function MyProfile() {
   const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <Section headerName={"My Profile"}>
+    <Section headerName="My Profile">
       <div className="profile-info-container">
         {isEdit ? (
           <>
@@ -98,10 +98,10 @@ function MyProfile() {
 function Groups(props) {
   const { groups } = props;
   return (
-    <Section headerName={"Groups"}>
+    <Section headerName="Groups">
       <div className="groups-container">
-        {groups.map((group) => (
-          <div className="group-container body-large font-medium">
+        {groups.map((group, index) => (
+          <div className="group-container body-large font-medium" key={index}>
             {`${group.name} | ${group.usernames.map((username) => `@${username}`).join(", ")}`}
           </div>
         ))}
