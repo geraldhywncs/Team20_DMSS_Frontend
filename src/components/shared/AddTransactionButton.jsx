@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from "../shared/Button";
+import Button from "./Button";
 import AddTransactionPage from "../pages/AddTransactionPage";
 
 const AddTransactionButton = () => {
@@ -26,14 +26,13 @@ const AddTransactionButton = () => {
             </div>
             
             {popupVisible && (
-                <div className="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center">
-                    <div className="modal-overlay fixed inset-0 bg-black opacity-30" onClick={closePopup}></div>
-                    
-                        <AddTransactionPage closePopup={closePopup} />
-                    
+            <div className="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center overflow-y-auto">
+                <div className="modal-overlay fixed inset-0 bg-black opacity-30" onClick={closePopup}></div>
+                <div className="modal-content rounded-lg shadow h-full p-4">
+                    <AddTransactionPage closePopup={closePopup} />
                 </div>
-            )}
-
+            </div>
+)}
         </div>
     );
 }
