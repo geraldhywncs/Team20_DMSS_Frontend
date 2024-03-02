@@ -6,6 +6,7 @@ import FormLabel from "../shared/FormLabel";
 import FormSelection from "../shared/FormSelection";
 import FormTextarea from "../shared/FormTextarea";
 import FormSection from "../shared/FormSection";
+import CreateTransactionButton from "../api/CreateTransaction";
 
 
 const AddTransactionPage = ({ closePopup }) => {
@@ -49,29 +50,27 @@ const AddTransactionPage = ({ closePopup }) => {
         setGroupOption(e.target.value);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
+
     const imageList = ["commute", "flight_takeoff", "home", "shopping_cart", "sports_esports", "restaurant", "cake", "cruelty_free", "snowboarding", "fitness_center", "checkroom"];
     const category = ["Travel", "Shopping", "Transport"];
     const currencyList = ["SGD","MYR","USD"];
     const groupList = ["Group 1","Group 2","Group 3"];
     return (
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <div className="flex items-center justify-between p-1 md:p-1 rounded-t dark:border-gray-600">
-        <button
-            type="button"
-            className="text-black bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            onClick={closePopup}
-        >
-            <span className="material-icons">
-                close
-            </span>
-        </button>
+        <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
+        <div className="flex items-center justify-between rounded-t dark:border-gray-600">
+            <button
+                type="button"
+                className="text-black bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                onClick={closePopup}
+            >
+                <span className="material-icons">
+                    close
+                </span>
+            </button>
 
         </div>
         <form class="p-7 md:p-7">
-            <div className="grid gap-4 mb-4 grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 mb-4">
                 <FormSection col="2">
                         <FormLabel
                             label={"Icon"}
@@ -83,7 +82,7 @@ const AddTransactionPage = ({ closePopup }) => {
                         />
                 </FormSection>
                 
-                <FormSection col="2">
+                <FormSection col="2" place="1">
                     <FormLabel
                         label={"Title"}
                     />
@@ -96,8 +95,8 @@ const AddTransactionPage = ({ closePopup }) => {
                     />
                 </FormSection>
 
-
-                <FormSection col="2">
+                
+                <FormSection col="2" place="1">
                     <FormLabel
                         label={"Category"}
                     />
@@ -122,33 +121,31 @@ const AddTransactionPage = ({ closePopup }) => {
                     />
                 </FormSection>
 
-                <FormSection col="3" place="1">
-                    <FormLabel
-                        label={"Currency"}
-                    />
+                <FormSection col="2" place="1">
+                    <FormLabel label={"Currency"} />
                     <FormSelection
-                        id = {"currency"}
-                        value={currency}
-                        onChange={handleCurrency}
-                        optionsList={currencyList}
+                    id={"currency"}
+                    value={currency}
+                    onChange={handleCurrency}
+                    optionsList={currencyList}
+                    label={"Currency"}
                     />
                 </FormSection>
 
-                <FormSection col="3" place="1">
-                    <FormLabel
-                        label={"Amount"}
-                    />
+                <div className="col-span-2 sm:col-span-1">
+                    <FormLabel label={"Amount"} />
                     <FormInput
-                        id = {"amount"}
-                        placeholder = {"Amount"}
-                        type = {"text"}
-                        value={amount}
-                        onChange={handleAmountChange}
+                    id={"amount"}
+                    placeholder={"Amount"}
+                    type={"text"}
+                    value={amount}
+                    onChange={handleAmountChange}
                     />
-                </FormSection>
-                
-                
+                </div>
 
+   
+                
+            
                 <FormSection col="2">
                     <FormLabel
                         label={"Group"}
@@ -161,21 +158,18 @@ const AddTransactionPage = ({ closePopup }) => {
                         label = {"Group"}
                     />
                 </FormSection>
+
+                <FormSection col="2">
+                <Button
+                    color={"white"}
+                    text={"Scan Receipt"}
+                    //onClick={handleButtonClick}
+                />
+                </FormSection>
+
+                
             </div>
-            <div className="col-span-1 p-1 md:p-1">
-            <Button
-                color={"white"}
-                text={"Scan Receipt"}
-                //onClick={handleButtonClick}
-            />
-            </div>
-            <div className="col-span-1 p-1 md:p-1">
-            <Button
-                color={"blue"}
-                text={"Create Transaction"}
-                //onClick={handleButtonClick}
-            />
-            </div>
+            <CreateTransactionButton />
         </form>
     </div>
 
