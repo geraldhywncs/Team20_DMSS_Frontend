@@ -1,5 +1,3 @@
-// src/lib/callApi.js
-
 import axios from 'axios';
 
 async function callApi(apiEndpoint, method, data = null) {
