@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import Button from "../shared/Button";
 import ImageSelector from "../shared/ImageSelector";
 import FormInput from "../shared/FormInput";
 import FormLabel from "../shared/FormLabel";
-import FormSelection from "../shared/FormSelection";
 import FormTextarea from "../shared/FormTextarea";
 import FormSection from "../shared/FormSection";
 import CreateTransactionButton from "../api/CreateTransaction";
+import GetCurrencySelection from "../api/GetCurrencySelection";
+import GetCategorySelection from "../api/GetCategorySelection";
+import GetGroupSelection from "../api/GetGroupSelection";
+import SplitAmountInput from "../api/SplitAmountInput";
 
 
 const AddTransactionPage = ({ closePopup }) => {
@@ -17,6 +20,7 @@ const AddTransactionPage = ({ closePopup }) => {
     const [description, setDescription] = useState('');
     const [selectedOption, setSelectedOption] = useState('commute');
     const [selectedGroupOption, setGroupOption] = useState('');
+    const [splitAmount, setSplitAmount] = useState('');
     
 
     const handleTransactionTitle = (e) => {
@@ -39,22 +43,27 @@ const AddTransactionPage = ({ closePopup }) => {
     };
 
     const handleCurrency = (e) => {
+        console.log(e.target.value);
         setCurrency(e.target.value);
     };
 
-    const handleOptionChange = (option) => {
-        setSelectedOption(option);
+    const handleIconOptionChange = (e) => {
+        setSelectedOption(e);
     };
 
     const handleGroupChange = (e) => {
+        console.log(e.target.value);
         setGroupOption(e.target.value);
+    };
+
+    const handleSplitAmount = (e) => {
+        console.log(e.target.value);
+        setSplitAmount(e.target.value);
     };
 
 
     const imageList = ["commute", "flight_takeoff", "home", "shopping_cart", "sports_esports", "restaurant", "cake", "cruelty_free", "snowboarding", "fitness_center", "checkroom"];
-    const category = ["Travel", "Shopping", "Transport"];
-    const currencyList = ["SGD","MYR","USD"];
-    const groupList = ["Group 1","Group 2","Group 3"];
+
     return (
         <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
         <div className="flex items-center justify-between rounded-t dark:border-gray-600">
@@ -78,7 +87,7 @@ const AddTransactionPage = ({ closePopup }) => {
                         <ImageSelector 
                             imageList = {imageList}
                             selectedOption = {selectedOption}
-                            handleOptionChange = {handleOptionChange}
+                            handleOptionChange = {handleIconOptionChange}
                         />
                 </FormSection>
                 
@@ -96,7 +105,7 @@ const AddTransactionPage = ({ closePopup }) => {
                 </FormSection>
 
                 
-                <FormSection col="2" place="1">
+                {/* <FormSection col="2" place="1">
                     <FormLabel
                         label={"Category"}
                     />
@@ -107,7 +116,11 @@ const AddTransactionPage = ({ closePopup }) => {
                         optionsList={category}
                         label = {"Category"}
                     />
-                </FormSection>
+                </FormSection> */}
+                <GetCategorySelection 
+                    selectedCategory={selectedCategory}
+                    handleCategoryChange={handleCategoryChange}
+                />
 
                 <FormSection col="2">
                     <FormLabel
@@ -121,7 +134,7 @@ const AddTransactionPage = ({ closePopup }) => {
                     />
                 </FormSection>
 
-                <FormSection col="2" place="1">
+                {/* <FormSection col="2" place="1">
                     <FormLabel label={"Currency"} />
                     <FormSelection
                     id={"currency"}
@@ -130,9 +143,15 @@ const AddTransactionPage = ({ closePopup }) => {
                     optionsList={currencyList}
                     label={"Currency"}
                     />
-                </FormSection>
+                </FormSection> */}
 
-                <div className="col-span-2 sm:col-span-1">
+                <GetCurrencySelection 
+                    handleCurrency={handleCurrency}
+                    currency={currency}
+                />
+
+                <FormSection col="2" place="1">
+                
                     <FormLabel label={"Amount"} />
                     <FormInput
                     id={"amount"}
@@ -141,23 +160,36 @@ const AddTransactionPage = ({ closePopup }) => {
                     value={amount}
                     onChange={handleAmountChange}
                     />
-                </div>
-
-   
-                
-            
-                <FormSection col="2">
-                    <FormLabel
-                        label={"Group"}
-                    />
-                    <FormSelection
-                        id = {"group"}
-                        value={selectedGroupOption}
-                        onChange={handleGroupChange}
-                        optionsList={groupList}
-                        label = {"Group"}
-                    />
                 </FormSection>
+                
+                <GetGroupSelection 
+                    handleGroupChange={handleGroupChange}
+                    selectedGroupOption={selectedGroupOption}
+                />
+
+                {/* <FormSection col="2" place="1">
+                    <FormLabel
+                        label={"Split Amont"}
+                    />
+                    <FormInput
+                        id = {"splitAmount"}
+                        placeholder = {"Split Amont"}
+                        type = {"text"}
+                        value={splitAmount}
+                        onChange={handleSplitAmount}
+                    />
+                </FormSection> */}
+
+                <SplitAmountInput 
+                    setSplitAmount={setSplitAmount}
+                    splitAmount={splitAmount}
+                    handleSplitAmount={handleSplitAmount}
+                    selectedGroupOption={selectedGroupOption}
+                    amount={amount}
+                />
+
+
+                <div className="col-span-2 sm:col-span-1"></div>
 
                 <FormSection col="2">
                 <Button
