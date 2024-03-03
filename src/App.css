@@ -221,14 +221,42 @@
 
 .bar-chartContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
+  gap: 0.6rem;
 }
 
 .bar {
-  width: 50px;
-  background-color: #3498db;
+  width: 1.625rem;
+  background-color: var(--blue);
   transition: height 0.5s;
-  margin: 0 0.4rem;
+  margin: 0 0.6rem;
+  border-radius: 25px;
+}
+
+/* Bar chart days/month/year */
+.bar-chartValue {
+  font-weight: 600;
+}
+
+.bar-filterContainer {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.6rem;
+  @apply mx-auto;
+}
+
+.bar-filterButton {
+  padding: 0.25rem 1.65rem;
+  border-radius: 20px;
+  background-color: var(--grey);
+  font-weight: 600;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.bar-filterButton:hover {
+  background-color: var(--blue);
+  color: var(--white);
 }
 
 /* SearchFriends */

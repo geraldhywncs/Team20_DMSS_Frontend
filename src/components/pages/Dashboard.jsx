@@ -1,23 +1,18 @@
 import React from "react";
 import GraphContainer from "../dashboard/GraphContainer";
 
-
 const Dashboard = () => {
   return (
     <React.Fragment>
-        <div className="section-container">
+      <div className="section-container">
         <div class="section-header body-xlarge font-medium">Dashboard</div>
-                <GraphContainer></GraphContainer>
-            <div>
-                Filter section
-            </div>
-        </div>
+        <GraphContainer></GraphContainer>
+      </div>
     </React.Fragment>
   );
 };
 
 export default Dashboard;
-
 
 /* Dashboard layout
 

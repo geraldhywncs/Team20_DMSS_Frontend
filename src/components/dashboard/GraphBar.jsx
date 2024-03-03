@@ -1,23 +1,17 @@
-import React from 'react'
+import React from "react";
 
-function GraphBar({height}) {
+function GraphBar({ height }) {
   return (
     <React.Fragment>
-        <div className='bar-chartContainer'>
-        <span className="bar" style={{ height: `${height}%` }}>
-                100
-            </span>
-            <span>
-                Month
-            </span>
-        </div>
-
+      <div className="bar-chartContainer">
+        <div className="bar-chartValue">Mon</div>
+        <div className="bar" style={{ height: `${height}%` }}></div>
+        <div>$100</div>
+      </div>
     </React.Fragment>
-  )
+  );
 }
 
-const mockData= {
+const mockData = {};
 
-}
-
-export default GraphBar
+export default GraphBar;
