@@ -208,6 +208,13 @@
 }
 
 /*Dashboard*/
+
+.dashboard-header {
+  @apply mx-auto;
+  text-decoration: underline;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -231,11 +238,13 @@
   transition: height 0.5s;
   margin: 0 0.6rem;
   border-radius: 25px;
+  @apply mx-auto;
 }
 
 /* Bar chart days/month/year */
 .bar-chartValue {
   font-weight: 600;
+  margin: 0 0.4rem;
 }
 
 .bar-filterContainer {
@@ -252,6 +261,11 @@
   font-weight: 600;
   border: none;
   transition: background-color 0.3s ease;
+}
+
+.bar-filterButton.active {
+  background-color: var(--blue);
+  color: var(--white);
 }
 
 .bar-filterButton:hover {
