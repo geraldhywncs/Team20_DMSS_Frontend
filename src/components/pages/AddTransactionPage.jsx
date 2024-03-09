@@ -1,6 +1,5 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import Button from "../shared/Button";
-import ImageSelector from "../shared/ImageSelector";
 import FormInput from "../shared/FormInput";
 import FormLabel from "../shared/FormLabel";
 import FormTextarea from "../shared/FormTextarea";
@@ -10,59 +9,117 @@ import GetCurrencySelection from "../api/GetCurrencySelection";
 import GetCategorySelection from "../api/GetCategorySelection";
 import GetGroupSelection from "../api/GetGroupSelection";
 import SplitAmountInput from "../api/SplitAmountInput";
+import IconSelection from "../api/IconSelection";
+import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelection";
+
 
 
 const AddTransactionPage = ({ closePopup }) => {
     const [transactionTitle, setTransactionTitle] = useState('');
+    const [transactionTitleFieldColour, setTransactionTitleFieldColour] = useState('gray');
+
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [currency, setCurrency] = useState('');
-    const [amount, setAmount] = useState('');
-    const [description, setDescription] = useState('');
-    const [selectedOption, setSelectedOption] = useState('commute');
-    const [selectedGroupOption, setGroupOption] = useState('');
-    const [splitAmount, setSplitAmount] = useState('');
+    const [selectedCategoryFieldColour, setSelectedCategoryFieldColour] = useState('gray');
     
+    const [currency, setCurrency] = useState('');
+    const [currencyFieldColour, setCurrencyFieldColour] = useState('gray');
+
+    const [amount, setAmount] = useState('');
+    const [amountFieldColour, setAmountFieldColour] = useState('gray');
+    
+    const [description, setDescription] = useState('');
+    const [selectedIconOption, setIconSelectedOption] = useState(1);
+
+    const [selectedGroupOption, setGroupOption] = useState('');
+    const [selectedGroupOptionFieldColour, setSelectedGroupOptionFieldColour] = useState('gray');
+    
+    const [splitAmount, setSplitAmount] = useState('');
+    const [splitAmountFieldColour, setSplitAmountFieldColour] = useState('gray');
+
+
+    const [selectedRecurringFrequency, setRecurringFrequency] = useState('');
+    const [selectedRecurringFrequencyFieldColour, setSelectedRecurringFrequencyFieldColour] = useState('gray');
+    const [userId, setUserId] = useState('1');
+
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
 
     const handleTransactionTitle = (e) => {
+        if(e.target.value === ""){
+            setTransactionTitleFieldColour("red");
+        } else {
+            setTransactionTitleFieldColour("gray");
+        }
         setTransactionTitle(e.target.value);
+        console.log(transactionTitle);
     };
 
     const handleCategoryChange = (e) => {
-        const selectedValue = e.target.value;
-        setSelectedCategory(selectedValue);
-        console.log(`Selected category: ${selectedValue}`);
+        if(e.target.value === ""){
+            setSelectedCategoryFieldColour("red");
+        } else {
+            setSelectedCategoryFieldColour("gray");
+        }
+        setSelectedCategory(e.target.value);
+        console.log(selectedCategory);
       };
 
       const handleAmountChange = (e) => {
         const numericValue = e.target.value.replace(/[^0-9]/g, '');
+        if(e.target.value === ""){
+            setAmountFieldColour("red");
+        } else {
+            setAmountFieldColour("gray");
+        }
         setAmount(numericValue);
+        console.log(amount);
       };
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
+        console.log(description);
     };
 
     const handleCurrency = (e) => {
-        console.log(e.target.value);
+        if(e.target.value === ""){
+            setCurrencyFieldColour("red");
+        } else {
+            setCurrencyFieldColour("gray");
+        }
         setCurrency(e.target.value);
+        console.log(currency);
     };
 
     const handleIconOptionChange = (e) => {
-        setSelectedOption(e);
+        setIconSelectedOption(e);
+        console.log(selectedIconOption);
     };
 
     const handleGroupChange = (e) => {
-        console.log(e.target.value);
         setGroupOption(e.target.value);
+        console.log(selectedGroupOption);
     };
 
     const handleSplitAmount = (e) => {
-        console.log(e.target.value);
         setSplitAmount(e.target.value);
+        console.log(splitAmount);
     };
 
+    const handleRecurringFrequencyChange = (e) => {
+        if(e.target.value === ""){
+            setSelectedRecurringFrequencyFieldColour("red");
+        } else {
+            setSelectedRecurringFrequencyFieldColour("gray");
+        }
+        setRecurringFrequency(e.target.value);
+        console.log(selectedRecurringFrequency);
+    };
 
-    const imageList = ["commute", "flight_takeoff", "home", "shopping_cart", "sports_esports", "restaurant", "cake", "cruelty_free", "snowboarding", "fitness_center", "checkroom"];
+    const handleTrnasactionCreatedSucessButton  = (e) => {
+        setShowSuccessMessage(false);
+        closePopup();
+    };
+
 
     return (
         <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
@@ -78,18 +135,36 @@ const AddTransactionPage = ({ closePopup }) => {
             </button>
 
         </div>
+
+        {showErrorMessage && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-8 rounded-md shadow-md">
+                <p className="text-red-500">Failed to create transaction. Please check your inputs.</p>
+                <button className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => setShowErrorMessage(false)}>
+                Close
+                </button>
+            </div>
+            </div>
+        )}
+
+        {showSuccessMessage && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
+                <div className="bg-white p-8 rounded-md shadow-md">
+                    <p className="text-green-500">Transaction created successfully!</p>
+                    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md" onClick={handleTrnasactionCreatedSucessButton}>
+                        Close
+                    </button>
+                </div>
+            </div>
+        )}
+        
         <form class="p-7 md:p-7">
             <div className="grid grid-cols-2 gap-4 mb-4">
-                <FormSection col="2">
-                        <FormLabel
-                            label={"Icon"}
-                        />
-                        <ImageSelector 
-                            imageList = {imageList}
-                            selectedOption = {selectedOption}
-                            handleOptionChange = {handleIconOptionChange}
-                        />
-                </FormSection>
+
+                <IconSelection
+                    selectedOption = {selectedIconOption}
+                    handleIconOptionChange = {handleIconOptionChange}
+                />
                 
                 <FormSection col="2" place="1">
                     <FormLabel
@@ -101,25 +176,14 @@ const AddTransactionPage = ({ closePopup }) => {
                         type = {"text"}
                         value={transactionTitle}
                         onChange={handleTransactionTitle}
+                        fieldColour = {transactionTitleFieldColour}
                     />
                 </FormSection>
 
-                
-                {/* <FormSection col="2" place="1">
-                    <FormLabel
-                        label={"Category"}
-                    />
-                    <FormSelection
-                        id = {"category"}
-                        value={selectedCategory}
-                        onChange={handleCategoryChange}
-                        optionsList={category}
-                        label = {"Category"}
-                    />
-                </FormSection> */}
                 <GetCategorySelection 
                     selectedCategory={selectedCategory}
                     handleCategoryChange={handleCategoryChange}
+                    fieldColour = {selectedCategoryFieldColour}
                 />
 
                 <FormSection col="2">
@@ -134,20 +198,10 @@ const AddTransactionPage = ({ closePopup }) => {
                     />
                 </FormSection>
 
-                {/* <FormSection col="2" place="1">
-                    <FormLabel label={"Currency"} />
-                    <FormSelection
-                    id={"currency"}
-                    value={currency}
-                    onChange={handleCurrency}
-                    optionsList={currencyList}
-                    label={"Currency"}
-                    />
-                </FormSection> */}
-
                 <GetCurrencySelection 
                     handleCurrency={handleCurrency}
                     currency={currency}
+                    fieldColour = {currencyFieldColour}
                 />
 
                 <FormSection col="2" place="1">
@@ -159,26 +213,15 @@ const AddTransactionPage = ({ closePopup }) => {
                     type={"text"}
                     value={amount}
                     onChange={handleAmountChange}
+                    fieldColour = {amountFieldColour}
                     />
                 </FormSection>
                 
                 <GetGroupSelection 
                     handleGroupChange={handleGroupChange}
                     selectedGroupOption={selectedGroupOption}
+                    fieldColour = {selectedGroupOptionFieldColour}
                 />
-
-                {/* <FormSection col="2" place="1">
-                    <FormLabel
-                        label={"Split Amont"}
-                    />
-                    <FormInput
-                        id = {"splitAmount"}
-                        placeholder = {"Split Amont"}
-                        type = {"text"}
-                        value={splitAmount}
-                        onChange={handleSplitAmount}
-                    />
-                </FormSection> */}
 
                 <SplitAmountInput 
                     setSplitAmount={setSplitAmount}
@@ -186,26 +229,46 @@ const AddTransactionPage = ({ closePopup }) => {
                     handleSplitAmount={handleSplitAmount}
                     selectedGroupOption={selectedGroupOption}
                     amount={amount}
+                    fieldColour = {splitAmountFieldColour}
                 />
 
+                <GetRecurringFrequencySelection
+                    selectedRecurringFrequency = {selectedRecurringFrequency}
+                    handleRecurringFrequencyChange = {handleRecurringFrequencyChange}
+                    fieldColour = {selectedRecurringFrequencyFieldColour}
+                />
 
                 <div className="col-span-2 sm:col-span-1"></div>
 
-                <FormSection col="2">
-                <Button
-                    color={"white"}
-                    text={"Scan Receipt"}
-                    //onClick={handleButtonClick}
-                />
-                </FormSection>
-
-                
             </div>
-            <CreateTransactionButton />
+            
         </form>
+        <div className="px-7 md:px-7 py-0 grid gap-4 mb-4">
+        <FormSection>
+            <Button
+                color={"white"}
+                text={"Scan Receipt"}
+                //onClick={handleButtonClick}
+            />
+        </FormSection>
+        <CreateTransactionButton 
+            transactionTitle = {transactionTitle}
+            selectedCategory = {selectedCategory}
+            currency = {currency}
+            description = {description}
+            selectedIconOption = {selectedIconOption}
+            selectedGroupOption = {selectedGroupOption}
+            splitAmount = {splitAmount}
+            selectedRecurringFrequency  = {selectedRecurringFrequency}
+            userId = {userId}
+            setShowErrorMessage = {setShowErrorMessage}
+            setShowSuccessMessage = {setShowSuccessMessage}
+        />
+        </div>
     </div>
 
     );
 }
+
 
 export default AddTransactionPage;

@@ -4,22 +4,20 @@ import FormSection from "../shared/FormSection";
 import FormLabel from "../shared/FormLabel";
 import FormSelection from "../shared/FormSelection";
 
-function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldColour}) {
+function GetRecurringFrequencySelection({ selectedRecurringFrequency, handleRecurringFrequencyChange, fieldColour}) {
     const [optionsList, setOptionsList] = useState([]);
     const [apiCalled, setApiCalled] = useState(false);
-    const [userId, setUserId] = useState("1");
-
     useEffect(() => {
         if (!apiCalled) {
             try {
-                const apiEndpoint = process.env.REACT_APP_apiHost + "/category/readCategory";
-                const data = {"user_id": userId};
+                const apiEndpoint = process.env.REACT_APP_apiHost + "/recurringFrequency/readAllrecurringFrequencies";
+                const data = {};
                 callApi(apiEndpoint, "POST", data)
                     .then(response => {
                         if (response.status_code === '200') {
-                            const options = response.categories.map((entry) => ({
-                                value: entry.category_id,
-                                label: entry.category_name,
+                            const options = response.recurring_frequency.map((entry) => ({
+                                value: entry.recurring_id,
+                                label: entry.recur_name,
                               }));
                             setOptionsList(options);
                         } else {
@@ -39,20 +37,20 @@ function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldCol
     }, [apiCalled]);
 
     return (
-        <FormSection col="2" place="1">
+        <FormSection col="2">
             <FormLabel
-                label={"Category"}
+                label={"Recurring Frequency"}
             />
             <FormSelection
-                id = {"category"}
-                value={selectedCategory}
-                onChange={handleCategoryChange}
+                id = {"recurringFrequency"}
+                value={selectedRecurringFrequency}
+                onChange={handleRecurringFrequencyChange}
                 optionsList={optionsList}
-                label = {"Select Category"}
+                label = {"No Recurring Frequency"}
                 fieldColour = {fieldColour}
             />
         </FormSection>
     );
 }
 
-export default GetCategorySelection;
+export default GetRecurringFrequencySelection;

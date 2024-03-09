@@ -3,21 +3,21 @@ import React from 'react';
 function ImageSelector({imageList, selectedOption, handleOptionChange}) {
     return (
         <div>
-            {imageList.map((image, index) => (
+            {imageList.map((option) => (
                 <label
-                    key={index}
-                    className={`cursor-pointer ${selectedOption === image ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'} p-3 rounded-lg mr-3`}
+                    key={option.value}
+                    className={`cursor-pointer ${selectedOption === option.value ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'} p-3 rounded-lg mr-3`}
                 >
                     <input
                         type="radio"
                         name="icon"
-                        value={image}
-                        onChange={() => handleOptionChange(image)}
-                        checked={selectedOption === image}
+                        value={option.value}
+                        onChange={() => handleOptionChange(option.value)}
+                        checked={selectedOption === option.value}
                         className="hidden"
                     />
                     <span className="material-icons">
-                        {image}
+                        {option.label}
                     </span>
                 </label>
             ))}
