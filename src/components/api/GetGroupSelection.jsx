@@ -4,7 +4,7 @@ import FormSection from "../shared/FormSection";
 import FormLabel from "../shared/FormLabel";
 import FormSelection from "../shared/FormSelection";
 
-function GetGroupSelection({ selectedGroupOption, handleGroupChange}) {
+function GetGroupSelection({ selectedGroupOption, handleGroupChange, fieldColour}) {
     const [optionsList, setOptionsList] = useState([]);
     const [apiCalled, setApiCalled] = useState(false);
     const [userId, setUserId] = useState("1");
@@ -12,7 +12,6 @@ function GetGroupSelection({ selectedGroupOption, handleGroupChange}) {
     useEffect(() => {
         if (!apiCalled) {
             try {
-                console.log("Fetching data...");
                 const apiEndpoint = process.env.REACT_APP_apiHost + "/groups/read";
                 const data = {"user_id": userId};
                 callApi(apiEndpoint, "POST", data)
@@ -39,8 +38,6 @@ function GetGroupSelection({ selectedGroupOption, handleGroupChange}) {
         }
     }, [apiCalled]);
 
-    console.log("Component rendering...");
-
     return (
         <FormSection col="2" place="1">
             <FormLabel
@@ -52,6 +49,7 @@ function GetGroupSelection({ selectedGroupOption, handleGroupChange}) {
                 onChange={handleGroupChange}
                 optionsList={optionsList}
                 label = {"Personal"}
+                fieldColour = {fieldColour}
             />
         </FormSection>
     );

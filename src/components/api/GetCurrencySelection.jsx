@@ -4,14 +4,13 @@ import FormSection from "../shared/FormSection";
 import FormLabel from "../shared/FormLabel";
 import FormSelection from "../shared/FormSelection";
 
-function GetCurrencySelection({ currency, handleCurrency }) {
+function GetCurrencySelection({ currency, handleCurrency, fieldColour}) {
     const [optionsList, setOptionsList] = useState([]);
     const [apiCalled, setApiCalled] = useState(false);
 
     useEffect(() => {
         if (!apiCalled) {
             try {
-                console.log("Fetching data...");
                 const apiEndpoint = process.env.REACT_APP_apiHost + "/currency/readAllCurrencies";
                 const data = {};
                 callApi(apiEndpoint, "POST", data)
@@ -38,8 +37,6 @@ function GetCurrencySelection({ currency, handleCurrency }) {
         }
     }, [apiCalled]);
 
-    console.log("Component rendering...");
-
     return (
         <FormSection col="2" place="1">
             <FormLabel label={"Currency"} />
@@ -49,6 +46,7 @@ function GetCurrencySelection({ currency, handleCurrency }) {
                 onChange={handleCurrency}
                 optionsList={optionsList}
                 label={"Select Currency"}
+                fieldColour = {fieldColour} 
             />
         </FormSection>
     );

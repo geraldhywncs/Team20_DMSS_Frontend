@@ -1,59 +1,72 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import callApi from "../shared/callAPI";
 import FormSection from '../shared/FormSection';
 import Button from '../shared/Button';
 
-function CreateTransactionButton() {
-  const [buttonClick, setButtonClick] = useState(false);
-  const [userId, setUserId] = useState('1');
-  const [groupId, setGroupId] = useState('1');
-  const [title, setTitle] = useState('Rental');
-  const [description, setDescription] = useState('Pay monthly rental');
-  const [catId, setCatId] = useState('1');
-  const [recurExpense, setRecurExpense] = useState('Monthly');
-  const [shareAmount, setShareAmount] = useState('500');
-  const [amount, setAmount] = useState('1500');
-  const [fromCurrency, setFromCurrency] = useState('1');
+function CreateTransactionButton({transactionTitle, selectedCategory, currency, description, selectedIconOption, selectedGroupOption, splitAmount, selectedRecurringFrequency, userId, setShowErrorMessage, setShowSuccessMessage}) {
+
+  useEffect(() => {
+    console.log('Transaction Title:', transactionTitle);
+    console.log('Selected Category:', selectedCategory);
+    console.log('Currency:', currency);
+    console.log('Description:', description);
+    console.log('Selected Group Option:', selectedGroupOption);
+    console.log('Split Amount:', splitAmount);
+    console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
+  }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedRecurringFrequency]);
 
   const [result, setResult] = useState({ message: null, statusCode: null });
 
   const fetchData = async () => {
-    if (!userId || !groupId || !title || !description || !catId || !recurExpense || !shareAmount || !amount || !fromCurrency) {
-      setTimeout(() => {
-        setResult({ message: null, statusCode: null });
-      }, 1000);
-      return;
-    }
-
     const apiEndpoint = process.env.REACT_APP_apiHost + "/expenses/create";
     const data = {
-      userId,
-      groupId,
-      title,
-      description,
-      catId,
-      recurExpense,
-      shareAmount,
-      amount,
-      fromCurrency
+      "user_id": userId,
+      "group_id": selectedGroupOption,
+      "title": transactionTitle,
+      "description": description,
+      "cat_id": selectedCategory,
+      "share_amount": splitAmount,
+      "from_currency": currency,
+      "icon_id": selectedIconOption,
+      "recur_id": selectedRecurringFrequency
     };
 
     try {
       const response = await callApi(apiEndpoint, "POST", data);
-      setResult({ message: response.message, statusCode: response.status_code });
+      return response.status_code;
     } catch (error) {
-      setResult({ message: "Error when creating transaction", statusCode: null });
+      return null;
     }
   };
 
-  const handleButtonClick = async () => {
-    await fetchData();
+  const handleCreateTransaction = async () => {
+    try {
+      if (!transactionTitle || !selectedCategory || !currency || !selectedIconOption || !splitAmount) {
+        console.log('Please fill all fields');
+        setShowErrorMessage(true);
+      } else {
+        setShowErrorMessage(false);
+        const statusCode = await fetchData();
+        console.log('Created Transaction');
+        console.log(statusCode)
+        if (result.statusCode === '200') {
+          setShowSuccessMessage(true);
+          console.log('Transaction created successfully');
+        } else {
+          setShowSuccessMessage(false);
+          console.log('Failed to create transaction');
+        }
+      }
+    } catch (error) {
+      console.error('Error creating transaction:', error);
+    }
   };
+  
 
   return (
     <div>
-      <FormSection col="2">
-        <div onClick={handleButtonClick}>
+      <FormSection>
+        <div onClick={handleCreateTransaction}>
           <Button color={"blue"} text={"Create Transaction"} />
         </div>
       </FormSection>

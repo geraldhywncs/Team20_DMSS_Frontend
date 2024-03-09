@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react';
 import callApi from "../shared/callAPI";
 import FormSection from "../shared/FormSection";
 import FormLabel from "../shared/FormLabel";
-import FormSelection from "../shared/FormSelection";
+import ImageSelector from "../shared/ImageSelector";
 
-function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldColour}) {
+function IconSelection({ selectedOption, handleIconOptionChange}) {
     const [optionsList, setOptionsList] = useState([]);
     const [apiCalled, setApiCalled] = useState(false);
-    const [userId, setUserId] = useState("1");
 
     useEffect(() => {
         if (!apiCalled) {
             try {
-                const apiEndpoint = process.env.REACT_APP_apiHost + "/category/readCategory";
-                const data = {"user_id": userId};
+                const apiEndpoint = process.env.REACT_APP_apiHost + "/icon/readAllIcon";
+                const data = {};
                 callApi(apiEndpoint, "POST", data)
                     .then(response => {
                         if (response.status_code === '200') {
-                            const options = response.categories.map((entry) => ({
-                                value: entry.category_id,
-                                label: entry.category_name,
-                              }));
+                            const options = response.icons.map((entry) => ({
+                                value: entry.icon_id,
+                                label: entry.icon_name
+                            }));
                             setOptionsList(options);
                         } else {
                             console.log(response.message);
@@ -36,23 +35,20 @@ function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldCol
                 console.log("Error when reading currency: ", error);
             }
         }
-    }, [apiCalled]);
+    },[apiCalled]);
 
     return (
-        <FormSection col="2" place="1">
+        <FormSection col="2">
             <FormLabel
-                label={"Category"}
+                label={"Icon"}
             />
-            <FormSelection
-                id = {"category"}
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-                optionsList={optionsList}
-                label = {"Select Category"}
-                fieldColour = {fieldColour}
+            <ImageSelector 
+                imageList = {optionsList}
+                selectedOption = {selectedOption}
+                handleOptionChange = {handleIconOptionChange}
             />
         </FormSection>
     );
 }
 
-export default GetCategorySelection;
+export default IconSelection;
