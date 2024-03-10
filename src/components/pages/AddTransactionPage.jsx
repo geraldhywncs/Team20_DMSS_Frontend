@@ -16,16 +16,16 @@ import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelectio
 
 const AddTransactionPage = ({ closePopup }) => {
     const [transactionTitle, setTransactionTitle] = useState('');
-    const [transactionTitleFieldColour, setTransactionTitleFieldColour] = useState('gray');
+    const [transactionTitleFieldColour, setTransactionTitleFieldColour] = useState('red');
 
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectedCategoryFieldColour, setSelectedCategoryFieldColour] = useState('gray');
+    const [selectedCategoryFieldColour, setSelectedCategoryFieldColour] = useState('red');
     
     const [currency, setCurrency] = useState('');
-    const [currencyFieldColour, setCurrencyFieldColour] = useState('gray');
+    const [currencyFieldColour, setCurrencyFieldColour] = useState('red');
 
     const [amount, setAmount] = useState('');
-    const [amountFieldColour, setAmountFieldColour] = useState('gray');
+    const [amountFieldColour, setAmountFieldColour] = useState('red');
     
     const [description, setDescription] = useState('');
     const [selectedIconOption, setIconSelectedOption] = useState(1);
@@ -39,10 +39,12 @@ const AddTransactionPage = ({ closePopup }) => {
 
     const [selectedRecurringFrequency, setRecurringFrequency] = useState('');
     const [selectedRecurringFrequencyFieldColour, setSelectedRecurringFrequencyFieldColour] = useState('gray');
+    const [loadRecurringFrequencyField, setLoadRecurringFrequencyField] = useState(false);
     const [userId, setUserId] = useState('1');
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
+    const [showLoadingMessage, setShowLoadingMessage] = useState(false); 
 
     const handleTransactionTitle = (e) => {
         if(e.target.value === ""){
@@ -106,11 +108,6 @@ const AddTransactionPage = ({ closePopup }) => {
     };
 
     const handleRecurringFrequencyChange = (e) => {
-        if(e.target.value === ""){
-            setSelectedRecurringFrequencyFieldColour("red");
-        } else {
-            setSelectedRecurringFrequencyFieldColour("gray");
-        }
         setRecurringFrequency(e.target.value);
         console.log(selectedRecurringFrequency);
     };
@@ -157,6 +154,18 @@ const AddTransactionPage = ({ closePopup }) => {
                 </div>
             </div>
         )}
+        {showLoadingMessage && (
+        <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
+            <div className="p-8 rounded-md">
+                <div className="flex items-center justify-center white-btn body-medium font-bold">
+                    <span className="material-icons animate-spin h-5 w-5 mr-3">
+                        autorenew
+                    </span>
+                    Processing...
+                </div>
+            </div>
+        </div>
+        )}
         
         <form class="p-7 md:p-7">
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -168,7 +177,7 @@ const AddTransactionPage = ({ closePopup }) => {
                 
                 <FormSection col="2" place="1">
                     <FormLabel
-                        label={"Title"}
+                        label={"Title (Required)"}
                     />
                     <FormInput
                         id = {"title"}
@@ -206,7 +215,7 @@ const AddTransactionPage = ({ closePopup }) => {
 
                 <FormSection col="2" place="1">
                 
-                    <FormLabel label={"Amount"} />
+                    <FormLabel label={"Amount (Required)"} />
                     <FormInput
                     id={"amount"}
                     placeholder={"Amount"}
@@ -263,6 +272,7 @@ const AddTransactionPage = ({ closePopup }) => {
             userId = {userId}
             setShowErrorMessage = {setShowErrorMessage}
             setShowSuccessMessage = {setShowSuccessMessage}
+            setShowLoadingMessage = {setShowLoadingMessage}
         />
         </div>
     </div>

@@ -3,17 +3,17 @@ import callApi from "../shared/callAPI";
 import FormSection from '../shared/FormSection';
 import Button from '../shared/Button';
 
-function CreateTransactionButton({transactionTitle, selectedCategory, currency, description, selectedIconOption, selectedGroupOption, splitAmount, selectedRecurringFrequency, userId, setShowErrorMessage, setShowSuccessMessage}) {
+function CreateTransactionButton({transactionTitle, selectedCategory, currency, description, selectedIconOption, selectedGroupOption, splitAmount, selectedRecurringFrequency, userId, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage}) {
 
-  useEffect(() => {
-    console.log('Transaction Title:', transactionTitle);
-    console.log('Selected Category:', selectedCategory);
-    console.log('Currency:', currency);
-    console.log('Description:', description);
-    console.log('Selected Group Option:', selectedGroupOption);
-    console.log('Split Amount:', splitAmount);
-    console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
-  }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedRecurringFrequency]);
+  // useEffect(() => {
+  //   console.log('Transaction Title:', transactionTitle);
+  //   console.log('Selected Category:', selectedCategory);
+  //   console.log('Currency:', currency);
+  //   console.log('Description:', description);
+  //   console.log('Selected Group Option:', selectedGroupOption);
+  //   console.log('Split Amount:', splitAmount);
+  //   console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
+  // }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedRecurringFrequency]);
 
   const [result, setResult] = useState({ message: null, statusCode: null });
 
@@ -46,14 +46,18 @@ function CreateTransactionButton({transactionTitle, selectedCategory, currency, 
         setShowErrorMessage(true);
       } else {
         setShowErrorMessage(false);
+        setShowLoadingMessage(true);
         const statusCode = await fetchData();
         console.log('Created Transaction');
-        console.log(statusCode)
-        if (result.statusCode === '200') {
+
+        if (statusCode === "200") {
+          setShowLoadingMessage(false);
           setShowSuccessMessage(true);
           console.log('Transaction created successfully');
         } else {
-          setShowSuccessMessage(false);
+          setShowLoadingMessage(false);
+          //setShowSuccessMessage(false);
+          setShowErrorMessage(true);
           console.log('Failed to create transaction');
         }
       }
