@@ -39,7 +39,7 @@ function GetCurrencySelection({ currency, handleCurrency, fieldColour}) {
 
     return (
         <FormSection col="2" place="1">
-            <FormLabel label={"Currency"} />
+            <FormLabel label={"Currency (Required)"} />
             <FormSelection
                 id={"currency"}
                 value={currency}

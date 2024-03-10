@@ -41,7 +41,7 @@ function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldCol
     return (
         <FormSection col="2" place="1">
             <FormLabel
-                label={"Category"}
+                label={"Category  (Required)"}
             />
             <FormSelection
                 id = {"category"}
