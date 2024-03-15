@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import "../../App.css";
 import Header from "../shared/Header";
 import Navbar from "../shared/Navbar";
@@ -14,12 +14,19 @@ function MainDisplay() {
         When the user clicks for eg. Home, the currentState should be stored as Home and this will re-render the component
         Trigger what needs to be displayed. In this case the home page.
   */
-  const [currentPage, setCurrentPage] = useState("");
+  const [userId, setUserId] = useState("");
+  useEffect(() => {
+      //localStorage.setItem('userId', "");
+      const storedUserId = localStorage.getItem('userId');
+      if (storedUserId) {
+          setUserId(storedUserId);
+      }
+  }, []);
+
   const renderPage = () => {
-    console.log(currentPage);
-    switch (currentPage) {
-      case "login":
-        return <LoginSignUp />;
+    switch (userId) {
+      case "":
+        return <LoginSignUp setUserId={setUserId}/>;
       default:
         return (
           <div>
