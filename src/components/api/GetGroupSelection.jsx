@@ -4,10 +4,9 @@ import FormSection from "../shared/FormSection";
 import FormLabel from "../shared/FormLabel";
 import FormSelection from "../shared/FormSelection";
 
-function GetGroupSelection({ selectedGroupOption, handleGroupChange, fieldColour}) {
+function GetGroupSelection({ selectedGroupOption, handleGroupChange, fieldColour, userId}) {
     const [optionsList, setOptionsList] = useState([]);
     const [apiCalled, setApiCalled] = useState(false);
-    const [userId, setUserId] = useState("1");
 
     useEffect(() => {
         if (!apiCalled) {

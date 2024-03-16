@@ -6,7 +6,7 @@ import Dashboard from "../pages/Dashboard";
 import Friends from "../pages/Friends";
 import Groups from "../pages/Groups";
 
-function ContentArea() {
+function ContentArea({userId}) {
   const navButtons = useSelector((state) => state.userNavbarStore.buttons);
 
   return (
@@ -16,7 +16,7 @@ function ContentArea() {
           if (button.active) {
             switch (button.name) {
               case "Profile":
-                return <Profile />;
+                return <Profile userId={userId}/>;
               case "Dashboard":
                 return <Dashboard />;
               case "Friends":

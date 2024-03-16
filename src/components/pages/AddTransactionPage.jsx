@@ -14,7 +14,7 @@ import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelectio
 
 
 
-const AddTransactionPage = ({ closePopup }) => {
+const AddTransactionPage = ({ closePopup, userId }) => {
     const [transactionTitle, setTransactionTitle] = useState('');
     const [transactionTitleFieldColour, setTransactionTitleFieldColour] = useState('red');
 
@@ -40,7 +40,6 @@ const AddTransactionPage = ({ closePopup }) => {
     const [selectedRecurringFrequency, setRecurringFrequency] = useState('');
     const [selectedRecurringFrequencyFieldColour, setSelectedRecurringFrequencyFieldColour] = useState('gray');
     const [loadRecurringFrequencyField, setLoadRecurringFrequencyField] = useState(false);
-    const [userId, setUserId] = useState('1');
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
@@ -193,6 +192,7 @@ const AddTransactionPage = ({ closePopup }) => {
                     selectedCategory={selectedCategory}
                     handleCategoryChange={handleCategoryChange}
                     fieldColour = {selectedCategoryFieldColour}
+                    userId={userId}
                 />
 
                 <FormSection col="2">
@@ -230,6 +230,7 @@ const AddTransactionPage = ({ closePopup }) => {
                     handleGroupChange={handleGroupChange}
                     selectedGroupOption={selectedGroupOption}
                     fieldColour = {selectedGroupOptionFieldColour}
+                    userId={userId}
                 />
 
                 <SplitAmountInput 
