@@ -7,6 +7,7 @@ import Login from "../api/Login";
 import ErrorMessage from '../shared/ErrorMessage';
 import LoadingMessage from '../shared/LoadingMessage';
 import ForgotPassword from './ForgotPassword';
+import Header from "../shared/Header";
 
 const LoginSignUp = ({setUserId}) => {
 	const [loginEmail, setLoginEmail] = useState('');
@@ -45,6 +46,7 @@ const LoginSignUp = ({setUserId}) => {
 
 	return (
 		<div>
+		<Header></Header>
 		<div className="relative z-50">
 			{showErrorMessage && (
 				<ErrorMessage
@@ -63,7 +65,7 @@ const LoginSignUp = ({setUserId}) => {
 				/>
 			)}
 		</div>
-		<div class="min-h-screen bg-indigo-600">
+		<div class="min-h-screen bg-indigo-500">
 			<h6 class="mb-0 pb-3 text-l font-bold"><span class="mr-5">Log In </span><span>Sign Up</span></h6>
 			
 				

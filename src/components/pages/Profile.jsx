@@ -5,7 +5,7 @@ import Friends from "../shared/Friends";
 import Button from "../shared/Button";
 import AddTransactionButton from "../shared/AddTransactionButton";
 
-function Profile() {
+function Profile({userId}) {
   const friends = [
     { name: "Jun Jie", username: "junjie", isFriend: true },
     { name: "Wei Jie", username: "weijie", isFriend: true },
@@ -26,7 +26,7 @@ function Profile() {
       <Section headerName="Friends">
         <Friends friends={friends} />
       </Section>
-      <AddTransactionButton />
+      <AddTransactionButton userId={userId}/>
     </>
   );
 }
