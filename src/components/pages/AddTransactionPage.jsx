@@ -113,7 +113,39 @@ const AddTransactionPage = ({ closePopup, userId }) => {
 
     const handleTrnasactionCreatedSucessButton  = (e) => {
         setShowSuccessMessage(false);
+        resetFormFields()
         closePopup();
+    };
+
+    const resetFormFields = () => {
+        setTransactionTitle('');
+        setTransactionTitleFieldColour('red');
+    
+        setSelectedCategory('');
+        setSelectedCategoryFieldColour('red');
+    
+        setCurrency('');
+        setCurrencyFieldColour('red');
+    
+        setAmount('');
+        setAmountFieldColour('red');
+    
+        setDescription('');
+        setIconSelectedOption(1);
+    
+        setGroupOption('');
+        setSelectedGroupOptionFieldColour('gray');
+    
+        setSplitAmount('');
+        setSplitAmountFieldColour('gray');
+    
+        setRecurringFrequency('');
+        setSelectedRecurringFrequencyFieldColour('gray');
+        setLoadRecurringFrequencyField(false);
+    
+        setShowErrorMessage(false);
+        setShowSuccessMessage(false);
+        setShowLoadingMessage(false);
     };
 
 

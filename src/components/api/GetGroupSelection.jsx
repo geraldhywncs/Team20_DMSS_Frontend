@@ -11,15 +11,15 @@ function GetGroupSelection({ selectedGroupOption, handleGroupChange, fieldColour
     useEffect(() => {
         if (!apiCalled) {
             try {
-                const apiEndpoint = process.env.REACT_APP_apiHost + "/groups/read";
+                const apiEndpoint = process.env.REACT_APP_apiHost + "/grouping/read";
                 const data = {"user_id": userId};
                 callApi(apiEndpoint, "POST", data)
                     .then(response => {
-                        if (response.status_code === '200') {
-                            const options = response.groups.map((entry) => ({
+                        if (response.status_code === 200) {
+                            const options = response.grouping.map((entry) => ({
                                 value: entry.group_id,
                                 label: entry.group_name,
-                              }));
+                            }));
                             setOptionsList(options);
                         } else {
                             console.log(response.message);
