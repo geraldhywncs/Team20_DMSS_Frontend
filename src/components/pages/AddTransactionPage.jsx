@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import Button from "../shared/Button";
 import FormInput from "../shared/FormInput";
 import FormLabel from "../shared/FormLabel";
@@ -6,12 +6,11 @@ import FormTextarea from "../shared/FormTextarea";
 import FormSection from "../shared/FormSection";
 import CreateTransactionButton from "../api/CreateTransaction";
 import GetCurrencySelection from "../api/GetCurrencySelection";
-import GetCategorySelection from "../api/GetCategorySelection";
+import {GetCategorySelection, addCategory, deleteCategory} from "../api/GetCategorySelection";
 import GetGroupSelection from "../api/GetGroupSelection";
 import SplitAmountInput from "../api/SplitAmountInput";
 import IconSelection from "../api/IconSelection";
 import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelection";
-
 
 
 const AddTransactionPage = ({ closePopup, userId }) => {
@@ -20,6 +19,10 @@ const AddTransactionPage = ({ closePopup, userId }) => {
 
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedCategoryFieldColour, setSelectedCategoryFieldColour] = useState('red');
+    const [categoryMessage, setCategoryMessage] = useState('');
+    const [categoryMessageType, setCategoryMessageType] = useState('');
+    const [categoryValue, setCategoryValue] = useState("");
+    const [updateCategoryComponent, setUpdateCategoryComponent] = useState(false); 
     
     const [currency, setCurrency] = useState('');
     const [currencyFieldColour, setCurrencyFieldColour] = useState('red');
@@ -36,7 +39,6 @@ const AddTransactionPage = ({ closePopup, userId }) => {
     const [splitAmount, setSplitAmount] = useState('');
     const [splitAmountFieldColour, setSplitAmountFieldColour] = useState('gray');
 
-
     const [selectedRecurringFrequency, setRecurringFrequency] = useState('');
     const [selectedRecurringFrequencyFieldColour, setSelectedRecurringFrequencyFieldColour] = useState('gray');
     const [loadRecurringFrequencyField, setLoadRecurringFrequencyField] = useState(false);
@@ -44,6 +46,17 @@ const AddTransactionPage = ({ closePopup, userId }) => {
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
     const [showLoadingMessage, setShowLoadingMessage] = useState(false); 
+
+    useEffect(() => {
+        if (categoryMessage) {
+            const timeoutId = setTimeout(() => {
+                setCategoryMessage('');
+                setCategoryMessageType('');
+            }, 5000); 
+
+            return () => clearTimeout(timeoutId); 
+        }
+    }, [categoryMessage]);
 
     const handleTransactionTitle = (e) => {
         if(e.target.value === ""){
@@ -117,6 +130,58 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         closePopup();
     };
 
+    /*Manage Category*/
+    const handleCategoryInputChange = (event) => {
+        setCategoryValue(event.target.value);
+    };
+    
+    const handleAddCategoryClick = (event) => {
+        event.preventDefault();
+        setSelectedCategory('');
+        setCategoryValue('');
+
+        const data = {
+            user_id: userId,
+            category_name: categoryValue
+        };
+    
+        addCategory(data, (response) => {
+            if (response.status_code === 200) {
+                setCategoryMessageType("success");
+                setCategoryMessage(`Category added successfully: ${categoryValue}`);
+                setSelectedCategory(response.category_name);
+                setUpdateCategoryComponent(prevState => !prevState);
+            } else {
+                setCategoryMessageType("error");
+                setCategoryMessage(`Please try another category.`);
+            }
+        });
+    };
+    
+    const handleDeleteCategoryClick = (event)=>{
+        event.preventDefault();
+        setSelectedCategory('');
+        setCategoryValue('');
+
+        const data = {
+            user_id: userId,
+            category_id: selectedCategory
+        };
+
+        deleteCategory(data, (response)=>{
+            if (response.status_code === 200) {
+                setCategoryMessageType("success");
+                setCategoryMessage(`Category deleted successfully: ${selectedCategory}`);
+                setSelectedCategory(response.category_id);
+                setUpdateCategoryComponent(prevState => !prevState);
+            }  else {
+                setCategoryMessageType("error");
+                setCategoryMessage(`Failed to delete category.`);
+            }
+
+        });
+    }
+
     const resetFormFields = () => {
         setTransactionTitle('');
         setTransactionTitleFieldColour('red');
@@ -147,7 +212,6 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         setShowSuccessMessage(false);
         setShowLoadingMessage(false);
     };
-
 
     return (
         <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
@@ -225,7 +289,35 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                     handleCategoryChange={handleCategoryChange}
                     fieldColour = {selectedCategoryFieldColour}
                     userId={userId}
+                    categoryAdded= {updateCategoryComponent}
                 />
+
+                <div className="col-span-2 flex justify-end">
+                    <div id="categoryMessage" className={categoryMessageType === 'success' ? 'successMessage' : 'errorMessage'}>{categoryMessage}</div>
+
+                    <input 
+                        type="text" 
+                        value={categoryValue} 
+                        onChange={handleCategoryInputChange} 
+                        placeholder="Enter Category" 
+                        className="addCategoryInput"
+                    />
+
+                    <Button
+                        color="addCategory"
+                        text="Add Category"
+                        onClick={handleAddCategoryClick} 
+                    />
+
+                    {selectedCategory && (
+                        <Button
+                            color="deleteCategory"
+                            text="Delete Category"
+                            onClick={handleDeleteCategoryClick}
+                            disabled={!selectedCategory}
+                        />
+                    )}
+                </div>
 
                 <FormSection col="2">
                     <FormLabel

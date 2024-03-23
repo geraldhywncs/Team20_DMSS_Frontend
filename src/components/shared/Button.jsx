@@ -17,6 +17,18 @@ function Button(props) {
           {text}
         </button>
       );
+    case "addCategory":
+      return (
+        <button className={`addCategoryButton text-xs`} onClick={onClick}>
+          {text}
+        </button>
+      );
+    case "deleteCategory":
+      return (
+        <button className={`deleteCategoryButton text-xs`} onClick={onClick}>
+          {text}
+        </button>
+      );
     default:
       return (
         <button className={`blue-btn body-medium font-bold`} onClick={onClick}>
