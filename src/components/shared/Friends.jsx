@@ -1,10 +1,13 @@
 import React from "react";
 
 function Friends(props) {
-  const { friends, onClick } = props;
+  const { friends, onClick, showFriend } = props;
+  const updatedFriends = friends.filter(
+    (friend) => friend.isFriend === showFriend
+  );
   return (
     <div className="friends-container">
-      {friends.map((friend, index) => (
+      {updatedFriends.map((friend, index) => (
         <FriendCard key={index} friend={friend} onClick={onClick} />
       ))}
     </div>

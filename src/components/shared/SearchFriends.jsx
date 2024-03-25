@@ -48,7 +48,7 @@ function SearchFriends(props) {
         </button>
       </div>
       <div className="friends-results">
-        <FriendList friends={results} onClick={onClick} />
+        <FriendList friends={results} onClick={onClick} showFriend={false} />
       </div>
     </>
   );
