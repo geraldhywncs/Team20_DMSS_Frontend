@@ -4,7 +4,7 @@ const constants = {
   },
   app: {
     APP_TITLE: "💵MoneyGoWhere",
-    TEMP_USER: "Steven Lim 帅哥", //Temp remove once logic is in place
+    TEMP_USER: "Steven Limmy 帅哥", //Temp remove once logic is in place
   },
   errors: {
     NETWORK_ERROR: "Network error. Please try again later.",
