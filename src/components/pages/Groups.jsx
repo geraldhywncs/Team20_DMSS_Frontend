@@ -7,15 +7,35 @@ import Button from "../shared/Button";
 import callApi from "../shared/callAPI";
 
 function Groups() {
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const userID = localStorage.getItem("userId");
+      try {
+        const endPoint = process.env.REACT_APP_apiHost + `/groups/${userID}`;
+        const response = await callApi(endPoint, "GET");
+        console.log(response.groups);
+
+        // setGroups(response.groups);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData(); // Call fetchData function when the component mounts
+  }, []);
+
   return (
     <>
-      <CreateGroup />
-      <ExistingGroups />
+      <CreateGroup groups={groups} setGroups={setGroups} />
+      <ExistingGroups groups={groups} />
     </>
   );
 }
 
-function CreateGroup() {
+function CreateGroup(props) {
+  const { groups, setGroups } = props;
   const [addedMembers, setAddedMembers] = useState([]);
   const [groupName, setGroupName] = useState("");
   const [allUsers, setAllUsers] = useState([]);
@@ -36,24 +56,45 @@ function CreateGroup() {
   }, []);
 
   useEffect(() => {
-    generateFriends(allUsers);
-  }, [allUsers]); // Run when allUsers or allFriends change
+    function generateFriends(allUsers) {
+      const generatedFriends = allUsers.map((user) => {
+        return {
+          id: user.user_id,
+          name: `${user.first_name} ${user.last_name}`,
+          username: user.user_name,
+          isFriend: addedMembers.includes(user.user_id) ? true : false,
+        };
+      });
+      setFriends(
+        generatedFriends.filter(
+          (f) => `${f.id}` !== localStorage.getItem("userId")
+        )
+      );
+    }
 
-  function generateFriends(allUsers) {
-    const generatedFriends = allUsers.map((user) => {
-      return {
-        id: user.user_id,
-        name: `${user.first_name} ${user.last_name}`,
-        username: user.user_name,
-        isFriend: addedMembers.includes(user.user_id) ? true : false,
-      };
-    });
-    setFriends(
-      generatedFriends.filter(
-        (f) => `${f.id}` !== localStorage.getItem("userId")
-      )
-    );
-  }
+    generateFriends(allUsers);
+  }, [allUsers, addedMembers]); // Run when allUsers or addedMembers change
+
+  const handleCreateGroup = async () => {
+    const userID = localStorage.getItem("userId");
+    try {
+      const endPoint = process.env.REACT_APP_apiHost + "/groups";
+      const data = JSON.stringify({
+        group_name: groupName,
+        group_member_ids: [userID, ...addedMembers.map((member) => member.id)],
+      });
+      const response = await callApi(endPoint, "POST", data);
+      setGroups([
+        ...groups,
+        {
+          name: response.group.group_name,
+          usernames: response.group_members.map((members) => members.user_name),
+        },
+      ]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   // const friends = [
   //   { name: "Jun Jie", username: "junjie", isFriend: false },
@@ -61,6 +102,8 @@ function CreateGroup() {
   //   { name: "Jedrek", username: "jedrek", isFriend: false },
   //   { name: "Weii Zee", username: "weiizee", isFriend: false },
   // ];
+
+  const addedMemberUsernames = addedMembers.map((member) => member.username);
   return (
     <Section headerName={"Create Group"}>
       <div className="groups-container">
@@ -75,33 +118,39 @@ function CreateGroup() {
           />
         </div>
         <div className="body-medium font-regular">
-          {`Members: ${addedMembers.map((username) => `@${username}`).join(", ")}`}
+          {`Members: ${addedMemberUsernames.map((username) => `@${username}`).join(", ")}`}
         </div>
         <SearchFriends
           onClick={(friend) => {
-            if (addedMembers.includes(friend.username)) {
+            const addedMemberUsernames = addedMembers.map(
+              (member) => member.username
+            );
+            if (addedMemberUsernames.includes(friend.username)) {
               setAddedMembers(
-                addedMembers.filter((member) => member !== friend.username)
+                addedMembers.filter(
+                  (member) => member.username !== friend.username
+                )
               );
             } else {
-              setAddedMembers([...addedMembers, friend.username]);
+              setAddedMembers([...addedMembers, friend]);
             }
           }}
           friends={friends}
-          addedMembers={addedMembers}
+          addedMembers={addedMemberUsernames}
         />
       </div>
-      <div className="groups-button">
+      <div className="groups-button" onClick={handleCreateGroup}>
         <Button color={"blue"} text={"Create group"} />
       </div>
     </Section>
   );
 }
 
-function ExistingGroups() {
+function ExistingGroups(props) {
+  const { groups } = props;
   return (
     <Section headerName="Existing Groups">
-      <GroupsView />
+      <GroupsView groups={groups} />
     </Section>
   );
 }

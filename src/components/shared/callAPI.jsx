@@ -7,6 +7,9 @@ async function callApi(apiEndpoint, method, data = null, params = null) {
       url: apiEndpoint,
       data: data,
       params: params,
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
     const response = await axios(config);
     return response.data;

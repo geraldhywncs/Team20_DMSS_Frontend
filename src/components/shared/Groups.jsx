@@ -1,13 +1,14 @@
 import "../../App.css";
 
-function Groups() {
-  const groups = [
-    {
-      name: "The Bois",
-      usernames: ["junjie", "weijie", "jedrek", "weiizee"],
-    },
-    { name: "The Girls", usernames: ["girl1", "girl2", "girl3"] },
-  ];
+function Groups(props) {
+  const { groups } = props;
+  // const groups = [
+  //   {
+  //     name: "The Bois",
+  //     usernames: ["junjie", "weijie", "jedrek", "weiizee"],
+  //   },
+  //   { name: "The Girls", usernames: ["girl1", "girl2", "girl3"] },
+  // ];
 
   return (
     <div className="groups-container">
