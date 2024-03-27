@@ -3,7 +3,7 @@ import FriendList from "../shared/Friends";
 import "../../App.css";
 
 function SearchFriends(props) {
-  const { onClick, friends } = props;
+  const { onClick, friends, addedMembers } = props;
 
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
@@ -58,6 +58,7 @@ function SearchFriends(props) {
           onClick={onClick}
           showFriend={false}
           showSearchResults={showSearchResults}
+          addedMembers={addedMembers}
         />
       </div>
     </>

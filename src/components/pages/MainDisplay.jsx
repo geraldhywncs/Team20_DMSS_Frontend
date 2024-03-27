@@ -18,7 +18,7 @@ function MainDisplay() {
   */
   const [userId, setUserId] = useState("");
   useEffect(() => {
-    localStorage.setItem("userId", "");
+    localStorage.setItem("userId", "1");
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
       setUserId(storedUserId);
