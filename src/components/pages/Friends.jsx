@@ -34,7 +34,7 @@ function Friends() {
   }, [allUsers, allFriends]); // Run when allUsers or allFriends change
 
   function generateFriends(allUsers, allFriends) {
-    const friendsId = allFriends.map((f) => f.user_id);
+    const friendsId = allFriends.map((f) => f.id);
     const generatedFriends = allUsers.map((user) => {
       return {
         id: user.user_id,
@@ -43,11 +43,15 @@ function Friends() {
         isFriend: friendsId.includes(user.user_id) ? true : false,
       };
     });
-    setFriends(generatedFriends);
+    setFriends(
+      generatedFriends.filter(
+        (f) => `${f.id}` !== localStorage.getItem("userId")
+      )
+    );
   }
 
   const handleFriendClick = async (friend) => {
-    const friendIds = allFriends.map((f) => f.user_id);
+    const friendIds = allFriends.map((f) => f.id);
     const userID = localStorage.getItem("userId");
     try {
       const apiEndpoint = process.env.REACT_APP_apiHost + `/friends/${userID}`;
@@ -56,16 +60,16 @@ function Friends() {
       if (friendIds.includes(friend.id)) {
         // REMOVE FRIEND
         const response = await callApi(apiEndpoint, "DELETE", params);
-        setAllFriends(
-          allFriends.filter((f) => f.user_id !== response.friend.friend_id)
+        setAllFriends((allFriends) =>
+          allFriends.filter((f) => f.id !== response.friend.friend_id)
         );
       } else {
         // ADD FRIEND
         const response = await callApi(apiEndpoint, "POST", params);
-        setAllFriends([
+        setAllFriends((allFriends) => [
           ...allFriends,
           {
-            id: response.friend.friend_id,
+            id: response.friend.user_id,
             name: `${response.friend.first_name} ${response.friend.last_name}`,
             username: response.friend.user_name,
             isFriend: true,
