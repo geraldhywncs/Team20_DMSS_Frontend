@@ -8,10 +8,8 @@ const DeleteTransactionPage = ({ closePopup }) => {
     const [transactionId, setTransactionId] = useState('');
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    const [showLoadingMessage, setShowLoadingMessage] = useState(false);
 
     const handleDelete = async () => {
-        setShowLoadingMessage(true);
         
         try {
             // Make an API call to delete the transaction with the specified ID
@@ -26,8 +24,6 @@ const DeleteTransactionPage = ({ closePopup }) => {
         } catch (error) {
             console.error('Error deleting transaction:', error);
             setShowErrorMessage(true);
-        } finally {
-            setShowLoadingMessage(false);
         }
     };
 
@@ -61,17 +57,6 @@ const DeleteTransactionPage = ({ closePopup }) => {
                 </div>
             )}
 
-            {showLoadingMessage && (
-                <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
-                    <div className="p-8 rounded-md">
-                        <div className="flex items-center justify-center white-btn body-medium font-bold">
-                            <span className="material-icons animate-spin h-5 w-5 mr-3">autorenew</span>
-                            Processing...
-                        </div>
-                    </div>
-                </div>
-            )}
-
             <form className="p-7 md:p-7">
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2">
@@ -90,10 +75,9 @@ const DeleteTransactionPage = ({ closePopup }) => {
             <div className="px-7 md:px-7 py-0 grid gap-4 mb-4">
                 <Button
                     color="red"
-                    text="Delete Transactionsss"
+                    text="Delete Transactions"
                     onClick={handleDelete}
                 />
-                <DeleteTransactionButton/>
             </div>
         </div>
     );

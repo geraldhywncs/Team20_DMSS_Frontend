@@ -1,0 +1,38 @@
+
+.transaction-date {
+  display: flex;
+  justify-content: flex-start;
+  align-items: start;
+  margin-bottom: 2px;
+  margin-top: 10px;
+}
+
+.transactions-button {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.icon-container {
+  display: flex;
+  width: 10%;
+}
+
+.transaction-trans {
+  display: flex;
+  width: 70%;
+  align-items: flex-start;
+  flex-direction: column;
+  align-content: stretch;
+  justify-content: center;
+}
+
+.transaction-amount{
+  display: flex;
+  text-wrap: balance;
+  align-items: center;
+  gap: 15px;
+  width: 20%;
+  color: red;
+  justify-content: flex-end;
+}

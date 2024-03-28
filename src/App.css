@@ -141,6 +141,7 @@
   width: 100%;
   padding: 16px 8px;
   border-radius: 10px;
+  margin-top: 5px;
 }
 
 .blue-btn:hover {
@@ -158,6 +159,14 @@
 
 .white-btn:hover {
   cursor: pointer;
+}
+
+.deleteTransactionButton {
+  background-color: var(--red);
+  color: var(--white);
+  width: 10%;
+  padding: 5px 2px;
+  border-radius: 10px;
 }
 
 .addCategoryButton {
@@ -358,4 +367,46 @@
 
 .addCategoryInput:focus {
   border-color: var(--blue); 
+}
+
+
+/* TransactionsView */
+.transactions-container {
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items:center;
+  justify-content: center;
+}
+
+.transaction-container { /*Grey flex box*/
+  display: flex;
+  background: var(--grey);
+  border-radius: 10px;
+  padding: 20px 40px;
+  align-items: center;
+  text-wrap: wrap;
+  text-align: left;
+  width: 100%;
+  
+}
+.icon-box { /*Cookie icon square css*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(107, 45, 239, 0.499);
+  background-color: rgba(107, 45, 239, 0.499);
+  border-radius: 20%;
+  width: 50px;
+  height: 50px;
+}
+
+.trans-icons { /*Cookie icon*/
+  display: flex;
+  justify-content: flex-start;
+  font-size: 24px; /* Adjust icon */
+  color: white; /* White icon color */
 }

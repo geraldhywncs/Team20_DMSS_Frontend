@@ -22,8 +22,8 @@ function DeleteTransactionButton({ transactionId, setShowErrorMessage, setShowSu
   };
 
   return (
-    <div onClick={deleteTransaction}>
-      <Button color={"red"} text={"Delete Transaction" }/>
+    <div>
+      {/* <Button color="red" text="Delete Transaction" onClick={deleteTransaction} /> */}
     </div>
   );
 }

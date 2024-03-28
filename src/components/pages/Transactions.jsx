@@ -1,45 +1,28 @@
-import React, { useState, useEffect } from "react";
-import Button from "../shared/Button";
+import { useState } from "react";
 import Section from "../shared/Section";
+import "../../styles/pages/Transactions.css";
+import TransactionsView from "../shared/Transactions";
 import AddTransactionButton from "../shared/AddTransactionButton";
 import DeleteTransactionButton from "../shared/DeleteTransactionButton";
+import UpdateTransactionButton from "../shared/UpdateTransactionButton";
 
-function Transactions() {
-  const [transactions, setTransactions] = useState([]);
-
-  useEffect(() => {
-    // Fetch data here and update state
-    // Example fetch call
-    fetchTransactions()
-      .then((data) => setTransactions(data))
-      .catch((error) => console.error("Error fetching transactions: ", error));
-  }, []); // Empty dependency array to run effect only once
-
-  // Function to fetch transactions data (example)
-  const fetchTransactions = async () => {
-    // Example fetch call
-    const response = await fetch("/api/transactions");
-    const data = await response.json();
-    return data;
-  };
-
+function Transactions({userId}){
   return (
     <>
-      <Section headerName="Transactions testisdng">
-        {/* Display transactions */}
-        {transactions.map((transaction) => (
-          <div key={transaction.id}>
-            {/* Render transaction details */}
-            <p>{transaction.description}</p>
-            <p>{transaction.amount}</p>
-            {/* Add more details as needed */}
-          </div>
-        ))}
-      </Section>
+      <ExistingTransactions />
       <AddTransactionButton />
-      <div><p></p></div>
+      <UpdateTransactionButton />
       <DeleteTransactionButton />
     </>
+  );
+}
+
+function ExistingTransactions() {
+  return (
+    <Section headerName="Recent Transaction">
+      <TransactionsView />
+      <TransactionsView />
+    </Section>
   );
 }
 

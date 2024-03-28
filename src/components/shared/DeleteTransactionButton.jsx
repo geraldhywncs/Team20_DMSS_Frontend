@@ -19,7 +19,7 @@ const DeleteTransactionButton = () => {
                 <div class="w-48">
                     <Button
                         color={"red"} // Use a red color for delete action
-                        text={"Delete Transactionss"}
+                        text={"Delete Transactionsse"}
                         onClick={handleButtonClick}
                     />
                 </div>
