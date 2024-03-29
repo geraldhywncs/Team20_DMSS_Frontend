@@ -59,6 +59,7 @@ function SearchFriends(props) {
           showFriend={false}
           showSearchResults={showSearchResults}
           addedMembers={addedMembers}
+          showButton={true}
         />
       </div>
     </>

@@ -99,6 +99,7 @@ function ExistingFriends(props) {
         friends={friends}
         onClick={handleFriendClick}
         showFriend={true}
+        showButton={true}
       />
     </Section>
   );
