@@ -15,15 +15,13 @@ function Groups() {
       try {
         const endPoint = process.env.REACT_APP_apiHost + `/groups/${userID}`;
         const response = await callApi(endPoint, "GET");
-        console.log(response.groups);
-
-        // setGroups(response.groups);
+        setGroups(response.groups);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchData(); // Call fetchData function when the component mounts
+    fetchData();
   }, []);
 
   return (
@@ -39,25 +37,37 @@ function CreateGroup(props) {
   const [addedMembers, setAddedMembers] = useState([]);
   const [groupName, setGroupName] = useState("");
   const [allUsers, setAllUsers] = useState([]);
+  const [allFriends, setAllFriends] = useState([]);
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const userID = localStorage.getItem("userId");
       try {
         const usersEndPoint = process.env.REACT_APP_apiHost + "/users";
         const usersResponse = await callApi(usersEndPoint, "GET");
         setAllUsers(usersResponse.users);
+
+        const friendsEndPoint =
+          process.env.REACT_APP_apiHost + `/friends/${userID}`;
+        const friendsResponse = await callApi(friendsEndPoint, "GET");
+        setAllFriends(friendsResponse.friends);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchData(); // Call fetchData function when the component mounts
+    fetchData();
   }, []);
 
   useEffect(() => {
-    function generateFriends(allUsers) {
-      const generatedFriends = allUsers.map((user) => {
+    function generateFriends(allUsers, allFriends) {
+      // check all friend_id, return custom friend object
+      const friendsId = allFriends.map((f) => f.friend_id);
+      const searachableFriends = allUsers.filter((user) =>
+        friendsId.includes(user.user_id)
+      );
+      const generatedFriends = searachableFriends.map((user) => {
         return {
           id: user.user_id,
           name: `${user.first_name} ${user.last_name}`,
@@ -65,6 +75,8 @@ function CreateGroup(props) {
           isFriend: addedMembers.includes(user.user_id) ? true : false,
         };
       });
+
+      // filter out self
       setFriends(
         generatedFriends.filter(
           (f) => `${f.id}` !== localStorage.getItem("userId")
@@ -72,8 +84,8 @@ function CreateGroup(props) {
       );
     }
 
-    generateFriends(allUsers);
-  }, [allUsers, addedMembers]); // Run when allUsers or addedMembers change
+    generateFriends(allUsers, allFriends);
+  }, [allUsers, allFriends, addedMembers]);
 
   const handleCreateGroup = async () => {
     const userID = localStorage.getItem("userId");
@@ -87,21 +99,14 @@ function CreateGroup(props) {
       setGroups([
         ...groups,
         {
-          name: response.group.group_name,
-          usernames: response.group_members.map((members) => members.user_name),
+          group_name: response.group.group_name,
+          members: response.group_members.map((members) => members.user_name),
         },
       ]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-  // const friends = [
-  //   { name: "Jun Jie", username: "junjie", isFriend: false },
-  //   { name: "Wei Jie", username: "weijie", isFriend: false },
-  //   { name: "Jedrek", username: "jedrek", isFriend: false },
-  //   { name: "Weii Zee", username: "weiizee", isFriend: false },
-  // ];
 
   const addedMemberUsernames = addedMembers.map((member) => member.username);
   return (
