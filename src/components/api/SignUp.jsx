@@ -34,8 +34,8 @@ function SignUp({ firstname, lastname, email, username, password, setShowErrorMe
             } else {
                 setShowErrorMessage(false);
                 setShowLoadingMessage(true);
-                const statusCode = await fetchData();
-                if (statusCode === "201") {
+                const response = await fetchData();
+                if (response.status_code === "201") {
                     setShowLoadingMessage(false);
                     console.log('Sign up successful.');
                     setSuccessMessage('Sign up successful! Please log in.')
