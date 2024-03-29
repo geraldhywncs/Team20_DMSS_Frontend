@@ -1,26 +1,52 @@
 import React from "react";
 import GraphBar from "./GraphBar";
+import DashboardFilter from "./DashboardFilter";
 
-function GraphDayLayout() {
+function GraphDayLayout({ receiptData }) {
+  const concatExpenses = (receiptData) => {
+    const dailyExpenses = {};
+
+    receiptData.forEach(receipt => {
+      const { title, expenses } = receipt;
+      if (!dailyExpenses[title]) {
+        dailyExpenses[title] = 0;
+      }
+      expenses.forEach(expense => {
+        dailyExpenses[title] += expense.share_amount;
+        console.log( dailyExpenses[title] + ":" + expense.share_amount);
+      });
+    });
+
+    return dailyExpenses;
+  };
+
+  const calculateTotalExpenses = (expenses) => {
+    let total = 0;
+    Object.values(expenses).forEach(amount => {
+      total += amount;
+    });
+    return total;
+  };
+
+  const dailyExpenses = concatExpenses(receiptData);
+  const totalExpenses = calculateTotalExpenses(dailyExpenses);
+
+  console.log(dailyExpenses);
+  console.log('Total Expenses:', totalExpenses);
+
   return (
     <React.Fragment>
-      <GraphBar height={20} value="Groceries" />
-      <GraphBar height={22} value="Bills" />
+      <DashboardFilter period="day" receiptData={receiptData} />
+      {Object.entries(dailyExpenses).map(([title, amount], index) => (
+        <GraphBar
+          key={index}
+          height={(amount / totalExpenses) * 100}
+          value={title}
+          amount = {amount}
+        />
+      ))}
     </React.Fragment>
   );
 }
 
-
-
-
-
 export default GraphDayLayout;
-
-/*
-1. Needs to call the expense API based on the expense. Select * from expenses based on user id.
-2. Once the expense is selected, get the receipt_id. 
-3. Select * from receipt_id and get the info
-
-From there use the necessary filters to filter out the values.
-
-*/

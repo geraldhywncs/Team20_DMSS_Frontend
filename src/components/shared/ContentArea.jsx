@@ -18,7 +18,7 @@ function ContentArea({userId}) {
               case "Profile":
                 return <Profile userId={userId}/>;
               case "Dashboard":
-                return <Dashboard />;
+                return <Dashboard userId={userId}/>;
               case "Friends":
                 return <Friends />;
               case "Groups":
