@@ -8,14 +8,6 @@ import ResetPassword from "./ResetPassword";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function MainDisplay() {
-  /*
-    Note in the main display, we will have 3 components (for now)
-    1. The header (username and app title)
-    2. The verical nav bar
-    3. The main display * This is the component that will be re-rendered based on what the user click.
-        When the user clicks for eg. Home, the currentState should be stored as Home and this will re-render the component
-        Trigger what needs to be displayed. In this case the home page.
-  */
   const [userId, setUserId] = useState("");
   useEffect(() => {
     localStorage.setItem("userId", "");

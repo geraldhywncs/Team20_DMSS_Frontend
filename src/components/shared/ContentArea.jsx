@@ -23,7 +23,6 @@ function ContentArea({userId}) {
                 return <Friends />;
               case "Groups":
                 return <Groups />;
-              // TODO - add your other components in this switch case
               default:
                 return (
                   <div key={index}>
