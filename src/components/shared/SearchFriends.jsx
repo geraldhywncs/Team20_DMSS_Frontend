@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import FriendList from "../shared/Friends";
 import "../../App.css";
 
 function SearchFriends(props) {
-  const { onClick, friends } = props;
+  const { onClick, friends, addedMembers } = props;
 
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
 
-  function showSearchResults() {
+  const showSearchResults = useCallback(() => {
     setResults(
       friends.filter((friend) => {
         if (friend.isFriend) return false;
@@ -22,7 +22,12 @@ function SearchFriends(props) {
         return nameMatch || usernameMatch;
       })
     );
-  }
+  }, [friends, search]);
+
+  useEffect(() => {
+    showSearchResults();
+  }, [friends, search, showSearchResults]);
+
   return (
     <>
       <div className="friends-search-container">
@@ -48,7 +53,14 @@ function SearchFriends(props) {
         </button>
       </div>
       <div className="friends-results">
-        <FriendList friends={results} onClick={onClick} />
+        <FriendList
+          friends={results}
+          onClick={onClick}
+          showFriend={false}
+          showSearchResults={showSearchResults}
+          addedMembers={addedMembers}
+          showButton={true}
+        />
       </div>
     </>
   );

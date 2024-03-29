@@ -1,43 +1,114 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../styles/pages/Profile.css";
 import Section from "../shared/Section";
 import Friends from "../shared/Friends";
 import Button from "../shared/Button";
+import Groups from "../shared/Groups";
 import AddTransactionButton from "../shared/AddTransactionButton";
+import callApi from "../shared/callAPI";
 
-function Profile({userId}) {
-  const friends = [
-    { name: "Jun Jie", username: "junjie", isFriend: true },
-    { name: "Wei Jie", username: "weijie", isFriend: true },
-    { name: "Jedrek", username: "jedrek", isFriend: true },
-    { name: "Weii Zee", username: "weiizee", isFriend: false },
-  ];
-  const groups = [
-    {
-      name: "The Bois",
-      usernames: ["junjie", "weijie", "jedrek", "weiizee"],
-    },
-    { name: "The Girls", usernames: ["girl1", "girl2", "girl3"] },
-  ];
+function Profile({ userId }) {
+  const [friends, setFriends] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [profileChange, setProfileChange] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const endpoint = process.env.REACT_APP_apiHost + `/profile/${userId}`;
+        const response = await callApi(endpoint, "GET");
+
+        setFriends(
+          response.friends.map((friend) => {
+            return {
+              id: friend.user_id,
+              name: `${friend.first_name} ${friend.last_name}`,
+              username: friend.user_name,
+              isFriend: true,
+            };
+          })
+        );
+        setGroups(response.groups);
+        setFirstName(response.user.first_name);
+        setLastName(response.user.last_name);
+        setUsername(response.user.user_name);
+        setBio(response.user.bio);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [profileChange, userId]);
+
   return (
     <>
-      <MyProfile />
-      <Groups groups={groups} />
+      <MyProfile
+        firstName={firstName}
+        setFirstName={setFirstName}
+        lastName={lastName}
+        setLastName={setLastName}
+        username={username}
+        setUsername={setUsername}
+        bio={bio}
+        setBio={setBio}
+        profileChange={profileChange}
+        setProfileChange={setProfileChange}
+        userId={userId}
+      />
       <Section headerName="Friends">
-        <Friends friends={friends} />
+        <Friends friends={friends} showFriend={true} showButton={false} />
       </Section>
-      <AddTransactionButton userId={userId}/>
+
+      <Section headerName="Groups">
+        <Groups groups={groups} />
+      </Section>
+      <AddTransactionButton userId={userId} />
     </>
   );
 }
 
-function MyProfile() {
-  const [name, setName] = useState("Gerald");
-  const [username, setUsername] = useState("geraldhyw");
-  const [bio, setBio] = useState(
-    "Pastry sprinkles marzipan tiramisu ipsum marzipan. Cream ipsum tiramisu croissant cake tiramisu. Tiramisu orange croissant apple sweet cream. Biscuit marzipan tiramisu dolor croissant sprinkles."
-  );
+function MyProfile(props) {
+  const {
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    username,
+    setUsername,
+    bio,
+    setBio,
+    profileChange,
+    setProfileChange,
+    userId,
+  } = props;
   const [isEdit, setIsEdit] = useState(false);
+
+  const handleButtonClick = async () => {
+    if (isEdit) {
+      try {
+        const endPoint = process.env.REACT_APP_apiHost + `/user/${userId}`;
+        const data = JSON.stringify({
+          user_details: {
+            first_name: firstName,
+            last_name: lastName,
+            user_name: username,
+            bio: bio,
+          },
+        });
+        await callApi(endPoint, "PUT", data);
+        setProfileChange(profileChange + 1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    setIsEdit(!isEdit);
+  };
 
   return (
     <Section headerName="My Profile">
@@ -45,12 +116,22 @@ function MyProfile() {
         {isEdit ? (
           <>
             <div className="profile-info-edit">
-              <label>Name</label>
+              <label>First Name</label>
               <input
                 className="profile-edit-name"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+
+            <div className="profile-info-edit">
+              <label>Last Name</label>
+              <input
+                className="profile-edit-name"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
 
@@ -76,34 +157,19 @@ function MyProfile() {
           </>
         ) : (
           <>
-            <div className="profile-info body-medium font-regular">{`${name} | @${username}`}</div>
+            <div className="profile-info body-medium font-regular">{`${`${firstName} ${lastName}`} | @${username}`}</div>
             <div className="profile-info body-medium font-regular">{bio}</div>
           </>
         )}
       </div>
       <div
         className="profile-edit-container"
-        onClick={() => setIsEdit(!isEdit)}
+        onClick={() => handleButtonClick()}
       >
         <Button
           color={"blue"}
           text={isEdit ? "Save Profile" : "Edit Profile"}
         />
-      </div>
-    </Section>
-  );
-}
-
-function Groups(props) {
-  const { groups } = props;
-  return (
-    <Section headerName="Groups">
-      <div className="groups-container">
-        {groups.map((group, index) => (
-          <div className="group-container body-large font-medium" key={index}>
-            {`${group.name} | ${group.usernames.map((username) => `@${username}`).join(", ")}`}
-          </div>
-        ))}
       </div>
     </Section>
   );
