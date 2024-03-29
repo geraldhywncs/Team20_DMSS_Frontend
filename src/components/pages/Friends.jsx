@@ -26,15 +26,16 @@ function Friends() {
       }
     };
 
-    fetchData(); // Call fetchData function when the component mounts
+    fetchData();
   }, []);
 
   useEffect(() => {
     generateFriends(allUsers, allFriends);
-  }, [allUsers, allFriends]); // Run when allUsers or allFriends change
+  }, [allUsers, allFriends]);
 
   function generateFriends(allUsers, allFriends) {
-    const friendsId = allFriends.map((f) => f.id);
+    // check all friend_id, return custom friend object
+    const friendsId = allFriends.map((f) => f.friend_id);
     const generatedFriends = allUsers.map((user) => {
       return {
         id: user.user_id,
@@ -43,6 +44,8 @@ function Friends() {
         isFriend: friendsId.includes(user.user_id) ? true : false,
       };
     });
+
+    // filter out self
     setFriends(
       generatedFriends.filter(
         (f) => `${f.id}` !== localStorage.getItem("userId")
@@ -51,7 +54,7 @@ function Friends() {
   }
 
   const handleFriendClick = async (friend) => {
-    const friendIds = allFriends.map((f) => f.id);
+    const friendIds = allFriends.map((f) => f.friend_id);
     const userID = localStorage.getItem("userId");
     try {
       const apiEndpoint = process.env.REACT_APP_apiHost + `/friends/${userID}`;
@@ -60,21 +63,13 @@ function Friends() {
       if (friendIds.includes(friend.id)) {
         // REMOVE FRIEND
         const response = await callApi(apiEndpoint, "DELETE", params);
-        setAllFriends((allFriends) =>
-          allFriends.filter((f) => f.id !== response.friend.friend_id)
+        setAllFriends(
+          allFriends.filter((f) => f.friend_id !== response.friend.friend_id)
         );
       } else {
         // ADD FRIEND
         const response = await callApi(apiEndpoint, "POST", params);
-        setAllFriends((allFriends) => [
-          ...allFriends,
-          {
-            id: response.friend.user_id,
-            name: `${response.friend.first_name} ${response.friend.last_name}`,
-            username: response.friend.user_name,
-            isFriend: true,
-          },
-        ]);
+        setAllFriends([...allFriends, response.friend]);
       }
       // Handle the response if needed
     } catch (error) {
