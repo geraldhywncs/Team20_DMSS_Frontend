@@ -1,5 +1,5 @@
 import React from "react";
-import GraphContainer from "../dashboard/GraphContainer";
+import GraphContainer from "../shared/dashboard/GraphContainer"
 
 const Dashboard = () => {
   return (
