@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import callApi from "../shared/callAPI";
 import FormSection from "../shared/FormSection";
 import FormLabel from "../shared/FormLabel";
-import FormSelection from "../shared/FormSelection";
 import CategoryFormSelection from '../shared/CategoryFormSelection';
 
 function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldColour, userId, categoryAdded }) {
-    console.log("GetCategorySelection component rendered"); // Add this line
 
     const [optionsList, setOptionsList] = useState([]);
 

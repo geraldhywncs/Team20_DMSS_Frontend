@@ -3,18 +3,21 @@ import callApi from "../shared/callAPI"; // Assuming this is a utility function 
 import FormSection from '../shared/FormSection';
 import Button from '../shared/Button';
 
-function SignUp({ name, username, password, setShowErrorMessage, setShowLoadingMessage, setErrorMessage, setUserId }) {
+function SignUp({ firstname, lastname, email, username, password, setShowErrorMessage, setShowLoadingMessage, setErrorMessage,setSuccessMessage,setShowSuccessMessage, setUserId }) {
     const fetchData = async () => {
-        const apiEndpoint = process.env.REACT_APP_apiHost + "/user/signup";
+        const apiEndpoint = process.env.REACT_APP_apiHost + "/user/createUser";
         const data = {
-            "name": name,
-            "username": username,
-            "password": password
+            "user_name": username,
+            "email": email,
+            "password": password,
+            "first_name": firstname,
+            "last_name": lastname
         };
 
         try {
             const response = await callApi(apiEndpoint, "POST", data);
-            if (response.status_code === "200") {
+            console.log(response);
+            if (response.status_code === "201") {
                 setUserId(response.user_id);
                 localStorage.setItem('userId', response.user_id);
             }
@@ -26,16 +29,18 @@ function SignUp({ name, username, password, setShowErrorMessage, setShowLoadingM
 
     const handleSignUp = async () => {
         try {
-            if (!name || !username || !password) {
+            if (!firstname || !lastname || !username || !password) {
                 setErrorMessage('Please fill in all fields.');
                 setShowErrorMessage(true);
             } else {
                 setShowErrorMessage(false);
                 setShowLoadingMessage(true);
-                const statusCode = await fetchData();
-                if (statusCode === "200") {
+                const response = await fetchData();
+                if (response.status_code === "201") {
                     setShowLoadingMessage(false);
                     console.log('Sign up successful.');
+                    setSuccessMessage('Sign up successful! Please log in.')
+                    setShowSuccessMessage(true);
                 } else {
                     setShowLoadingMessage(false);
                     setShowErrorMessage(true);

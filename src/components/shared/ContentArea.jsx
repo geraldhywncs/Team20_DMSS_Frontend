@@ -5,8 +5,9 @@ import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
 import Friends from "../pages/Friends";
 import Groups from "../pages/Groups";
+import Transactions from "../pages/Transactions";
 
-function ContentArea({userId}) {
+function ContentArea({ userId }) {
   const navButtons = useSelector((state) => state.userNavbarStore.buttons);
 
   return (
@@ -16,13 +17,15 @@ function ContentArea({userId}) {
           if (button.active) {
             switch (button.name) {
               case "Profile":
-                return <Profile userId={userId}/>;
+                return <Profile userId={userId} />;
               case "Dashboard":
-                return <Dashboard />;
+                return <Dashboard userId={userId} />;
               case "Friends":
                 return <Friends />;
               case "Groups":
                 return <Groups />;
+              case "Transactions":
+                return <Transactions userId={userId}/>;
               // TODO - add your other components in this switch case
               default:
                 return (

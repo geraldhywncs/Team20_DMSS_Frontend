@@ -29,6 +29,12 @@ function Button(props) {
           {text}
         </button>
       );
+    case "deleteTransactionButton":
+      return (
+        <button className={`deleteTransactionButton text-xs`} onClick={onClick}>
+          {text}
+        </button>
+      );
     default:
       return (
         <button className={`blue-btn body-medium font-bold`} onClick={onClick}>

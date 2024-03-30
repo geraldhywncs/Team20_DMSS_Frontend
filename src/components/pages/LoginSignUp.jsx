@@ -9,6 +9,7 @@ import LoadingMessage from "../shared/LoadingMessage";
 import ForgotPassword from "./ForgotPassword";
 import Header from "../shared/Header";
 import SignUp from "../api/SignUp";
+import SuccessMessage from "../shared/SuccessMessage";
 
 const LoginSignUp = ({ setUserId }) => {
   const [loginEmail, setLoginEmail] = useState("");
@@ -17,35 +18,56 @@ const LoginSignUp = ({ setUserId }) => {
   const [PasswordFieldColor, setPasswordFieldColor] = useState("gray");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [loginTempEmail, setLoginTempEmail] = useState("");
 
   const [showLoadingMessage, setShowLoadingMessage] = useState(false);
 
-
   //addition for sign up page
-  const [name, setName] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [nameFieldColor, setNameFieldColor] = useState('gray');
-    const [usernameFieldColor, setUsernameFieldColor] = useState('gray');
+  // const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  // const [nameFieldColor, setNameFieldColor] = useState("gray");
+  const [usernameFieldColor, setUsernameFieldColor] = useState("gray");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [firstNameFieldColor, setFirstNameFieldColor] = useState("gray");
+  const [lastNameFieldColor, setLastNameFieldColor] = useState("gray");
 
-	const handleNameChange = (e) => {
-        setName(e.target.value);
-        setNameFieldColor('gray');
-    };
+  const handleFirstNameChange = (e) => {
+    setFirstName(e.target.value);
+    setFirstNameFieldColor("gray");
+  };
 
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-        setUsernameFieldColor('gray');
-    };
+  const handleLastNameChange = (e) => {
+    setLastName(e.target.value);
+    setLastNameFieldColor("gray");
+  };
 
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-        setPasswordFieldColor('gray');
-    };
+  // const handleNameChange = (e) => {
+  //   setName(e.target.value);
+  //   setNameFieldColor("gray");
+  // };
 
-	// end of sign up page
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    setUsernameFieldColor("gray");
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setEmailFieldColor("gray");
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setPasswordFieldColor("gray");
+  };
+
+  // end of sign up page
   const handleLoginEmail = (e) => {
     setLoginTempEmail(e.target.value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,6 +99,12 @@ const LoginSignUp = ({ setUserId }) => {
             setShowErrorMessage={setShowErrorMessage}
             message={errorMessage}
           />
+        )}
+        {showSuccessMessage && (
+                    <SuccessMessage
+                    setShowSuccessMessage={setShowSuccessMessage}
+                    message={successMessage}
+                  />
         )}
         {showLoadingMessage && <LoadingMessage message={"Loading"} />}
         {showForgotPassword && (
@@ -148,58 +176,90 @@ const LoginSignUp = ({ setUserId }) => {
               <div class="center-wrap">
                 <h4 class="mb-3 pb-3">Sign Up</h4>
 
-			{/* start of sign up page */}
+                {/* start of sign up page */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <FormSection col="1">
+                    <FormLabel label={"First Name"} />
+                    <FormInput
+                      id="signupFirstName"
+                      placeholder="First Name"
+                      type="text"
+                      value={firstName}
+                      onChange={handleFirstNameChange}
+                      fieldColour={firstNameFieldColor}
+                    />
+                  </FormSection>
+                  <FormSection col="1">
+                    <FormLabel label={"Last Name"} />
+                    <FormInput
+                      id="signupLastName"
+                      placeholder="Last Name"
+                      type="text"
+                      value={lastName}
+                      onChange={handleLastNameChange}
+                      fieldColour={lastNameFieldColor}
+                    />
+                  </FormSection>
+                  <FormSection col="1">
+                    <FormLabel label={"Username"} />
+                    <FormInput
+                      id="signupUsername"
+                      placeholder="Username"
+                      type="text"
+                      value={username}
+                      onChange={handleUsernameChange}
+                      fieldColour={usernameFieldColor}
+                    />
+                  </FormSection>
+                  <FormSection col="1">
+                    <FormLabel label={"Password"} />
+                    <FormInput
+                      id="signupPassword"
+                      placeholder="Password"
+                      type="password"
+                      value={password}
+                      onChange={handlePasswordChange}
+                      fieldColour={PasswordFieldColor}
+                    />
+                  </FormSection>
+                </div>
+
                 <FormSection col="1">
-                  <FormLabel label={"Name"} />
+                  <FormLabel label={"Email"} />
                   <FormInput
-                    id="signupName"
-                    placeholder="Name"
-                    type="text"
-                    value={name}
-                    onChange={handleNameChange}
-                    fieldColour={nameFieldColor}
+                    id="signupEmail"
+                    placeholder="Email"
+                    type="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    fieldColour={emailFieldColor}
                   />
                 </FormSection>
-                <FormSection col="1">
-                  <FormLabel label={"Username"} />
-                  <FormInput
-                    id="signupUsername"
-                    placeholder="Username"
-                    type="text"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    fieldColour={usernameFieldColor}
-                  />
-                </FormSection>
-                <FormSection col="1">
-                  <FormLabel label={"Password"} />
-                  <FormInput
-                    id="signupPassword"
-                    placeholder="Password"
-                    type="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    fieldColour={PasswordFieldColor}
-                  />
-                </FormSection>
+                <br />
+
                 {/* <button
                   className="bg-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   onClick={handleSignUp}
                 >
                   Sign Up
                 </button> */}
-				<SignUp
-                    class="min-h-screen bg-indigo-600"
-                    name={name}
-					username={username}
-                    password={password}
-                    setShowErrorMessage={setShowErrorMessage}
-                    setShowLoadingMessage={setShowLoadingMessage}
-                    setErrorMessage={setErrorMessage}
-                    setUserId={setUserId}
-                  />
+                <SignUp
+                  class="min-h-screen bg-indigo-600"
+                  // name={name}
+                  firstname={firstName}
+                  lastname={lastName}
+                  email={email}
+                  username={username}
+                  password={password}
+                  setShowErrorMessage={setShowErrorMessage}
+                  setShowLoadingMessage={setShowLoadingMessage}
+                  setErrorMessage={setErrorMessage}
+                  setSuccessMessage={setSuccessMessage}
+                  setShowSuccessMessage={setShowSuccessMessage}
+                  setUserId={setUserId}
+                />
 
-				{/* end of sign up page */}
+                {/* end of sign up page */}
               </div>
             </div>
           </div>

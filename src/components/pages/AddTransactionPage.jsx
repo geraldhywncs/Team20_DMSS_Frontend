@@ -14,9 +14,9 @@ import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelectio
 
 
 const AddTransactionPage = ({ closePopup, userId }) => {
+    
     const [transactionTitle, setTransactionTitle] = useState('');
     const [transactionTitleFieldColour, setTransactionTitleFieldColour] = useState('red');
-
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedCategoryFieldColour, setSelectedCategoryFieldColour] = useState('red');
     const [categoryMessage, setCategoryMessage] = useState('');

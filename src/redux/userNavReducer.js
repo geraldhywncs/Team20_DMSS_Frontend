@@ -1,11 +1,8 @@
-// src/redux/UserNavbarSlice.js (or NavbarSlice.js)
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   buttons: [
-    { name: "Home", active: true },
-    { name: "Dashboard", active: false },
+    { name: "Dashboard", active: true },
     { name: "Transactions", active: false },
     { name: "Friends", active: false },
     { name: "Groups", active: false },
