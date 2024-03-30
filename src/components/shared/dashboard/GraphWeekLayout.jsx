@@ -1,25 +1,68 @@
 import React from "react";
 import GraphBar from "./GraphBar";
 
-function GraphWeekLayout() {
+function GraphWeekLayout({ receiptData }) {
+  const calculateTotalWeekExpenses = (receiptData) => {
+    let totalExpenses = 0;
+    receiptData.forEach((receipt) => {
+      receipt.expenses.forEach((expense) => {
+        totalExpenses += expense.share_amount;
+      });
+    });
+    return totalExpenses;
+  };
 
-  const weekData = [
-    { day: 1, totalExpense: 20 },
-    { day: 2, totalExpense: 30 },
-    { day: 3, totalExpense: 15 },
-    { day: 4, totalExpense: 40 },
-    { day: 5, totalExpense: 25 },
-    { day: 6, totalExpense: 35 },
-    { day: 7, totalExpense: 45 },
-  ];
+  const calculateDailyExpenses = (receiptData, totalWeekExpenses) => {
+    const dailyExpenses = {};
+    const currentWeek = getCurrentWeek();
+
+    currentWeek.forEach((day) => {
+      const dayOfWeek = day.toLocaleString("en-us", { weekday: "short" });
+      const dayOfMonth = day.getDate();
+      const monthOfYear = day.getMonth() + 1;
+      const key = `${dayOfWeek} ${dayOfMonth}/${monthOfYear}`;
+
+      let dailyExpensesTotal = 0;
+      receiptData.forEach((receipt) => {
+        const createdDate = new Date(receipt.created_datetime);
+        if (
+          createdDate.getDate() === dayOfMonth &&
+          createdDate.getMonth() === monthOfYear - 1 && 
+          createdDate.getFullYear() === day.getFullYear()
+        ) {
+          receipt.expenses.forEach((expense) => {
+            dailyExpensesTotal += expense.share_amount;
+          });
+        }
+      });
+
+      dailyExpenses[key] = dailyExpensesTotal; 
+    });
+
+    return dailyExpenses;
+  };
+
+  const getCurrentWeek = () => {
+    const currDate = new Date();
+    const firstDayOfWeek = currDate.getDate() - currDate.getDay();
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      days.push(new Date(currDate.getFullYear(), currDate.getMonth(), firstDayOfWeek + i));
+    }
+    return days;
+  };
+
+  const totalWeekExpenses = calculateTotalWeekExpenses(receiptData);
+  const dailyExpenses = calculateDailyExpenses(receiptData, totalWeekExpenses);
 
   return (
     <React.Fragment>
-      {weekData.map((dayData) => (
+      {Object.keys(dailyExpenses).map((key, index) => (
         <GraphBar
-          key={dayData.day}
-          height={dayData.totalExpense}
-          value={`Day ${dayData.day}`}
+          key={index}
+          height={(dailyExpenses[key] / totalWeekExpenses) * 100} 
+          value={key}
+          amount={dailyExpenses[key]} 
         />
       ))}
     </React.Fragment>

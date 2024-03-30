@@ -31,7 +31,6 @@ function GraphContainer({ userId }) {
 
     useEffect(() => {
         fetchReceiptData();
-        console.log("")
     }, [selectedPeriod, transactionAdded]);
 
     useEffect(() => {
@@ -76,7 +75,9 @@ function GraphContainer({ userId }) {
             case "week":
                 const firstDayOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
                 const lastDayOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 7);
-                return `${firstDayOfWeek.toLocaleDateString()} - ${lastDayOfWeek.toLocaleDateString()}`;
+                const firstDay = `${firstDayOfWeek.getDate()}/${firstDayOfWeek.getMonth() + 1}/${firstDayOfWeek.getFullYear()}`;
+                const lastDay = `${lastDayOfWeek.getDate()}/${lastDayOfWeek.getMonth() + 1}/${lastDayOfWeek.getFullYear()}`;
+                return `${firstDay} - ${lastDay}`;
             case "month":
                 return currentDate.toLocaleDateString('default', { month: 'long' });
             case "year":
@@ -98,7 +99,7 @@ function GraphContainer({ userId }) {
                         className={`bar-filterButton ${selectedPeriod === period ? "active" : ""}`}
                         onClick={() => handlePeriodChange(period)}
                     >
-                        {index === 0 ? "Today" : `Past ${period.charAt(0).toUpperCase() + period.slice(1)}`}
+                        {index === 0 ? "Today" :  ` ${period.charAt(0).toUpperCase() + period.slice(1)}`}
                     </button>
                 ))}
             </div>

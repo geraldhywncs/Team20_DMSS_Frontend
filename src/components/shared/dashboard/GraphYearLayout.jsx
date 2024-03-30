@@ -2,16 +2,26 @@ import React from "react";
 import GraphBar from "./GraphBar";
 import constants from "../../../constants/constants";
 
-function GraphYearLayout() {
-  const monthHeights = [20, 80, 30, 40, 80, 50, 80, 60, 40, 20, 10, 30];
+function GraphYearLayout({ receiptData }) {
+  const monthExpenses = Array.from({ length: 12 }, () => 0);
+
+  receiptData.forEach(item => {
+    const createdDate = new Date(item.created_datetime);
+    const month = createdDate.getMonth();
+    const totalExpense = item.expenses.reduce((acc, expense) => acc + expense.share_amount, 0);
+    monthExpenses[month] += totalExpense;
+  });
+
+  const maxExpense = Math.max(...monthExpenses);
 
   return (
     <React.Fragment>
-      {monthHeights.map((height, index) => (
+      {monthExpenses.map((totalExpense, index) => (
         <GraphBar
           key={index}
-          height={height}
+          height={(totalExpense / maxExpense) * 100} 
           value={constants.months[Object.keys(constants.months)[index]]}
+          amount={totalExpense} 
         />
       ))}
     </React.Fragment>

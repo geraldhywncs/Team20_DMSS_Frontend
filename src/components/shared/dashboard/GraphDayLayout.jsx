@@ -2,7 +2,20 @@ import React from "react";
 import GraphBar from "./GraphBar";
 import DashboardFilter from "./DashboardFilter";
 
-function GraphDayLayout({ receiptData }) {
+const filterReceiptsByDate = (receiptData) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set hours to midnight for accurate comparison
+  return receiptData.filter(receipt => {
+    const receiptDate = new Date(receipt.created_datetime);
+    receiptDate.setHours(0, 0, 0, 0); // Set hours to midnight for accurate comparison
+    return receiptDate.getTime() === today.getTime();
+  });
+};
+
+function GraphDayLayout({ receiptData, date }) {
+  const dailyReceipts = filterReceiptsByDate(receiptData, date);
+  console.log(dailyReceipts)
+
   const concatExpenses = (receiptData) => {
     const dailyExpenses = {};
 
@@ -13,7 +26,6 @@ function GraphDayLayout({ receiptData }) {
       }
       expenses.forEach(expense => {
         dailyExpenses[category_name] += expense.share_amount;
-        console.log( dailyExpenses[category_name] + ":" + expense.share_amount);
       });
     });
 
@@ -27,12 +39,10 @@ function GraphDayLayout({ receiptData }) {
     });
     return total;
   };
+  
 
-  const dailyExpenses = concatExpenses(receiptData);
+  const dailyExpenses = concatExpenses(dailyReceipts);
   const totalExpenses = calculateTotalExpenses(dailyExpenses);
-
-  console.log(dailyExpenses);
-  console.log('Total Expenses:', totalExpenses);
 
   return (
     <React.Fragment>
