@@ -13,6 +13,9 @@ import GetGroupSelection from "../api/GetGroupSelection";
 import SplitAmountInput from "../api/SplitAmountInput";
 import IconSelection from "../api/IconSelection";
 import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelection";
+import ErrorMessage from "../shared/ErrorMessage";
+import SuccessMessage from "../shared/SuccessMessage";
+import LoadingMessage from "../shared/LoadingMessage";
 
 
 const AddTransactionPage = ({ closePopup, userId }) => {
@@ -35,6 +38,7 @@ const AddTransactionPage = ({ closePopup, userId }) => {
     
     const [description, setDescription] = useState('');
     const [selectedIconOption, setIconSelectedOption] = useState(1);
+    
 
     const [selectedGroupOption, setGroupOption] = useState('');
     const [selectedGroupOptionFieldColour, setSelectedGroupOptionFieldColour] = useState('gray');
@@ -50,16 +54,12 @@ const AddTransactionPage = ({ closePopup, userId }) => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
     const [showLoadingMessage, setShowLoadingMessage] = useState(false); 
 
-    useEffect(() => {
-        if (categoryMessage) {
-            const timeoutId = setTimeout(() => {
-                setCategoryMessage('');
-                setCategoryMessageType('');
-            }, 5000); 
+    const [addCategoryPopUpFailed, setAddCategoryPopUpFailed] = useState(false);
+    const [addCategoryPopUpSuccessed, setAddCategoryPopUpSuccessed] = useState(false);
 
-            return () => clearTimeout(timeoutId); 
-        }
-    }, [categoryMessage]);
+    useEffect(() => {
+        console.log(selectedCategory);
+    }, [selectedCategory]);
 
     const handleTransactionTitle = (e) => {
         if(e.target.value === ""){
@@ -155,9 +155,11 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                 setCategoryMessage(`Category added successfully: ${categoryValue}`);
                 setSelectedCategory(response.category_id);
                 setUpdateCategoryComponent(prevState => !prevState);
+                setAddCategoryPopUpSuccessed(true);
             } else {
                 setCategoryMessageType("error");
                 setCategoryMessage(`Please try another category.`);
+                setAddCategoryPopUpFailed(true);
             }
         });
     };
@@ -217,6 +219,12 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         setShowLoadingMessage(false);
     };
 
+    
+
+    const handleAddCategoryPopUpSuccessed = (event) => {
+        setAddCategoryPopUpSuccessed(!addCategoryPopUpSuccessed);
+    };
+
     return (
         <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
         <div className="flex items-center justify-between rounded-t dark:border-gray-600">
@@ -233,37 +241,34 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         </div>
 
         {showErrorMessage && (
-            <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-md shadow-md">
-                <p className="text-red-500">Failed to create transaction. Please check your inputs.</p>
-                <button className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => setShowErrorMessage(false)}>
-                Close
-                </button>
-            </div>
-            </div>
+            <ErrorMessage
+                setShowErrorMessage={setShowErrorMessage}
+                message={"Failed to create transaction. Please check your inputs."}
+            />
         )}
 
         {showSuccessMessage && (
-            <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
-                <div className="bg-white p-8 rounded-md shadow-md">
-                    <p className="text-green-500">Transaction created successfully!</p>
-                    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md" onClick={handleTransactionCreatedSucessButton}>
-                        Close
-                    </button>
-                </div>
-            </div>
+            <SuccessMessage
+                setShowSuccessMessage={handleTransactionCreatedSucessButton}
+                message={"Transaction created successfully!"}
+            />
         )}
         {showLoadingMessage && (
-        <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
-            <div className="p-8 rounded-md">
-                <div className="flex items-center justify-center white-btn body-medium font-bold">
-                    <span className="material-icons animate-spin h-5 w-5 mr-3">
-                        autorenew
-                    </span>
-                    Processing...
-                </div>
-            </div>
-        </div>
+            <LoadingMessage message={"Loading"} />
+        )}
+
+        {addCategoryPopUpSuccessed && (
+            <SuccessMessage
+                setShowSuccessMessage={handleAddCategoryPopUpSuccessed}
+                message={categoryMessage}
+            />
+        )}
+
+        {addCategoryPopUpFailed && (
+            <ErrorMessage
+                setShowErrorMessage={setAddCategoryPopUpFailed}
+                message={categoryMessage}
+            />
         )}
         
         <form class="p-7 md:p-7">
@@ -274,7 +279,7 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                     handleIconOptionChange = {handleIconOptionChange}
                 />
                 
-                <FormSection col="2" place="1">
+                <FormSection col="2">
                     <FormLabel
                         label={"Title (Required)"}
                     />
@@ -296,17 +301,20 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                     categoryAdded= {updateCategoryComponent}
                 />
 
-                <div className="col-span-2 flex justify-end">
-                    <div id="categoryMessage" className={categoryMessageType === 'success' ? 'successMessage' : 'errorMessage'}>{categoryMessage}</div>
-
-                    <input 
-                        type="text" 
-                        value={categoryValue} 
-                        onChange={handleCategoryInputChange} 
-                        placeholder="Enter Category" 
-                        className="addCategoryInput"
+                <FormSection col="2" place="1">
+                    {/* <div id="categoryMessage" className={categoryMessageType === 'success' ? 'successMessage' : 'errorMessage'}>{categoryMessage}</div> */}
+                
+                    <FormInput
+                        id = {"addCategory"}
+                        placeholder = {"Enter Category"}
+                        type = {"text"}
+                        value={categoryValue}
+                        onChange={handleCategoryInputChange}
+                        fieldColour = {"gray"}
                     />
+                </FormSection>
 
+                <FormSection col="2" place="1">
                     <Button
                         color="addCategory"
                         text="Add Category"
@@ -321,7 +329,8 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                             disabled={!selectedCategory}
                         />
                     )}
-                </div>
+                </FormSection>
+                
 
                 <FormSection col="2">
                     <FormLabel

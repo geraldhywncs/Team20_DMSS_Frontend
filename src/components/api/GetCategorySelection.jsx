@@ -35,7 +35,7 @@ function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldCol
     }, [categoryAdded]);
 
     return (
-        <FormSection col="2" place="1">
+        <FormSection col="2">
             <FormLabel
                 label={"Category  (Required)"}
             />

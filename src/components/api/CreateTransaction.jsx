@@ -5,15 +5,15 @@ import Button from '../shared/Button';
 
 function CreateTransactionButton({transactionTitle, selectedCategory, currency, description, selectedIconOption, selectedGroupOption, splitAmount, selectedRecurringFrequency, userId, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage}) {
 
-  useEffect(() => {
-    console.log('Transaction Title:', transactionTitle);
-    console.log('Selected Category:', selectedCategory);
-    console.log('Currency:', currency);
-    console.log('Description:', description);
-    console.log('Selected Group Option:', selectedGroupOption);
-    console.log('Split Amount:', splitAmount);
-    console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
-  }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedRecurringFrequency]);
+  // useEffect(() => {
+  //   console.log('Transaction Title:', transactionTitle);
+  //   console.log('Selected Category:', selectedCategory);
+  //   console.log('Currency:', currency);
+  //   console.log('Description:', description);
+  //   console.log('Selected Group Option:', selectedGroupOption);
+  //   console.log('Split Amount:', splitAmount);
+  //   console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
+  // }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedRecurringFrequency]);
 
   const [result, setResult] = useState({ message: null, statusCode: null });
 
