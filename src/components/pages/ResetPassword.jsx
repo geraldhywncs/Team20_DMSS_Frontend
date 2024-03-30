@@ -71,7 +71,7 @@ const ResetPassword = ({}) => {
       {showSuccessMessage && (
 				<SuccessMessage
           setShowSuccessMessage={handleSucessMessage}
-          message={"Email sent successfully."}
+          message={"Password changed successfully"}
         />
 			)}
 
