@@ -10,7 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function MainDisplay() {
   const [userId, setUserId] = useState("");
   useEffect(() => {
-    localStorage.setItem("userId", "1");
+    localStorage.setItem("userId", "");
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
       setUserId(storedUserId);

@@ -16,6 +16,7 @@ function SignUp({ firstname, lastname, email, username, password, setShowErrorMe
 
         try {
             const response = await callApi(apiEndpoint, "POST", data);
+            console.log(response);
             if (response.status_code === "201") {
                 setUserId(response.user_id);
                 localStorage.setItem('userId', response.user_id);

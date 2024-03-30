@@ -25,7 +25,7 @@ function ContentArea({ userId }) {
               case "Groups":
                 return <Groups />;
               case "Transactions":
-                return <Transactions />;
+                return <Transactions userId={userId}/>;
               // TODO - add your other components in this switch case
               default:
                 return (

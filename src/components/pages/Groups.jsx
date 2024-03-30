@@ -15,6 +15,7 @@ function Groups() {
       try {
         const endPoint = process.env.REACT_APP_apiHost + `/groups/${userID}`;
         const response = await callApi(endPoint, "GET");
+        console.log(response.groups);
         setGroups(response.groups);
       } catch (error) {
         console.error("Error fetching data:", error);

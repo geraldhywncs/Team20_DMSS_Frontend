@@ -10,9 +10,9 @@ function Transactions({userId}){
   return (
     <>
       <ExistingTransactions />
-      <AddTransactionButton />
-      <UpdateTransactionButton />
-      <DeleteTransactionButton />
+      <AddTransactionButton userId={userId}/>
+      <UpdateTransactionButton userId={userId}/>
+      <DeleteTransactionButton userId={userId}/>
     </>
   );
 }
