@@ -149,7 +149,7 @@ const AddTransactionPage = ({ closePopup, userId }) => {
             if (response.status_code === 200) {
                 setCategoryMessageType("success");
                 setCategoryMessage(`Category added successfully: ${categoryValue}`);
-                setSelectedCategory(response.category_name);
+                setSelectedCategory(response.category_id);
                 setUpdateCategoryComponent(prevState => !prevState);
                 setAddCategoryPopUpSuccessed(true);
             } else {
