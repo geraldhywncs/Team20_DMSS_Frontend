@@ -7,13 +7,13 @@ function GraphDayLayout({ receiptData }) {
     const dailyExpenses = {};
 
     receiptData.forEach(receipt => {
-      const { title, expenses } = receipt;
-      if (!dailyExpenses[title]) {
-        dailyExpenses[title] = 0;
+      const { category_name, expenses } = receipt;
+      if (!dailyExpenses[category_name]) {
+        dailyExpenses[category_name] = 0;
       }
       expenses.forEach(expense => {
-        dailyExpenses[title] += expense.share_amount;
-        console.log( dailyExpenses[title] + ":" + expense.share_amount);
+        dailyExpenses[category_name] += expense.share_amount;
+        console.log( dailyExpenses[category_name] + ":" + expense.share_amount);
       });
     });
 
@@ -37,11 +37,11 @@ function GraphDayLayout({ receiptData }) {
   return (
     <React.Fragment>
       <DashboardFilter period="day" receiptData={receiptData} />
-      {Object.entries(dailyExpenses).map(([title, amount], index) => (
+      {Object.entries(dailyExpenses).map(([category_name, amount], index) => (
         <GraphBar
           key={index}
           height={(amount / totalExpenses) * 100}
-          value={title}
+          value={category_name}
           amount = {amount}
         />
       ))}

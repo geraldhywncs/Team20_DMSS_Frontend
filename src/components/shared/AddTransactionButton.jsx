@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import Button from "./Button";
 import AddTransactionPage from "../pages/AddTransactionPage";
+import { useDispatch } from 'react-redux';
+import { resetTransaction } from '../../redux/transactionReducer';
 
 const AddTransactionButton = ({userId}) => {
+    const dispatch = useDispatch();
     const [popupVisible, setPopupVisible] = useState(false);
 
     const handleButtonClick = () => {
         setPopupVisible(true);
+        dispatch(resetTransaction());
     };
 
     const closePopup = () => {

@@ -1,4 +1,6 @@
 import React, {useState,useEffect} from 'react';
+import { useDispatch } from 'react-redux';
+import { addTransaction } from '../../redux/transactionReducer';
 import Button from "../shared/Button";
 import FormInput from "../shared/FormInput";
 import FormLabel from "../shared/FormLabel";
@@ -14,7 +16,8 @@ import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelectio
 
 
 const AddTransactionPage = ({ closePopup, userId }) => {
-    
+    const dispatch = useDispatch();
+
     const [transactionTitle, setTransactionTitle] = useState('');
     const [transactionTitleFieldColour, setTransactionTitleFieldColour] = useState('red');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -124,10 +127,11 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         console.log(selectedRecurringFrequency);
     };
 
-    const handleTrnasactionCreatedSucessButton  = (e) => {
+    const handleTransactionCreatedSucessButton  = (e) => {
         setShowSuccessMessage(false);
-        resetFormFields()
+        resetFormFields();
         closePopup();
+        dispatch(addTransaction());
     };
 
     /*Manage Category*/
@@ -149,7 +153,7 @@ const AddTransactionPage = ({ closePopup, userId }) => {
             if (response.status_code === 200) {
                 setCategoryMessageType("success");
                 setCategoryMessage(`Category added successfully: ${categoryValue}`);
-                setSelectedCategory(response.category_name);
+                setSelectedCategory(response.category_id);
                 setUpdateCategoryComponent(prevState => !prevState);
             } else {
                 setCategoryMessageType("error");
@@ -243,7 +247,7 @@ const AddTransactionPage = ({ closePopup, userId }) => {
             <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
                 <div className="bg-white p-8 rounded-md shadow-md">
                     <p className="text-green-500">Transaction created successfully!</p>
-                    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md" onClick={handleTrnasactionCreatedSucessButton}>
+                    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md" onClick={handleTransactionCreatedSucessButton}>
                         Close
                     </button>
                 </div>
