@@ -5,17 +5,16 @@ import DeleteTransactionButton from "../api/DeleteTransaction";
 
 
 const DeleteTransactionPage = ({ closePopup }) => {
-    const [transactionId, setTransactionId] = useState('');
+    const [expenseId, setexpenseId] = useState('');
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleDelete = async () => {
         
         try {
-            // Make an API call to delete the transaction with the specified ID
-            const response = await callApi(`/transactions/${transactionId}`, "DELETE");
+            const response = await callApi(`/transactions/${expenseId}`, "DELETE");
             
-            // Check if the deletion was successful
+            //Checking delete was successful anot
             if (response.status === 200) {
                 setShowSuccessMessage(true);
             } else {
@@ -60,24 +59,22 @@ const DeleteTransactionPage = ({ closePopup }) => {
             <form className="p-7 md:p-7">
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="col-span-2">
-                        <label htmlFor="transactionId" className="block text-sm font-medium text-gray-700">Transaction ID</label>
+                        <label htmlFor="expenseId" className="block text-sm font-medium text-gray-700">Expense ID</label>
                         <input
                             type="text"
-                            id="transactionId"
+                            id="expenseId"
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={transactionId}
-                            onChange={(e) => setTransactionId(e.target.value)}
+                            value={expenseId}
+                            onChange={(e) => setexpenseId(e.target.value)}
                         />
                     </div>
                 </div>
             </form>
 
             <div className="px-7 md:px-7 py-0 grid gap-4 mb-4">
-                <Button
-                    color="red"
-                    text="Delete Transactions"
-                    onClick={handleDelete}
-                />
+            <p>Delete this transaction?</p>
+            <Button color="red" text="Delete" onClick={handleDelete} />
+            {/* <Button color="gray" text="Cancel" onClick={closePopup} /> */}
             </div>
         </div>
     );

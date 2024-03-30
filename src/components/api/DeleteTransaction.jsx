@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import callApi from "../shared/callAPI";
 import Button from '../shared/Button';
 
-function DeleteTransactionButton({ transactionId, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage }) {
+function DeleteTransactionButton({ expenseId, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage }) {
 
   const [result, setResult] = useState({ message: null, statusCode: null });
 
   const deleteTransaction = async () => {
-    const apiEndpoint = process.env.REACT_APP_apiHost + `/expenses/${transactionId}`;
+    const apiEndpoint = process.env.REACT_APP_apiHost + `/expenses/${expenseId}`;
 
     try {
       setShowLoadingMessage(true);

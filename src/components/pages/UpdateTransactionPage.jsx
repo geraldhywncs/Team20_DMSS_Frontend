@@ -22,9 +22,10 @@ const UpdateTransactionPage = ({ closePopup, userId, transactionData }) => {
     const [selectedGroupOption, setGroupOption] = useState('');
     const [splitAmount, setSplitAmount] = useState('');
     const [selectedRecurringFrequency, setRecurringFrequency] = useState('');
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
-        // Populate form fields with existing transaction data
         if (transactionData) {
             setTransactionTitle(transactionData.title || '');
             setSelectedCategory(transactionData.category || '');
@@ -38,7 +39,6 @@ const UpdateTransactionPage = ({ closePopup, userId, transactionData }) => {
         }
     }, [transactionData]);
 
-    // Handle form input changes
     const handleTransactionTitle = (e) => setTransactionTitle(e.target.value);
     const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
     const handleDescriptionChange = (e) => setDescription(e.target.value);
@@ -48,17 +48,48 @@ const UpdateTransactionPage = ({ closePopup, userId, transactionData }) => {
     const handleGroupChange = (e) => setGroupOption(e.target.value);
     const handleSplitAmount = (e) => setSplitAmount(e.target.value);
     const handleRecurringFrequencyChange = (e) => setRecurringFrequency(e.target.value);
+    const handleTransactionUpdatedSuccessButton  = (e) => {
+        setShowSuccessMessage(false);
+        closePopup();
+    };
 
-    return (
+    return ( 
         <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
-            {/* Form content */}
-            <form className="p-7 md:p-7">
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                    {/* Other form fields */}
+            <div className="flex items-center justify-between rounded-t dark:border-gray-600">
+            <button
+                type="button"
+                className="text-black bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                onClick={closePopup}>
+                <span className="material-icons">
+                    close
+                </span>
+            </button>
+        </div>
+        {showErrorMessage && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-8 rounded-md shadow-md">
+                <p className="text-red-500">Failed to update transaction. Please check your inputs.</p>
+                <button className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => setShowErrorMessage(false)}>
+                Close
+                </button>
+            </div>
+            </div>
+        )}
+        {showSuccessMessage && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
+                <div className="bg-white p-8 rounded-md shadow-md">
+                    <p className="text-green-500">Transaction updated successfully!</p>
+                    <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md" onClick={handleTransactionUpdatedSuccessButton}>
+                        Close
+                    </button>
                 </div>
-            </form>
+            </div>
+        )}
+        <form className="p-7 md:p-7">
+            <div className="grid grid-cols-2 gap-4 mb-4">
 
-            {/* Buttons */}
+            </div>
+        </form>
             <div className="px-7 md:px-7 py-0 grid gap-4 mb-4">
                 <FormSection>
                     <Button
@@ -68,7 +99,8 @@ const UpdateTransactionPage = ({ closePopup, userId, transactionData }) => {
                     />
                 </FormSection>
                 <UpdateTransactionButton
-                    transactionId={transactionData.id} // Pass transaction ID for updating
+                    //expenseId={transactionData.id} // Pass transaction ID for updating
+                    expenseId={transactionData ? transactionData.id : null}
                     transactionTitle={transactionTitle}
                     selectedCategory={selectedCategory}
                     currency={currency}
@@ -78,6 +110,8 @@ const UpdateTransactionPage = ({ closePopup, userId, transactionData }) => {
                     splitAmount={splitAmount}
                     selectedRecurringFrequency={selectedRecurringFrequency}
                     userId={userId}
+                    setShowErrorMessage = {setShowErrorMessage}
+                    setShowSuccessMessage = {setShowSuccessMessage}
                 />
             </div>
         </div>
