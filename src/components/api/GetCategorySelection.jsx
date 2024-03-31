@@ -9,7 +9,6 @@ function GetCategorySelection({ selectedCategory, handleCategoryChange, fieldCol
     const [optionsList, setOptionsList] = useState([]);
 
     useEffect(() => {
-        console.log("fetching again")
         try {
             const apiEndpoint = process.env.REACT_APP_apiHost + "/category/readCategory";
             const data = { "user_id": userId };

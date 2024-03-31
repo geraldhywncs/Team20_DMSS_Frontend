@@ -57,10 +57,6 @@ const AddTransactionPage = ({ closePopup, userId }) => {
     const [addCategoryPopUpFailed, setAddCategoryPopUpFailed] = useState(false);
     const [addCategoryPopUpSuccessed, setAddCategoryPopUpSuccessed] = useState(false);
 
-    useEffect(() => {
-        console.log(selectedCategory);
-    }, [selectedCategory]);
-
     const handleTransactionTitle = (e) => {
         if(e.target.value === ""){
             setTransactionTitleFieldColour("red");
