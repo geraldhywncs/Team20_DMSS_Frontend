@@ -48,7 +48,8 @@ function GraphContainer({ userId }) {
         }
 
         if (!receiptData || receiptData.length === 0) {
-            return <div>No expenses added</div>;
+            console.log("Please check you database connection! Or tables");
+            return <div className="dashboard-null">No expenses found!</div>;
         }
 
         switch (selectedPeriod) {
@@ -65,31 +66,8 @@ function GraphContainer({ userId }) {
         }
     };
 
-    const getHeader = () => {
-        switch (selectedPeriod) {
-            case "day":
-                const day = currentDate.getDate().toString().padStart(2, '0');
-                const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-                const year = currentDate.getFullYear();
-                return `${day}/${month}/${year}`;
-            case "week":
-                const firstDayOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
-                const lastDayOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 7);
-                const firstDay = `${firstDayOfWeek.getDate()}/${firstDayOfWeek.getMonth() + 1}/${firstDayOfWeek.getFullYear()}`;
-                const lastDay = `${lastDayOfWeek.getDate()}/${lastDayOfWeek.getMonth() + 1}/${lastDayOfWeek.getFullYear()}`;
-                return `${firstDay} - ${lastDay}`;
-            case "month":
-                return currentDate.toLocaleDateString('default', { month: 'long' });
-            case "year":
-                return currentDate.getFullYear();
-            default:
-                return "";
-        }
-    };
-
     return (
         <React.Fragment>
-            <div className="dashboard-header">{getHeader()}</div>
             <div className="graph-container">{renderGraphData()}</div>
 
             <div className="bar-filterContainer">

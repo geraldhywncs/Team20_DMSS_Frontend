@@ -1,12 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import GraphBar from "./GraphBar";
 
 function GraphWeekLayout({ receiptData }) {
+  const [currentWeekStartDate, setCurrentWeekStartDate] = useState(new Date());
+  const [earliestExpenseDate, setEarliestExpenseDate] = useState(new Date());
+  const [hasExpenses, setHasExpenses] = useState(true);
+
+  const moveToPreviousWeek = () => {
+    const newDate = new Date(currentWeekStartDate);
+    newDate.setDate(newDate.getDate() - 7);
+    setCurrentWeekStartDate(newDate);
+  };
+
+  const moveToNextWeek = () => {
+    const newDate = new Date(currentWeekStartDate);
+    newDate.setDate(newDate.getDate() + 7);
+    setCurrentWeekStartDate(newDate);
+  };
+
+  useEffect(() => {
+    if (receiptData && receiptData.length > 0) {
+      const dates = receiptData.map(receipt => new Date(receipt.created_datetime));
+      const earliest = new Date(Math.min.apply(null, dates));
+      setEarliestExpenseDate(earliest);
+    }
+  }, [receiptData]);
+
+  useEffect(() => {
+    const weekExpenses = calculateTotalWeekExpenses(receiptData);
+    setHasExpenses(weekExpenses > 0);
+  }, [receiptData, currentWeekStartDate]);
+
   const calculateTotalWeekExpenses = (receiptData) => {
     let totalExpenses = 0;
     receiptData.forEach((receipt) => {
       receipt.expenses.forEach((expense) => {
-        totalExpenses += expense.share_amount;
+        const expenseDate = new Date(receipt.created_datetime);
+        if (isInCurrentWeek(expenseDate)) {
+          totalExpenses += expense.share_amount;
+        }
       });
     });
     return totalExpenses;
@@ -43,8 +75,8 @@ function GraphWeekLayout({ receiptData }) {
   };
 
   const getCurrentWeek = () => {
-    const currDate = new Date();
-    const firstDayOfWeek = currDate.getDate() - currDate.getDay();
+    const currDate = new Date(currentWeekStartDate);
+    const firstDayOfWeek = currDate.getDate() - currDate.getDay() + (currDate.getDay() === 0 ? -6 : 1);
     const days = [];
     for (let i = 0; i < 7; i++) {
       days.push(new Date(currDate.getFullYear(), currDate.getMonth(), firstDayOfWeek + i));
@@ -52,18 +84,49 @@ function GraphWeekLayout({ receiptData }) {
     return days;
   };
 
+  const isInCurrentWeek = (date) => {
+    const currentWeek = getCurrentWeek();
+    return currentWeek.some(day => day.toDateString() === date.toDateString());
+  };
+
   const totalWeekExpenses = calculateTotalWeekExpenses(receiptData);
   const dailyExpenses = calculateDailyExpenses(receiptData, totalWeekExpenses);
 
+  const getCurrentWeekHeader = () => {
+    const startDate = currentWeekStartDate;
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 6); 
+
+    const startDayOfMonth = startDate.getDate();
+    const startMonth = startDate.toLocaleString('en-us', { month: 'long' });
+    const startYear = startDate.getFullYear();
+
+    const endDayOfMonth = endDate.getDate();
+    const endMonth = endDate.toLocaleString('en-us', { month: 'long' });
+    const endYear = endDate.getFullYear();
+
+    return `${startDayOfMonth} ${startMonth} ${startYear} - ${endDayOfMonth} ${endMonth} ${endYear}`;
+  };
+
   return (
     <React.Fragment>
+      <div className="dashboardHeaderButtonsContainer">
+        {currentWeekStartDate.getTime() > earliestExpenseDate.getTime() && (
+          <button className="dashboard-button" onClick={moveToPreviousWeek}>&lt;</button>
+        )}
+        <div className="dashboard-header">{getCurrentWeekHeader()}</div>
+        <button className="dashboard-button" onClick={moveToNextWeek}>&gt;</button>
+      </div>
+      {!hasExpenses && <div className="dashboard-null">No Expenses</div>}
       {Object.keys(dailyExpenses).map((key, index) => (
-        <GraphBar
-          key={index}
-          height={(dailyExpenses[key] / totalWeekExpenses) * 100} 
-          value={key}
-          amount={dailyExpenses[key]} 
-        />
+        dailyExpenses[key] > 0 && (
+          <GraphBar
+            key={index}
+            height={(dailyExpenses[key] / totalWeekExpenses) * 100} 
+            value={key}
+            amount={dailyExpenses[key]} 
+          />
+        )
       ))}
     </React.Fragment>
   );

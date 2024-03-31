@@ -12,6 +12,4 @@ function GraphBar({ height, value, amount }) {
   );
 }
 
-const mockData = {};
-
 export default GraphBar;

@@ -1,98 +1,134 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import GraphBar from "./GraphBar";
 
 function GraphMonthLayout({ receiptData }) {
+  const [currentMonthStartDate, setCurrentMonthStartDate] = useState(new Date());
+  const [earliestExpenseDate, setEarliestExpenseDate] = useState(new Date());
+  const [earliestAllowedDate, setEarliestAllowedDate] = useState(new Date());
+
+  const moveToPreviousMonth = () => {
+    const newDate = new Date(currentMonthStartDate);
+    newDate.setMonth(newDate.getMonth() - 1);
+    setCurrentMonthStartDate(newDate);
+  };
+
+  const moveToNextMonth = () => {
+    const newDate = new Date(currentMonthStartDate);
+    newDate.setMonth(newDate.getMonth() + 1);
+    setCurrentMonthStartDate(newDate);
+  };
+
+  useEffect(() => {
+    if (receiptData && receiptData.length > 0) {
+      const dates = receiptData.map(receipt => new Date(receipt.created_datetime));
+      const earliest = new Date(Math.min.apply(null, dates));
+      setEarliestExpenseDate(earliest);
+
+      // Set earliest allowed date to the beginning of the month of the earliest expense date
+      setEarliestAllowedDate(new Date(earliest.getFullYear(), earliest.getMonth(), 1));
+    }
+  }, [receiptData]);
+
+  const getWeeksInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const weeks = [];
+    let currentDate = new Date(year, month, 1);
+    
+    while (currentDate.getMonth() === month) {
+      const startOfWeek = new Date(currentDate);
+      const endOfWeek = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        Math.min(currentDate.getDate() + (6 - currentDate.getDay()), new Date(year, month + 1, 0).getDate())
+      );
+      weeks.push([startOfWeek, endOfWeek]);
+      currentDate.setDate(endOfWeek.getDate() + 1);
+    }
+    
+    return weeks;
+  };
+
   const concatExpenses = (receiptData) => {
     const monthlyExpenses = {};
-    const weeksInMonth = getWeeksInMonth(new Date());
-  
-    weeksInMonth.forEach((week, index) => {
-      const startDate = week[0];
-      const endDate = week[1];
-      const weekNumber = index + 1;
-      const key = `Week ${weekNumber}: ${startDate.getDate()}/${startDate.getMonth() + 1} - ${endDate.getDate()}/${endDate.getMonth() + 1}`;
-      monthlyExpenses[key] = 0;
-    });
   
     receiptData.forEach(receipt => {
       const createdDate = new Date(receipt.created_datetime);
-      const weekNumber = getWeekNumber(createdDate);
-      const startDate = weeksInMonth[weekNumber - 1][0];
-      const endDate = weeksInMonth[weekNumber - 1][1];
-      const key = `Week ${weekNumber}: ${startDate.getDate()}/${startDate.getMonth() + 1} - ${endDate.getDate()}/${endDate.getMonth() + 1}`;
-      if (!monthlyExpenses[key]) {
-        monthlyExpenses[key] = 0;
+      const month = createdDate.getMonth();
+      const year = createdDate.getFullYear();
+  
+      // Check if the createdDate is in the current month
+      if (year === currentMonthStartDate.getFullYear() && month === currentMonthStartDate.getMonth()) {
+        const weeksInMonth = getWeeksInMonth(new Date(year, month, 1));
+        const weekNumber = getWeekNumber(createdDate, weeksInMonth);
+        const startDate = weeksInMonth[weekNumber - 1][0];
+        const endDate = weeksInMonth[weekNumber - 1][1];
+        const key = `Week ${weekNumber}: ${formatDate(startDate)} - ${formatDate(endDate)}`;
+  
+        if (!monthlyExpenses[key]) {
+          monthlyExpenses[key] = 0;
+        }
+  
+        monthlyExpenses[key] += receipt.expenses.reduce((total, expense) => total + expense.share_amount, 0);
       }
-      monthlyExpenses[key] += receipt.expenses.reduce((total, expense) => total + expense.share_amount, 0);
     });
   
     return monthlyExpenses;
   };
   
 
-  const getWeeksInMonth = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const weeks = [];
-  let currentDate = new Date(year, month, 1);
-  
-  while (currentDate.getMonth() === month) {
-    const startOfWeek = new Date(currentDate);
-
-    const endOfWeek = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      Math.min(currentDate.getDate() + (6 - currentDate.getDay()), new Date(year, month + 1, 0).getDate())
-    );
-    
-    weeks.push([startOfWeek, endOfWeek]);
-    
-    currentDate.setDate(endOfWeek.getDate() + 1);
-  }
-  
-  return weeks;
-};
-
   const getWeekNumber = (date) => {
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const dayOfWeek = firstDayOfMonth.getDay();
-    const dayOfMonth = date.getDate();
-    const weekNumber = Math.ceil((dayOfMonth + dayOfWeek) / 7);
-    return weekNumber;
+    const weeksInMonth = getWeeksInMonth(date);
+    for (let i = 0; i < weeksInMonth.length; i++) {
+      const [startOfWeek, endOfWeek] = weeksInMonth[i];
+      if (date >= startOfWeek && date <= endOfWeek) {
+        return i + 1;
+      }
+    }
+    return 1;
+  };
+  
+  const formatDate = (date) => {
+    return `${date.getDate()} ${getMonthName(date.getMonth())} ${date.getFullYear()}`;
   };
 
-  const getStartDateOfWeek = (date) => {
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const dayOfWeek = firstDayOfMonth.getDay();
-    const dayOfMonth = date.getDate();
-    const startDate = new Date(date.getFullYear(), date.getMonth(), dayOfMonth - dayOfWeek);
-    return startDate;
-  };
-
-  const getEndDateOfWeek = (date) => {
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const dayOfWeek = firstDayOfMonth.getDay();
-    const dayOfMonth = date.getDate();
-    const startDate = new Date(date.getFullYear(), date.getMonth(), dayOfMonth - dayOfWeek);
-    const endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 6);
-    return endDate;
+  const getMonthName = (month) => {
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+    return monthNames[month];
   };
 
   const monthlyExpenses = concatExpenses(receiptData);
   const totalMonthlyExpenses = Object.values(monthlyExpenses).reduce((total, amount) => total + amount, 0);
+// &lt; &gt;
+return (
+  <React.Fragment>
+    <div className="dashboardHeaderButtonsContainer">
+      {(currentMonthStartDate.getFullYear() > earliestAllowedDate.getFullYear() ||
+        (currentMonthStartDate.getFullYear() === earliestAllowedDate.getFullYear() && currentMonthStartDate.getMonth() > earliestAllowedDate.getMonth())) && (
+          <button className="dashboard-button" onClick={moveToPreviousMonth}>&lt;</button>
+          )}
+      <div className="dashboard-header">
+        {getMonthName(currentMonthStartDate.getMonth())} {currentMonthStartDate.getFullYear()}
+      </div>
+      <button className="dashboard-button" onClick={moveToNextMonth}>&gt;</button>
+    </div>
 
-  return (
-    <React.Fragment>
-      {Object.keys(monthlyExpenses).map((key, index) => (
-        <GraphBar
+    {Object.keys(monthlyExpenses).length === 0 ? (
+      <div className="dashboard-null">No Expenses</div>
+      ) : (
+        Object.keys(monthlyExpenses).map((key, index) => (
+          <GraphBar
           key={index}
-          height={(monthlyExpenses[key] / totalMonthlyExpenses) * 100} // Calculate the height based on the percentage of total expenses
+          height={(monthlyExpenses[key] / totalMonthlyExpenses) * 100} 
           value={key}
           amount={monthlyExpenses[key]}
-        />
-      ))}
-    </React.Fragment>
-  );
+          />
+        ))
+      )}
+  </React.Fragment>
+);
+
 }
 
 export default GraphMonthLayout;

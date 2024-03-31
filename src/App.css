@@ -250,12 +250,6 @@
 
 /*Dashboard*/
 
-.dashboard-header {
-  @apply mx-auto;
-  text-decoration: underline;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -280,6 +274,48 @@
   margin: 0 0.6rem;
   border-radius: 25px;
   @apply mx-auto;
+}
+
+.dashboard-null {
+  font-size: 1.5rem; 
+  color: #999; 
+  text-align: center; 
+  margin-top: 10rem;
+}
+
+/*Dashboard headers and <> buttons*/
+.dashboardHeaderButtonsContainer{
+  display: flex;
+  align-content: space-between;
+  top: 114px;
+  position: fixed;
+  width: 500px;
+  height: 20px;
+  left: 652px;
+}
+
+.dashboard-header {
+  @apply mx-auto;
+  text-decoration: underline;
+  font-weight: 600;
+  margin-top:3px;
+}
+
+.dashboard-button {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: 600; 
+  color: #777; 
+  cursor: pointer;
+}
+
+.dashboard-button:hover {
+  color: #444;
+} 
+
+.dashboard-button.left {
+  transform: rotate(180deg);
 }
 
 /* Bar chart days/month/year */
