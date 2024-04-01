@@ -23,31 +23,33 @@ function GraphMonthLayout({ receiptData }) {
       const dates = receiptData.map(receipt => new Date(receipt.created_datetime));
       const earliest = new Date(Math.min.apply(null, dates));
       setEarliestExpenseDate(earliest);
-
-      // Set earliest allowed date to the beginning of the month of the earliest expense date
       setEarliestAllowedDate(new Date(earliest.getFullYear(), earliest.getMonth(), 1));
     }
   }, [receiptData]);
-
   const getWeeksInMonth = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const weeks = [];
     let currentDate = new Date(year, month, 1);
     
+    while (currentDate.getDay() !== 1) {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  
     while (currentDate.getMonth() === month) {
       const startOfWeek = new Date(currentDate);
       const endOfWeek = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
-        Math.min(currentDate.getDate() + (6 - currentDate.getDay()), new Date(year, month + 1, 0).getDate())
+        currentDate.getDate() + 6
       );
       weeks.push([startOfWeek, endOfWeek]);
-      currentDate.setDate(endOfWeek.getDate() + 1);
+      currentDate.setDate(currentDate.getDate() + 7); 
     }
     
     return weeks;
   };
+  
 
   const concatExpenses = (receiptData) => {
     const monthlyExpenses = {};
@@ -57,13 +59,12 @@ function GraphMonthLayout({ receiptData }) {
       const month = createdDate.getMonth();
       const year = createdDate.getFullYear();
   
-      // Check if the createdDate is in the current month
       if (year === currentMonthStartDate.getFullYear() && month === currentMonthStartDate.getMonth()) {
         const weeksInMonth = getWeeksInMonth(new Date(year, month, 1));
         const weekNumber = getWeekNumber(createdDate, weeksInMonth);
         const startDate = weeksInMonth[weekNumber - 1][0];
         const endDate = weeksInMonth[weekNumber - 1][1];
-        const key = `Week ${weekNumber}: ${formatDate(startDate)} - ${formatDate(endDate)}`;
+        const key = `Week ${weekNumber} ${formatDate(startDate)} - ${formatDate(endDate)}`;
   
         if (!monthlyExpenses[key]) {
           monthlyExpenses[key] = 0;
@@ -76,7 +77,6 @@ function GraphMonthLayout({ receiptData }) {
     return monthlyExpenses;
   };
   
-
   const getWeekNumber = (date) => {
     const weeksInMonth = getWeeksInMonth(date);
     for (let i = 0; i < weeksInMonth.length; i++) {
@@ -89,9 +89,9 @@ function GraphMonthLayout({ receiptData }) {
   };
   
   const formatDate = (date) => {
-    return `${date.getDate()} ${getMonthName(date.getMonth())} ${date.getFullYear()}`;
+    return `${date.getDate()}: ${getMonthName(date.getMonth())}`;
   };
-
+  
   const getMonthName = (month) => {
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"];
@@ -100,20 +100,26 @@ function GraphMonthLayout({ receiptData }) {
 
   const monthlyExpenses = concatExpenses(receiptData);
   const totalMonthlyExpenses = Object.values(monthlyExpenses).reduce((total, amount) => total + amount, 0);
-// &lt; &gt;
+
 return (
   <React.Fragment>
     <div className="dashboardHeaderButtonsContainer">
-      {(currentMonthStartDate.getFullYear() > earliestAllowedDate.getFullYear() ||
-        (currentMonthStartDate.getFullYear() === earliestAllowedDate.getFullYear() && currentMonthStartDate.getMonth() > earliestAllowedDate.getMonth())) && (
-          <button className="dashboard-button" onClick={moveToPreviousMonth}>&lt;</button>
-          )}
-      <div className="dashboard-header">
-        {getMonthName(currentMonthStartDate.getMonth())} {currentMonthStartDate.getFullYear()}
-      </div>
-      <button className="dashboard-button" onClick={moveToNextMonth}>&gt;</button>
-    </div>
+  <button
+    className="dashboard-button"
+    onClick={moveToPreviousMonth}
+    style={{ visibility: currentMonthStartDate.getFullYear() <= earliestAllowedDate.getFullYear() && currentMonthStartDate.getMonth() <= earliestAllowedDate.getMonth() ? 'hidden' : 'visible' }}
+  >
+    &lt;
+  </button>
+  <div className="dashboard-header">
+    {getMonthName(currentMonthStartDate.getMonth())} {currentMonthStartDate.getFullYear()}
+  </div>
+  <button className="dashboard-button" onClick={moveToNextMonth}>
+  &gt;
+  </button>
+</div>
 
+    <div className="bars-container">     
     {Object.keys(monthlyExpenses).length === 0 ? (
       <div className="dashboard-null">No Expenses</div>
       ) : (
@@ -126,6 +132,7 @@ return (
           />
         ))
       )}
+      </div>
   </React.Fragment>
 );
 

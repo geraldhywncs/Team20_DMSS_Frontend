@@ -18,7 +18,7 @@
   --font-height-medium: 18px;
   --font-size-large: 18px;
   --font-height-large: 20px;
-  --font-size-xlarge: 20px;
+  --font-size-xlarge: 28px;
   --font-height-xlarge: 22px;
   --font-size-h1: 48px;
   --font-height-h1: "auto";
@@ -255,8 +255,15 @@
   flex-direction: column;
 }
 
+.dashboardAddTransBtn{
+  display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
+}
+
 .graph-container {
   display: flex;
+  flex-direction: column;
   height: 57vh;
   @apply mx-auto;
 }
@@ -288,10 +295,10 @@
   display: flex;
   align-content: space-between;
   top: 114px;
-  position: fixed;
+  position: sticky;
   width: 500px;
   height: 20px;
-  left: 652px;
+  left: 600px;
 }
 
 .dashboard-header {
@@ -319,6 +326,13 @@
 }
 
 /* Bar chart days/month/year */
+.bars-container{
+  display: flex;
+  height: 100%;
+  margin: auto;
+  padding-top: 20px;
+}
+
 .bar-chartValue {
   font-weight: 600;
   margin: 0 0.4rem;

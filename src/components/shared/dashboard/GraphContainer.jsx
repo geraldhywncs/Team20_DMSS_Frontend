@@ -81,7 +81,9 @@ function GraphContainer({ userId }) {
                     </button>
                 ))}
             </div>
-            <AddTransactionButton userId={userId} />
+            <div className="dashboardAddTransBtn">
+                <AddTransactionButton userId={userId} />
+            </div>
         </React.Fragment>
     );
 }

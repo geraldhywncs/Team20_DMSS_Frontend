@@ -76,15 +76,17 @@ const GraphDayLayout = ({ receiptData }) => {
       </div>
       
       {dailyReceipts.length === 0 && <div className="dashboard-null">No Expenses</div>}
-      
-      {Object.entries(dailyExpenses).map(([category_name, amount], index) => (
-        <GraphBar
+
+      <div className="bars-container">
+        {Object.entries(dailyExpenses).map(([category_name, amount], index) => (
+          <GraphBar
           key={index}
           height={(amount / totalExpenses) * 100}
           value={category_name}
           amount={amount}
-        />
-      ))}
+          />
+        ))}
+      </div>
     </React.Fragment>
   );
 };

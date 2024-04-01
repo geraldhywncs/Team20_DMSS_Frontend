@@ -95,18 +95,21 @@ function GraphWeekLayout({ receiptData }) {
   const getCurrentWeekHeader = () => {
     const startDate = currentWeekStartDate;
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 6); 
-
+    endDate.setDate(endDate.getDate() + 6);
+  
+    const startDayOfWeek = startDate.toLocaleString("en-us", { weekday: "short" });
     const startDayOfMonth = startDate.getDate();
-    const startMonth = startDate.toLocaleString('en-us', { month: 'long' });
+    const startMonth = startDate.toLocaleString("en-us", { month: "short" });
     const startYear = startDate.getFullYear();
-
+  
+    const endDayOfWeek = endDate.toLocaleString("en-us", { weekday: "short" });
     const endDayOfMonth = endDate.getDate();
-    const endMonth = endDate.toLocaleString('en-us', { month: 'long' });
+    const endMonth = endDate.toLocaleString("en-us", { month: "short" });
     const endYear = endDate.getFullYear();
-
-    return `${startDayOfMonth} ${startMonth} ${startYear} - ${endDayOfMonth} ${endMonth} ${endYear}`;
+  
+    return `${startDayOfWeek} ${startDayOfMonth} ${startMonth} ${startYear} - ${endDayOfWeek} ${endDayOfMonth} ${endMonth} ${endYear}`;
   };
+  
 
   return (
     <React.Fragment>
@@ -118,16 +121,19 @@ function GraphWeekLayout({ receiptData }) {
         <button className="dashboard-button" onClick={moveToNextWeek}>&gt;</button>
       </div>
       {!hasExpenses && <div className="dashboard-null">No Expenses</div>}
-      {Object.keys(dailyExpenses).map((key, index) => (
-        dailyExpenses[key] > 0 && (
-          <GraphBar
+
+      <div className="bars-container">
+        {Object.keys(dailyExpenses).map((key, index) => (
+          dailyExpenses[key] > 0 && (
+            <GraphBar
             key={index}
             height={(dailyExpenses[key] / totalWeekExpenses) * 100} 
             value={key}
             amount={dailyExpenses[key]} 
-          />
-        )
-      ))}
+            />
+          )
+        ))}
+      </div>
     </React.Fragment>
   );
 }

@@ -5,15 +5,12 @@ import constants from "../../../constants/constants";
 function GraphYearLayout({ receiptData }) {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [earliestYear, setEarliestYear] = useState(null);
-  const [latestYear, setLatestYear] = useState(null);
 
   useEffect(() => {
     if (receiptData && receiptData.length > 0) {
       const years = receiptData.map(receipt => new Date(receipt.created_datetime).getFullYear());
       const earliest = Math.min(...years);
-      const latest = Math.max(...years);
       setEarliestYear(earliest);
-      setLatestYear(latest);
     }
   }, [receiptData]);
 
@@ -24,9 +21,7 @@ function GraphYearLayout({ receiptData }) {
   };
 
   const moveToNextYear = () => {
-    if (currentYear < latestYear) {
-      setCurrentYear(currentYear + 1);
-    }
+    setCurrentYear(currentYear + 1);
   };
 
   const filteredReceiptData = receiptData.filter(receipt => {
@@ -44,30 +39,33 @@ function GraphYearLayout({ receiptData }) {
 
   const maxExpense = Math.max(...monthExpenses);
 
-// &lt; &gt;
   return (
     <React.Fragment>
+     
       <div className="dashboardHeaderButtonsContainer">
         {currentYear > earliestYear && (
-          <button className="dashboard-button" onClick={moveToPreviousYear}>&lt; Prev Year</button>
+          <button className="dashboard-button" onClick={moveToPreviousYear}>&lt;</button>
         )}
         <div className="dashboard-header">{currentYear}</div>
-        {currentYear < latestYear && (
-          <button className="dashboard-button" onClick={moveToNextYear}>Next Year &gt;</button>
+        <button className="dashboard-button" onClick={moveToNextYear}>&gt;</button>
+      </div>
+
+      <div className="bars-container">
+        {monthExpenses.every(expense => expense === 0) ? (
+          <div className="dashboard-null">No Expenses</div>
+          ) : (
+            monthExpenses.map((totalExpense, index) => (
+            <GraphBar
+              key={index}
+              height={(totalExpense / maxExpense) * 100} 
+              value={constants.months[Object.keys(constants.months)[index]]}
+              amount={totalExpense} 
+            />
+          ))
         )}
       </div>
-      
-      {monthExpenses.map((totalExpense, index) => (
-        <GraphBar
-          key={index}
-          height={(totalExpense / maxExpense) * 100} 
-          value={constants.months[Object.keys(constants.months)[index]]}
-          amount={totalExpense} 
-        />
-      ))}
     </React.Fragment>
   );
 }
 
 export default GraphYearLayout;
-
