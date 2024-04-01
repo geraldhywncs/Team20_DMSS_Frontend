@@ -3,15 +3,18 @@ import FriendList from "../shared/Friends";
 import SearchFriends from "../shared/SearchFriends";
 import { useState, useEffect } from "react";
 import callApi from "../shared/callAPI";
+import LoadingMessage from "../shared/LoadingMessage";
 
 function Friends() {
   const [allUsers, setAllUsers] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const userID = localStorage.getItem("userId");
+      setLoading(true);
       try {
         const usersEndPoint = process.env.REACT_APP_apiHost + "/users";
         const usersResponse = await callApi(usersEndPoint, "GET");
@@ -23,6 +26,8 @@ function Friends() {
         setAllFriends(friendsResponse.friends);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -79,8 +84,14 @@ function Friends() {
 
   return (
     <>
+      {loading && <LoadingMessage message="Loading..." />}
       <Section headerName="Search for friends">
-        <SearchFriends onClick={handleFriendClick} friends={friends} />
+        <SearchFriends
+          isLoading={loading}
+          onClick={handleFriendClick}
+          friends={friends}
+          isError={false}
+        />
       </Section>
       <ExistingFriends
         friends={friends}

@@ -19,7 +19,7 @@
 
 .groups-name-input {
   padding: 10px 20px;
-  border: 1px solid var(--black);
+  /* border: 1px solid var(--black); */
   border-radius: 10px;
   width: 100%;
 }
