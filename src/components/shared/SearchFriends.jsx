@@ -3,7 +3,7 @@ import FriendList from "../shared/Friends";
 import "../../App.css";
 
 function SearchFriends(props) {
-  const { onClick, friends, addedMembers } = props;
+  const { onClick, friends, addedMembers, isError, isLoading } = props;
 
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
@@ -34,7 +34,13 @@ function SearchFriends(props) {
         <input
           type="text"
           placeholder="Search for your friends here"
-          className="friends-search"
+          className={
+            isLoading
+              ? "friends-search friends-search-loading"
+              : isError
+                ? `friends-search bg-red-50 border border-red-300 text-red-900`
+                : `friends-search border border-black`
+          }
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);

@@ -5,20 +5,24 @@ import "../../styles/pages/Groups.css";
 import GroupsView from "../shared/Groups";
 import Button from "../shared/Button";
 import callApi from "../shared/callAPI";
+import LoadingMessage from "../shared/LoadingMessage";
 
 function Groups() {
   const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const userID = localStorage.getItem("userId");
       try {
         const endPoint = process.env.REACT_APP_apiHost + `/groups/${userID}`;
         const response = await callApi(endPoint, "GET");
-        console.log(response.groups);
         setGroups(response.groups);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -27,22 +31,30 @@ function Groups() {
 
   return (
     <>
-      <CreateGroup groups={groups} setGroups={setGroups} />
+      {loading && <LoadingMessage message="Loading..." />}
+      <CreateGroup
+        groups={groups}
+        setGroups={setGroups}
+        loading={loading}
+        setLoading={setLoading}
+      />
       <ExistingGroups groups={groups} />
     </>
   );
 }
 
 function CreateGroup(props) {
-  const { groups, setGroups } = props;
+  const { groups, setGroups, loading, setLoading } = props;
   const [addedMembers, setAddedMembers] = useState([]);
   const [groupName, setGroupName] = useState("");
   const [allUsers, setAllUsers] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [isValidGroup, setIsValidGroup] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const userID = localStorage.getItem("userId");
       try {
         const usersEndPoint = process.env.REACT_APP_apiHost + "/users";
@@ -55,6 +67,8 @@ function CreateGroup(props) {
         setAllFriends(friendsResponse.friends);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -89,23 +103,34 @@ function CreateGroup(props) {
   }, [allUsers, allFriends, addedMembers]);
 
   const handleCreateGroup = async () => {
+    setLoading(true);
     const userID = localStorage.getItem("userId");
-    try {
-      const endPoint = process.env.REACT_APP_apiHost + "/groups";
-      const data = JSON.stringify({
-        group_name: groupName,
-        group_member_ids: [userID, ...addedMembers.map((member) => member.id)],
-      });
-      const response = await callApi(endPoint, "POST", data);
-      setGroups([
-        ...groups,
-        {
-          group_name: response.group.group_name,
-          members: response.group_members.map((members) => members.user_name),
-        },
-      ]);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    setIsValidGroup(groupName !== "" && addedMembers.length !== 0);
+    if (groupName !== "" && addedMembers.length !== 0) {
+      try {
+        const endPoint = process.env.REACT_APP_apiHost + "/groups";
+        const data = JSON.stringify({
+          group_name: groupName,
+          group_member_ids: [
+            userID,
+            ...addedMembers.map((member) => member.id),
+          ],
+        });
+        const response = await callApi(endPoint, "POST", data);
+        setGroups([
+          ...groups,
+          {
+            group_name: response.group.group_name,
+            members: response.group_members.map((members) => members.user_name),
+          },
+        ]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
     }
   };
 
@@ -116,7 +141,11 @@ function CreateGroup(props) {
         <div className="groups-name-container body-medium font-regular">
           <label className="groups-name-label">Group Name: </label>
           <input
-            className="groups-name-input"
+            className={
+              isValidGroup || groupName.length > 0
+                ? "groups-name-input border border-black"
+                : "groups-name-input bg-red-50 border border-red-300 text-red-900"
+            }
             type="text"
             placeholder="Fill group name here"
             value={groupName}
@@ -127,6 +156,8 @@ function CreateGroup(props) {
           {`Members: ${addedMemberUsernames.map((username) => `@${username}`).join(", ")}`}
         </div>
         <SearchFriends
+          isLoading={loading}
+          isError={!(isValidGroup || addedMemberUsernames.length > 0)}
           onClick={(friend) => {
             const addedMemberUsernames = addedMembers.map(
               (member) => member.username

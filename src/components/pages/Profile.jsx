@@ -6,6 +6,7 @@ import Button from "../shared/Button";
 import Groups from "../shared/Groups";
 import AddTransactionButton from "../shared/AddTransactionButton";
 import callApi from "../shared/callAPI";
+import LoadingMessage from "../shared/LoadingMessage";
 
 function Profile({ userId }) {
   const [friends, setFriends] = useState([]);
@@ -15,9 +16,11 @@ function Profile({ userId }) {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [profileChange, setProfileChange] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const endpoint = process.env.REACT_APP_apiHost + `/profile/${userId}`;
         const response = await callApi(endpoint, "GET");
@@ -39,6 +42,8 @@ function Profile({ userId }) {
         setBio(response.user.bio);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -47,6 +52,7 @@ function Profile({ userId }) {
 
   return (
     <>
+      {loading && <LoadingMessage message="Loading..." />}
       <MyProfile
         firstName={firstName}
         setFirstName={setFirstName}
@@ -59,6 +65,7 @@ function Profile({ userId }) {
         profileChange={profileChange}
         setProfileChange={setProfileChange}
         userId={userId}
+        setLoading={setLoading}
       />
       <Section headerName="Friends">
         <Friends friends={friends} showFriend={true} showButton={false} />
@@ -85,11 +92,13 @@ function MyProfile(props) {
     profileChange,
     setProfileChange,
     userId,
+    setLoading,
   } = props;
   const [isEdit, setIsEdit] = useState(false);
 
   const handleButtonClick = async () => {
     if (isEdit) {
+      setLoading(true);
       try {
         const endPoint = process.env.REACT_APP_apiHost + `/user/${userId}`;
         const data = JSON.stringify({
@@ -104,6 +113,8 @@ function MyProfile(props) {
         setProfileChange(profileChange + 1);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     }
 
