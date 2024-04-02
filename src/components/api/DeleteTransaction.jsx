@@ -1,31 +1,19 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import callApi from "../shared/callAPI";
-import Button from '../shared/Button';
 
-function DeleteTransactionButton({ expenseId, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage }) {
+function DeleteTransaction(receipt_id) {
+    const apiEndpoint = process.env.REACT_APP_apiHost + "/expenses/delete";
+    const data = { "receipt_id": receipt_id };
 
-  const [result, setResult] = useState({ message: null, statusCode: null });
-
-  const deleteTransaction = async () => {
-    const apiEndpoint = process.env.REACT_APP_apiHost + `/expenses/${expenseId}`;
-
-    try {
-      setShowLoadingMessage(true);
-      const response = await callApi(apiEndpoint, "DELETE");
-      setResult({ message: response.message, statusCode: response.status_code });
-    } catch (error) {
-      console.error('Error deleting transaction:', error);
-      setShowErrorMessage(true);
-    } finally {
-      setShowLoadingMessage(false);
-    }
-  };
-
-  return (
-    <div>
-      {/* <Button color="red" text="Delete Transaction" onClick={deleteTransaction} /> */}
-    </div>
-  );
+    return callApi(apiEndpoint, "DELETE", data)
+        .then(response => {
+            console.log("Success", response.receipts);
+            return response.receipts;
+        })
+        .catch(error => {
+            console.log("Error when deleting expense: ", error);
+            throw error;
+        });
 }
 
-export default DeleteTransactionButton;
+export {DeleteTransaction};

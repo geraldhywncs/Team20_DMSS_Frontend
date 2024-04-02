@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
-import callApi from "../shared/callAPI";
 import Button from "../shared/Button";
-import DeleteTransactionButton from "../api/DeleteTransaction";
+import { DeleteTransaction } from '../api/DeleteTransaction';
 
+const DeleteExpenseConfirmation = ({ closePopup, receipt_id }) => {
 
-const DeleteTransactionPage = ({ closePopup }) => {
-    const [expenseId, setexpenseId] = useState('');
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleDelete = async () => {
-        
         try {
-            const response = await callApi(`/transactions/${expenseId}`, "DELETE");
-            
-            //Checking delete was successful anot
-            if (response.status === 200) {
-                setShowSuccessMessage(true);
-            } else {
-                setShowErrorMessage(true);
-            }
+            await DeleteTransaction(receipt_id);
+            setShowSuccessMessage(true);
+            // console.log(receipt);
+            console.log(receipt_id);
         } catch (error) {
-            console.error('Error deleting transaction:', error);
             setShowErrorMessage(true);
+            console.error("Error deleting expense:", error);
+            // console.log(receipt);
+            console.log(receipt_id);
         }
     };
 
@@ -41,7 +36,7 @@ const DeleteTransactionPage = ({ closePopup }) => {
             {showErrorMessage && (
                 <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-8 rounded-md shadow-md">
-                        <p className="text-red-500">Failed to delete transaction.</p>
+                        <p className="text-red-500">Failed to delete expense.</p>
                         <button className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => setShowErrorMessage(false)}>Close</button>
                     </div>
                 </div>
@@ -50,34 +45,18 @@ const DeleteTransactionPage = ({ closePopup }) => {
             {showSuccessMessage && (
                 <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-8 rounded-md shadow-md">
-                        <p className="text-green-500">Transaction deleted successfully!</p>
+                        <p className="text-green-500">Expense deleted successfully!</p>
                         <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md" onClick={closePopup}>Close</button>
                     </div>
                 </div>
             )}
-
-            <form className="p-7 md:p-7">
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="col-span-2">
-                        <label htmlFor="expenseId" className="block text-sm font-medium text-gray-700">Expense ID</label>
-                        <input
-                            type="text"
-                            id="expenseId"
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={expenseId}
-                            onChange={(e) => setexpenseId(e.target.value)}
-                        />
-                    </div>
-                </div>
-            </form>
-
             <div className="px-7 md:px-7 py-0 grid gap-4 mb-4">
-            <p>Delete this transaction?</p>
-            <Button color="red" text="Delete" onClick={handleDelete} />
+            <div className="body-large font-large font-bold">Delete this Expense?</div>
+                <Button color="red" text="Delete" onClick={handleDelete} />
             {/* <Button color="gray" text="Cancel" onClick={closePopup} /> */}
             </div>
         </div>
     );
 }
 
-export default DeleteTransactionPage;
+export default DeleteExpenseConfirmation;

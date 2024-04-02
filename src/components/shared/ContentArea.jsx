@@ -5,7 +5,8 @@ import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
 import Friends from "../pages/Friends";
 import Groups from "../pages/Groups";
-import Transactions from "../pages/Transactions";
+import TransactionView from "./TransactionView";
+
 
 function ContentArea({ userId }) {
   const navButtons = useSelector((state) => state.userNavbarStore.buttons);
@@ -25,7 +26,7 @@ function ContentArea({ userId }) {
               case "Groups":
                 return <Groups />;
               case "Transactions":
-                return <Transactions userId={userId}/>;
+                return <TransactionView userId={userId}/>;
               // TODO - add your other components in this switch case
               default:
                 return (
