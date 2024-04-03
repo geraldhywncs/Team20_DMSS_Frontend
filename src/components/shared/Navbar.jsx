@@ -10,6 +10,11 @@ function Navbar() {
     dispatch(toggleButton({ buttonName }));
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    window.location.reload();
+  };
+
   return (
     <nav className="Nav-bar">
       {navButtons.map((button, index) => (
@@ -17,6 +22,9 @@ function Navbar() {
           key={index}
           className={`Nav-button ${button.active ? "active" : ""}`}
           onClick={() => {
+            if (button.name === "Logout") {
+              handleLogout();
+            }
             handleButtonClick(button.name);
             console.log(button.name);
           }}
