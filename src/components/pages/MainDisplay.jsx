@@ -8,7 +8,7 @@ import ResetPassword from "./ResetPassword";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function MainDisplay() {
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState("1");
   useEffect(() => {
     localStorage.setItem("userId", "");
     const storedUserId = localStorage.getItem("userId");
