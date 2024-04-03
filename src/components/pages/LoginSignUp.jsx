@@ -26,45 +26,114 @@ const LoginSignUp = ({ setUserId }) => {
   const [showLoadingMessage, setShowLoadingMessage] = useState(false);
 
   //addition for sign up page
-  // const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  // const [nameFieldColor, setNameFieldColor] = useState("gray");
   const [usernameFieldColor, setUsernameFieldColor] = useState("gray");
+  const [signUpEmailFieldColor, setSignUpEmailFieldColor] = useState("gray");
+  const [signUpPasswordFieldColor, setSignUpPasswordFieldColor] = useState("gray");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [signupTempEmail, setSignupTempEmail] = useState("");
+  const [signupTempPassword, setSignupTempPassword] = useState("");
   const [firstNameFieldColor, setFirstNameFieldColor] = useState("gray");
   const [lastNameFieldColor, setLastNameFieldColor] = useState("gray");
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
     setFirstNameFieldColor("gray");
+
+    const maxFirstNameLength = 20;
+    const firstName = e.target.value.slice(0, maxFirstNameLength);
+    setFirstName(firstName);
+
+    if (e.target.value.length >= maxFirstNameLength) {
+      setFirstNameFieldColor("red");
+    } else {
+      setFirstNameFieldColor("gray");
+    }
+
+    console.log(lastName);
   };
 
   const handleLastNameChange = (e) => {
     setLastName(e.target.value);
     setLastNameFieldColor("gray");
-  };
 
-  // const handleNameChange = (e) => {
-  //   setName(e.target.value);
-  //   setNameFieldColor("gray");
-  // };
+    const maxLastNameLength = 20;
+    const lastName = e.target.value.slice(0, maxLastNameLength);
+    setLastName(lastName);
+
+    if (e.target.value.length >= maxLastNameLength) {
+      setLastNameFieldColor("red");
+    } else {
+      setLastNameFieldColor("gray");
+    }
+
+    console.log(lastName);
+  };
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
     setUsernameFieldColor("gray");
+
+    const maxUsernameLength = 20;
+    const username = e.target.value.slice(0, maxUsernameLength);
+    setUsername(username);
+
+    if (e.target.value.length >= maxUsernameLength) {
+      setUsernameFieldColor("red");
+    } else {
+      setUsernameFieldColor("gray");
+    }
+
+    console.log(username);
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    setEmailFieldColor("gray");
+  const handleSucessMessage = () => {
+
+    setShowSuccessMessage(false);
+    setUsername("");
+    setSignupTempPassword("");
+    setSignupTempEmail("");
+    setFirstName("");
+    setLastName("");
+    setPassword("");
+    setEmail("");
+
+    const checkbox = document.getElementById("reg-log");
+    checkbox.checked = !checkbox.checked;
+  };
+
+  const handleSignUpEmailChange = (e) => {
+
+    setSignupTempEmail(e.target.value);
+    setSignUpEmailFieldColor("gray");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(e.target.value)) {
+      setEmail(e.target.value);
+      setSignUpEmailFieldColor("gray");
+    } else {
+      console.log("Empty");
+      setSignUpEmailFieldColor("red");
+    }
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    setPasswordFieldColor("gray");
+    setSignupTempPassword(e.target.value);
+    setSignUpPasswordFieldColor("gray");
+
+    const maxPasswordLength = 20;
+    const password = e.target.value.slice(0, maxPasswordLength);
+    setPassword(password);
+
+    if (e.target.value.length >= maxPasswordLength) {
+      setSignUpPasswordFieldColor("red");
+    } else {
+      setSignUpPasswordFieldColor("gray");
+    }
+
+    console.log(password);
   };
 
   // end of sign up page
@@ -101,10 +170,10 @@ const LoginSignUp = ({ setUserId }) => {
           />
         )}
         {showSuccessMessage && (
-                    <SuccessMessage
-                    setShowSuccessMessage={setShowSuccessMessage}
-                    message={successMessage}
-                  />
+          <SuccessMessage
+            setShowSuccessMessage={handleSucessMessage}
+            message={successMessage}
+          />
         )}
         {showLoadingMessage && <LoadingMessage message={"Loading"} />}
         {showForgotPassword && (
@@ -217,9 +286,9 @@ const LoginSignUp = ({ setUserId }) => {
                       id="signupPassword"
                       placeholder="Password"
                       type="password"
-                      value={password}
+                      value={signupTempPassword}
                       onChange={handlePasswordChange}
-                      fieldColour={PasswordFieldColor}
+                      fieldColour={signUpPasswordFieldColor}
                     />
                   </FormSection>
                 </div>
@@ -230,22 +299,15 @@ const LoginSignUp = ({ setUserId }) => {
                     id="signupEmail"
                     placeholder="Email"
                     type="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                    fieldColour={emailFieldColor}
+                    value={signupTempEmail}
+                    onChange={handleSignUpEmailChange}
+                    fieldColour={signUpEmailFieldColor}
                   />
                 </FormSection>
                 <br />
 
-                {/* <button
-                  className="bg-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  onClick={handleSignUp}
-                >
-                  Sign Up
-                </button> */}
                 <SignUp
                   class="min-h-screen bg-indigo-600"
-                  // name={name}
                   firstname={firstName}
                   lastname={lastName}
                   email={email}
