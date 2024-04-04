@@ -15,8 +15,10 @@ function Login({email, password, setShowErrorMessage, setShowLoadingMessage, set
     
         try {
           const response = await callApi(apiEndpoint, "POST", data);
-          if(response.status_code == "200"){
+          console.log(response);
+          if(response.status_code === "200"){
             setUserId(response.user_id);
+            localStorage.setItem('userFirstName', response.user_first_name);
             localStorage.setItem('userId', response.user_id);
           }
           return response.status_code;

@@ -8,9 +8,9 @@ import ResetPassword from "./ResetPassword";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function MainDisplay() {
-  const [userId, setUserId] = useState("1");
+  const [userId, setUserId] = useState("");
   useEffect(() => {
-    localStorage.setItem("userId", "");
+    // localStorage.setItem("userId", "");
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
       setUserId(storedUserId);
@@ -24,7 +24,7 @@ function MainDisplay() {
       default:
         return (
           <div>
-            <Header></Header>
+            <Header  userId={userId} ></Header>
             <div className="Display-container">
               <Navbar />
               <ContentArea userId={userId} />
