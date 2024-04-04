@@ -6,8 +6,8 @@ const initialState = {
     { name: "Transactions", active: false },
     { name: "Friends", active: false },
     { name: "Groups", active: false },
-    { name: "Profile", active: false }, 
-    { name: "Logout", active: false}
+    { name: "Profile", active: false }
+    // { name: "Logout", active: false}
   ],
 };
 
