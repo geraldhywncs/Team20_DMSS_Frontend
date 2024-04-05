@@ -16,6 +16,7 @@ import GetRecurringFrequencySelection from "../api/GetRecurringFrequencySelectio
 import ErrorMessage from "../shared/ErrorMessage";
 import SuccessMessage from "../shared/SuccessMessage";
 import LoadingMessage from "../shared/LoadingMessage";
+import ScanReceipt from '../api/ScanReceipt';
 
 
 const AddTransactionPage = ({ closePopup, userId }) => {
@@ -61,6 +62,10 @@ const AddTransactionPage = ({ closePopup, userId }) => {
     const [deleteCategoryPopUpFailed, setDeleteCategoryPopUpFailed] = useState(false);
 
     const [categories, setUpdatedCategories] = useState([]);
+
+    const [successScanReceiptMessage, setSuccessScanReceiptMessage] = useState(false);
+    const [errorScanReceiptMessage, setErrorScanReceiptMessage] = useState(false);
+
 
     useEffect(() => {
         console.log(selectedCategory);
@@ -236,6 +241,14 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         setDeleteCategoryPopUpSuccessed(!deleteCategoryPopUpSuccessed);
     };
 
+    const handleScannedSuccessMessage =() => {
+        setSuccessScanReceiptMessage(false);
+    };
+
+    const handleScannedErrorMessage =() => {
+        setErrorScanReceiptMessage(false);
+    }
+
     return (
         <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
         <div className="flex items-center justify-between rounded-t dark:border-gray-600">
@@ -293,6 +306,20 @@ const AddTransactionPage = ({ closePopup, userId }) => {
             <ErrorMessage
                 setShowErrorMessage={setDeleteCategoryPopUpFailed}
                 message={categoryMessage}
+            />
+        )}
+
+        {successScanReceiptMessage && (
+            <SuccessMessage
+                setShowSuccessMessage={handleScannedSuccessMessage}
+                message={"Receipt scanned successfully"}
+            />
+        )}
+
+        {errorScanReceiptMessage && (
+            <ErrorMessage
+                setShowErrorMessage={handleScannedErrorMessage}
+                message={"Unable to detect amount. Please enter manually."}
             />
         )}
         
@@ -415,10 +442,13 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         </form>
         <div className="px-7 md:px-7 py-0 grid gap-4 mb-4">
         <FormSection>
-            <Button
+            <ScanReceipt
                 color={"white"}
                 text={"Scan Receipt"}
-                //onClick={handleButtonClick}
+                setShowLoadingMessage = {setShowLoadingMessage}
+                setAmount = {setAmount}
+                setSuccessScanReceiptMessage = {setSuccessScanReceiptMessage}
+                setErrorScanReceiptMessage = {setErrorScanReceiptMessage}
             />
         </FormSection>
         <CreateTransactionButton 
