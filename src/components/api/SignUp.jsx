@@ -1,5 +1,5 @@
 import React from "react";
-import callApi from "../shared/callAPI"; // Assuming this is a utility function to make API calls
+import callApi from "../shared/callAPI";
 import FormSection from "../shared/FormSection";
 import Button from "../shared/Button";
 
@@ -13,8 +13,7 @@ function SignUp({
   setShowLoadingMessage,
   setErrorMessage,
   setSuccessMessage,
-  setShowSuccessMessage,
-  setUserId,
+  setShowSuccessMessage
 }) {
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()\-_=+[{\]}\\|;:'",<.>/?]).{8,}$/;
