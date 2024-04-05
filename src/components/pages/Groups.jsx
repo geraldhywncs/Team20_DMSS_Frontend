@@ -51,6 +51,8 @@ function CreateGroup(props) {
   const [allFriends, setAllFriends] = useState([]);
   const [friends, setFriends] = useState([]);
   const [isValidGroup, setIsValidGroup] = useState(true);
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -128,6 +130,10 @@ function CreateGroup(props) {
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
+        setGroupName("");
+        setAddedMembers([]);
+        setSearch("");
+        setResults([]);
       }
     } else {
       setLoading(false);
@@ -174,6 +180,10 @@ function CreateGroup(props) {
           }}
           friends={friends}
           addedMembers={addedMemberUsernames}
+          search={search}
+          setSearch={setSearch}
+          results={results}
+          setResults={setResults}
         />
       </div>
       <div className="groups-button" onClick={handleCreateGroup}>

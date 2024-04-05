@@ -3,10 +3,17 @@ import FriendList from "../shared/Friends";
 import "../../App.css";
 
 function SearchFriends(props) {
-  const { onClick, friends, addedMembers, isError, isLoading } = props;
-
-  const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
+  const {
+    onClick,
+    friends,
+    addedMembers,
+    isError,
+    isLoading,
+    search,
+    setSearch,
+    results,
+    setResults,
+  } = props;
 
   const showSearchResults = useCallback(() => {
     setResults(

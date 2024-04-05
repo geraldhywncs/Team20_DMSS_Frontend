@@ -24,7 +24,7 @@ function MainDisplay() {
       default:
         return (
           <div>
-            <Header  userId={userId} ></Header>
+            <Header userId={userId}></Header>
             <div className="Display-container">
               <Navbar />
               <ContentArea userId={userId} />

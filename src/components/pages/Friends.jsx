@@ -10,6 +10,8 @@ function Friends() {
   const [allFriends, setAllFriends] = useState([]);
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +93,10 @@ function Friends() {
           onClick={handleFriendClick}
           friends={friends}
           isError={false}
+          search={search}
+          setSearch={setSearch}
+          results={results}
+          setResults={setResults}
         />
       </Section>
       <ExistingFriends
