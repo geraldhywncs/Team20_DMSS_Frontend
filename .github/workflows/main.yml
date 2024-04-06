@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Build frontend with ESLint warnings ignored
-        run: npm run build -- --no-error-on-unmatched-pattern
+        run: npm run build-no-eslint
 
       - name: Configure AWS CLI
         run: |
