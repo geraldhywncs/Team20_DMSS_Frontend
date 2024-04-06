@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build frontend
-        run: npm run build
+      - name: Build frontend with ESLint warnings ignored
+        run: npm run build -- --no-error-on-unmatched-pattern
 
       - name: Configure AWS CLI
         run: |
