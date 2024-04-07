@@ -5,20 +5,21 @@ import Button from '../shared/Button';
 
 function CreateTransactionButton({transactionTitle, selectedCategory, currency, description, selectedIconOption, selectedGroupOption, splitAmount, selectedRecurringFrequency, userId, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage}) {
 
-  // useEffect(() => {
-  //   console.log('Transaction Title:', transactionTitle);
-  //   console.log('Selected Category:', selectedCategory);
-  //   console.log('Currency:', currency);
-  //   console.log('Description:', description);
-  //   console.log('Selected Group Option:', selectedGroupOption);
-  //   console.log('Split Amount:', splitAmount);
-  //   console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
-  // }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedRecurringFrequency]);
+  useEffect(() => {
+    console.log('Transaction Title:', transactionTitle);
+    console.log('Selected Category:', selectedCategory);
+    console.log('Currency:', currency);
+    console.log('Description:', description);
+    console.log('Selected Group Option:', selectedGroupOption);
+    console.log('Split Amount:', splitAmount);
+    console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
+  }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedRecurringFrequency]);
 
   const [result, setResult] = useState({ message: null, statusCode: null });
 
   const fetchData = async () => {
     const apiEndpoint = process.env.REACT_APP_apiHost + "/expenses/create";
+    
     const data = {
       "user_id": userId,
       "group_id": selectedGroupOption,
@@ -30,6 +31,8 @@ function CreateTransactionButton({transactionTitle, selectedCategory, currency, 
       "icon_id": selectedIconOption,
       "recur_id": selectedRecurringFrequency
     };
+
+    console.log(data);
 
     try {
       const response = await callApi(apiEndpoint, "POST", data);

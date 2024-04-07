@@ -91,7 +91,7 @@ const AddTransactionPage = ({ closePopup, userId }) => {
     };
 
       const handleAmountChange = (e) => {
-        const numericValue = e.target.value.replace(/[^0-9]/g, '');
+        const numericValue = e.target.value.replace(/[^0-9.]/g, '');
         if(e.target.value === ""){
             setAmountFieldColour("red");
         } else {
@@ -165,12 +165,14 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                 setSelectedCategory(response.category_id);
                 setUpdateCategoryComponent(prevState => !prevState);
                 setAddCategoryPopUpSuccessed(true);
+                setSelectedCategoryFieldColour('gray')
             } else {
                 setCategoryMessageType("error");
                 setCategoryMessage(`Please try another category.`);
                 setAddCategoryPopUpFailed(true);
             }
         });
+        
     };
     
     const handleDeleteCategoryClick = (event) => {
@@ -193,12 +195,15 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                 setUpdateCategoryComponent(prevState => !prevState);
                 setDeleteCategoryPopUpSuccessed(true);
                 setSelectedCategory('');
+                setSelectedCategoryFieldColour('red')
             } else {
                 setCategoryMessageType("error");
                 setCategoryMessage(`Failed to delete category.`);
                 setDeleteCategoryPopUpFailed(true);
             }
         });
+
+        
     };
     
 
@@ -249,13 +254,18 @@ const AddTransactionPage = ({ closePopup, userId }) => {
         setErrorScanReceiptMessage(false);
     }
 
+    const handleClosePopUp =() => {
+        closePopup()
+        resetFormFields();
+    }
+
     return (
         <div className="relative bg-white rounded-lg shadow p-4 overflow-y-auto">
         <div className="flex items-center justify-between rounded-t dark:border-gray-600">
             <button
                 type="button"
                 className="text-black bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                onClick={closePopup}
+                onClick={handleClosePopUp}
             >
                 <span className="material-icons">
                     close
