@@ -33,7 +33,7 @@ function SignUp({
       const response = await callApi(apiEndpoint, "POST", data);
       console.log(response);
 
-      return response.user_status_code;
+      return response;
     } catch (error) {
       return null;
     }
@@ -67,12 +67,17 @@ function SignUp({
         setShowLoadingMessage(true);
         const response = await fetchData();
         console.log("handlesignup response: " + response);
-        if (response === 201) {
+        if (response.user_status_code === 201) {
           setShowLoadingMessage(false);
           console.log("Sign up successful.");
           setSuccessMessage("Sign up successful! Please log in.");
           setShowSuccessMessage(true);
-        } else {
+        } else if (response.user_status_code ===501) {
+          setShowLoadingMessage(false);
+          setShowErrorMessage(true);
+          setErrorMessage(response.message);
+        }
+        else {
           setShowLoadingMessage(false);
           setShowErrorMessage(true);
           setErrorMessage("Sign up failed. Please try again.");
