@@ -9,6 +9,8 @@ function ScanReceipt({
   setAmount,
   setSuccessScanReceiptMessage,
   setErrorScanReceiptMessage,
+  setAmountFieldColour,
+  setDescription
 }) {
   const [showUploadWindow, setShowUploadWindow] = useState(false);
   const [error, setError] = useState(null);
@@ -36,7 +38,9 @@ function ScanReceipt({
       console.log("Response from API:", response.response);
 
       if ((response.ocr_status_code = 200)) {
-        setAmount(response.response);
+        setAmount(response.receipt_amount);
+        setDescription(response.receipt_text)
+        setAmountFieldColour("gray")
         setSuccessScanReceiptMessage(true);
         setShowLoadingMessage(false);
       } else {
@@ -45,10 +49,6 @@ function ScanReceipt({
         setErrorScanReceiptMessage(true);
       }
 
-      // // Handle the response from the API
-      // setAmount(response.response);
-      // setSuccessScanReceiptMessage(true);
-      // setShowLoadingMessage(false);
     } catch (error) {
       console.error("Error uploading file:", error);
       setError("An error occurred while uploading the file.");

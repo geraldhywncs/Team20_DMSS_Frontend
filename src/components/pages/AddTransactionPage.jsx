@@ -457,6 +457,8 @@ const AddTransactionPage = ({ closePopup, userId }) => {
                 text={"Scan Receipt"}
                 setShowLoadingMessage = {setShowLoadingMessage}
                 setAmount = {setAmount}
+                setAmountFieldColour = {setAmountFieldColour}
+                setDescription = {setDescription}
                 setSuccessScanReceiptMessage = {setSuccessScanReceiptMessage}
                 setErrorScanReceiptMessage = {setErrorScanReceiptMessage}
             />
