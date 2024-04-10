@@ -41,6 +41,9 @@ jobs:
       - name: Print ChromeDriver version
         run: chromedriver --version
 
+      - name: Wait for 5 minutes
+        run: sleep 300
+      
       - name: Start selenium testing
         run: | 
           selenium-side-runner moneygowhere.side
