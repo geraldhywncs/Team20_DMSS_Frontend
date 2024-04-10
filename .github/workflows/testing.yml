@@ -30,7 +30,10 @@ jobs:
       run: |
         npm install -g selenium-side-runner
         
-    - name: Run Selenium Tests
+    - name: Set Chrome Binary Path
       run: |
         export CHROME_BIN=/usr/bin/chromium-browser
+        
+    - name: Run Selenium Tests
+      run: |
         selenium-side-runner moneygowhere.side || exit 0
