@@ -27,21 +27,10 @@ jobs:
           wget -q -O chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i chrome.deb
           sudo apt-get install -f -y
-          sudo apt-get update
-          sudo apt-get upgrade google-chrome-stable
+          sudo apt-get install --only-upgrade google-chrome-stable
 
           # Download the latest ChromeDriver version
-          LATEST_CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-          wget -q --show-progress https://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-
-          # Unzip the downloaded file
-          unzip chromedriver_linux64.zip
-
-          # Move ChromeDriver to a directory in PATH
-          sudo mv chromedriver /usr/local/bin/
-
-          # Clean up downloaded files
-          rm chromedriver_linux64.zip chrome.deb
+          sudo apt-get install chromium-chromedriver
 
       - name: Install selenium-side-runner
         run: npm install -g selenium-side-runner
