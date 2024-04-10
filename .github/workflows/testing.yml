@@ -32,4 +32,5 @@ jobs:
         
     - name: Run Selenium Tests
       run: |
-        CHROME_BIN=/usr/bin/chromium-browser selenium-side-runner --chrome /usr/bin/chromium-browser moneygowhere.side || exit 0
+        export CHROME_BIN=/usr/bin/chromium-browser
+        selenium-side-runner moneygowhere.side || exit 0
