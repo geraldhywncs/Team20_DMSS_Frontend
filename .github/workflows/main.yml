@@ -21,14 +21,44 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Chrome
+        run: |
+          LATEST_CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3)
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+          sudo apt-get update
+          sudo apt-get install google-chrome-stable=$LATEST_CHROME_VERSION
+
+      - name: Install ChromeDriver
+        run: |
+          LATEST_CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+          wget -q --show-progress https://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          rm chromedriver_linux64.zip
+
+      - name: Install selenium-side-runner
+        run: npm install -g selenium-side-runner
+
+      - name: Start frontend
+        run: npm run start
+
+      - name: Start selenium testing
+        run: | 
+          selenium-side-runner moneygowhere.side
+        continue-on-error: true
+
       - name: Build frontend with ESLint warnings ignored
+        if: ${{ success() }}
         run: npm run build-no-eslint
 
       - name: Configure AWS CLI
+        if: ${{ success() }}
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ap-southeast-2
 
       - name: Sync build output to S3
+        if: ${{ success() }}
         run: aws s3 sync build/ s3://moneygowheredmss --delete
