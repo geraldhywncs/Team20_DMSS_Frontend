@@ -40,21 +40,6 @@ jobs:
 
       - name: Print ChromeDriver version
         run: chromedriver --version
-        
-      - name: Start frontend server
-        run: npm run start &
-
-      - name: Wait for frontend server to start
-        run: |
-          timeout=300 # 5 minutes timeout
-          until nc -z localhost 3000; do
-            sleep 5
-            timeout=$((timeout - 5))
-            if [ $timeout -le 0 ]; then
-              echo "Frontend server did not start within the timeout."
-              exit 1
-            fi
-          done
 
       - name: Start selenium testing
         run: | 
