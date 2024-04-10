@@ -10,10 +10,28 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
       
-    - name: Install Dependencies
+    - name: Install Node.js and npm
       run: |
         sudo apt-get update
         sudo apt-get install -y nodejs npm
+        
+    - name: Install Chrome and ChromeDriver
+      run: |
+        # Install Chrome
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+        
+        # Install ChromeDriver
+        CHROME_VERSION=$(google-chrome --version | grep -oP '(?<=Google Chrome )[\d\.]+')
+        CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        wget -q -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+        sudo unzip -o /tmp/chromedriver.zip -d /usr/local/bin
+        sudo chmod +x /usr/local/bin/chromedriver
+        
+    - name: Install Selenium-Side-Runner
+      run: |
         npm install -g selenium-side-runner
         
     - name: Run Selenium Tests
