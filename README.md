@@ -45,3 +45,8 @@ Here are some guidelines to follow when creating files in this project:
 4. **Constants Component:**
    - Create a separate `constants` component to store hardcoded variables and strings.
    - Example: `src/constants/constants.js`.
+
+### Selenium Testing
+1. npm install -g selenium-side-runner \
+2. Go to https://getwebdriver.com/chromedriver to download the chromedriver version which same with your chrome browser. \
+3. Run selenium-side-runner _\moneygowhere.side from different path from your running program
