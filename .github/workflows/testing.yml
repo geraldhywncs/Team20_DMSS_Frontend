@@ -44,3 +44,4 @@ jobs:
 
       - name: Start selenium testing
         run: selenium-side-runner moneygowhere.side
+        
