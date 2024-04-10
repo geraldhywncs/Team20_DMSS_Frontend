@@ -1,43 +1,43 @@
-name: Build and Deploy Frontend to S3
+# name: Build and Deploy Frontend to S3
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18.13.0'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '18.13.0'
 
-      - name: Install dependencies
-        run: npm install
+#       - name: Install dependencies
+#         run: npm install
 
-      - name: Download Chrome and ChromeDriver
-        run: |
-          # Download and install Chrome
-          wget -q -O chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i chrome.deb
-          sudo apt-get install -f -y
-          sudo apt-get install --only-upgrade google-chrome-stable
+#       - name: Download Chrome and ChromeDriver
+#         run: |
+#           # Download and install Chrome
+#           wget -q -O chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#           sudo dpkg -i chrome.deb
+#           sudo apt-get install -f -y
+#           sudo apt-get install --only-upgrade google-chrome-stable
 
-          # Download the latest ChromeDriver version
-          sudo apt-get install chromium-chromedriver
+#           # Download the latest ChromeDriver version
+#           sudo apt-get install chromium-chromedriver
         
-      - name: Print Chrome version
-        run: google-chrome --version
+#       - name: Print Chrome version
+#         run: google-chrome --version
 
-      - name: Print ChromeDriver version
-        run: chromedriver --version
+#       - name: Print ChromeDriver version
+#         run: chromedriver --version
         
-      - name: Start frontend server
-        run: timeout 10m npm run start
+#       - name: Start frontend server
+#         run: timeout 10m npm run start
 
