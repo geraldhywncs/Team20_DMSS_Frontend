@@ -43,4 +43,4 @@ jobs:
     - name: Run Selenium Tests
       run: |
         # Run Selenium tests
-        selenium-side-runner path/to/tests/*.side || exit 0
+        selenium-side-runner moneygowhere.side || exit 0
