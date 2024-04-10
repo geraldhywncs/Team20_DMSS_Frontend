@@ -28,7 +28,6 @@ jobs:
           sudo dpkg -i chrome.deb
           sudo apt-get install -f -y
           sudo apt-get install --only-upgrade google-chrome-stable
-          which google-chrome
 
           # Download the latest ChromeDriver version
           sudo apt-get install chromium-chromedriver
@@ -37,10 +36,17 @@ jobs:
         run: npm install -g selenium-side-runner
         
       - name: Print Chrome version
-        run: google-chrome --version
+        run: |
+          google-chrome --version
+          which google-chrome
+          ls -l /usr/bin/google-chrome
+          echo $PATH
 
       - name: Print ChromeDriver version
-        run: chromedriver --version
+        run: |
+          chromedriver --version
+          which chromedriver
+          ls -l /usr/bin/chromedriver
 
       - name: Wait for 0.5 minutes
         run: sleep 30
@@ -48,7 +54,6 @@ jobs:
       - name: Start selenium testing
         run: | 
           export PATH="$PATH:/usr/bin/google-chrome"
-          echo $PATH
           selenium-side-runner moneygowhere.side
 
       - name: Build frontend with ESLint warnings ignored
