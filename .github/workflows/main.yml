@@ -21,20 +21,30 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Chrome
+      - name: Install Chrome and ChromeDriver
         run: |
-          LATEST_CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3)
+          # Fetch the latest Chrome version
+          LATEST_CHROME_VERSION=$(curl -sS https://omahaproxy.appspot.com/all | grep -m1 '"os":"linux"' | cut -d'"' -f8)
+
+          # Install Chrome
           wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
           sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
           sudo apt-get update
           sudo apt-get install google-chrome-stable=$LATEST_CHROME_VERSION
 
-      - name: Install ChromeDriver
-        run: |
+          # Fetch the latest ChromeDriver version
           LATEST_CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+
+          # Download the latest ChromeDriver binary
           wget -q --show-progress https://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+
+          # Unzip the downloaded file
           unzip chromedriver_linux64.zip
+
+          # Move ChromeDriver to a directory in PATH
           sudo mv chromedriver /usr/local/bin/
+
+          # Clean up downloaded files
           rm chromedriver_linux64.zip
 
       - name: Install selenium-side-runner
