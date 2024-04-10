@@ -56,7 +56,7 @@ jobs:
       
       - name: Start selenium testing
         run: | 
-          export PATH="$PATH:/usr/bin/google-chrome"
+          export PATH="/usr/bin/google-chrome:/usr/bin/chromedriver:$PATH"
           selenium-side-runner moneygowhere.side
 
       - name: Build frontend with ESLint warnings ignored
