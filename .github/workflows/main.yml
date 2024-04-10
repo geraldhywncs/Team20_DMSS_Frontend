@@ -46,7 +46,8 @@ jobs:
       
       - name: Start selenium testing
         run: | 
-          selenium-side-runner moneygowhere.side --config chromeOptions.binary=/usr/bin/google-chrome
+          export PATH="$PATH:/usr/bin"
+          selenium-side-runner moneygowhere.side
 
       - name: Build frontend with ESLint warnings ignored
         if: ${{ success() }}
