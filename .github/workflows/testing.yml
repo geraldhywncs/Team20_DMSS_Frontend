@@ -38,6 +38,9 @@ jobs:
 
       - name: Print ChromeDriver version
         run: /usr/local/bin/chromedriver --version
+
+      - name: Update PATH
+        run: echo "export PATH=\"/usr/local/bin/chromedriver:/usr/bin/google-chrome:$PATH\"" >> $GITHUB_ENV
         
       - name: Print Path
         run: echo $PATH
