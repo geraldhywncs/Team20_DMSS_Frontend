@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.13.0'
+          node-version: '14' # Adjust the version as needed
 
       - name: Install dependencies
         run: npm install
@@ -34,17 +34,13 @@ jobs:
           sudo ln -sf /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
 
       - name: Print Chrome version
-        run: google-chrome --version
+        run: /usr/bin/google-chrome --version
 
       - name: Print ChromeDriver version
-        run: chromedriver --version
+        run: /usr/local/bin/chromedriver --version
 
       - name: Install selenium-side-runner
         run: npm install -g selenium-side-runner
 
       - name: Start selenium testing
-        run: | 
-          selenium-side-runner moneygowhere.side
-
-
-
+        run: selenium-side-runner moneygowhere.side
