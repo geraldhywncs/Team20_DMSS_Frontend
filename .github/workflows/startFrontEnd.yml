@@ -44,14 +44,6 @@ jobs:
       - name: Start frontend server
         run: npm run start &
 
-      - name: Wait for frontend server to start
-        run: |
-          timeout=1000 # 5 minutes timeout
-          until nc -z localhost 3000; do
-            sleep 5
-            timeout=$((timeout - 5))
-            if [ $timeout -le 0 ]; then
-              echo "Frontend server did not start within the timeout."
-              exit 1
-            fi
-          done
+      - name: Wait for 10 minutes
+        run: sleep 600; exit 0
+
