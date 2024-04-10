@@ -37,7 +37,10 @@ jobs:
           sudo mv chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
 
-      - name: Run Google Chrome in Headless Mode
-        run: google-chrome --headless --disable-gpu --remote-debugging-port=9222 https://www.google.com/
+      - name: Print Chrome version
+        run: google-chrome --version
+
+      - name: Print ChromeDriver version
+        run: chromedriver --version
 
 
