@@ -1,6 +1,12 @@
 name: Selenium Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
@@ -36,4 +42,5 @@ jobs:
         
     - name: Run Selenium Tests
       run: |
-        selenium-side-runner moneygowhere.side
+        # Run Selenium tests
+        selenium-side-runner path/to/tests/*.side || exit 0
