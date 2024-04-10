@@ -21,11 +21,14 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y nodejs npm
         
-    - name: Install Chrome and ChromeDriver
+    - name: Install Chromium and Chromedriver
       run: |
-        # Install Chromium and Chromedriver
         sudo apt-get update
         sudo apt-get install -y chromium-browser chromium-chromedriver
+        
+    - name: Set Chrome Binary Path
+      run: |
+        echo "export CHROME_BIN=/usr/bin/chromium-browser" >> $GITHUB_ENV
         
     - name: Install Selenium-Side-Runner
       run: |
