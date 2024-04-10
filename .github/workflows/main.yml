@@ -43,7 +43,13 @@ jobs:
 
       - name: Install selenium-side-runner
         run: npm install -g selenium-side-runner
+        
+      - name: Print Chrome version
+        run: google-chrome --version
 
+      - name: Print ChromeDriver version
+        run: chromedriver --version
+        
       - name: Start frontend server
         run: npm run start &
 
@@ -62,7 +68,6 @@ jobs:
       - name: Start selenium testing
         run: | 
           selenium-side-runner moneygowhere.side
-        continue-on-error: true
 
       - name: Build frontend with ESLint warnings ignored
         if: ${{ success() }}
