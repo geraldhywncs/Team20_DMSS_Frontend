@@ -27,6 +27,8 @@ jobs:
           wget -q -O chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo dpkg -i chrome.deb
           sudo apt-get install -f -y
+          sudo apt-get update
+          sudo apt-get upgrade google-chrome-stable
 
           # Download the latest ChromeDriver version
           LATEST_CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
