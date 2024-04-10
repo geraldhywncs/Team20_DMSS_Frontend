@@ -3,6 +3,9 @@
   "version": "2.0",
   "name": "moneygowhere",
   "url": "http://localhost:3000",
+  "chromeOptions": {
+    "binary": "/usr/bin/chromium-browser"
+  },
   "tests": [{
     "id": "73540b20-fc28-4723-a89a-4ca230405c86",
     "name": "Sign Up User Existing",
