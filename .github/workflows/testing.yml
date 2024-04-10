@@ -39,4 +39,12 @@ jobs:
       - name: Print ChromeDriver version
         run: chromedriver --version
 
+      - name: Install selenium-side-runner
+        run: npm install -g selenium-side-runner
+
+      - name: Start selenium testing
+        run: | 
+          selenium-side-runner moneygowhere.side
+
+
 
