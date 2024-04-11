@@ -31,7 +31,8 @@ const LoginSignUp = ({ setUserId }) => {
   const [email, setEmail] = useState("");
   const [usernameFieldColor, setUsernameFieldColor] = useState("gray");
   const [signUpEmailFieldColor, setSignUpEmailFieldColor] = useState("gray");
-  const [signUpPasswordFieldColor, setSignUpPasswordFieldColor] = useState("gray");
+  const [signUpPasswordFieldColor, setSignUpPasswordFieldColor] =
+    useState("gray");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [signupTempEmail, setSignupTempEmail] = useState("");
@@ -44,10 +45,10 @@ const LoginSignUp = ({ setUserId }) => {
     setFirstNameFieldColor("gray");
 
     const maxFirstNameLength = 20;
-    const firstName = e.target.value.slice(0, maxFirstNameLength);
-    setFirstName(firstName);
 
     if (e.target.value.length >= maxFirstNameLength) {
+      const firstName = e.target.value.slice(0, maxFirstNameLength);
+      setFirstName(firstName);
       setFirstNameFieldColor("red");
     } else {
       setFirstNameFieldColor("gray");
@@ -61,10 +62,10 @@ const LoginSignUp = ({ setUserId }) => {
     setLastNameFieldColor("gray");
 
     const maxLastNameLength = 20;
-    const lastName = e.target.value.slice(0, maxLastNameLength);
-    setLastName(lastName);
 
     if (e.target.value.length >= maxLastNameLength) {
+      const lastName = e.target.value.slice(0, maxLastNameLength);
+      setLastName(lastName);
       setLastNameFieldColor("red");
     } else {
       setLastNameFieldColor("gray");
@@ -78,10 +79,10 @@ const LoginSignUp = ({ setUserId }) => {
     setUsernameFieldColor("gray");
 
     const maxUsernameLength = 20;
-    const username = e.target.value.slice(0, maxUsernameLength);
-    setUsername(username);
 
     if (e.target.value.length >= maxUsernameLength) {
+      const username = e.target.value.slice(0, maxUsernameLength);
+      setUsername(username);
       setUsernameFieldColor("red");
     } else {
       setUsernameFieldColor("gray");
@@ -91,7 +92,6 @@ const LoginSignUp = ({ setUserId }) => {
   };
 
   const handleSucessMessage = () => {
-
     setShowSuccessMessage(false);
     setUsername("");
     setSignupTempPassword("");
@@ -106,8 +106,6 @@ const LoginSignUp = ({ setUserId }) => {
   };
 
   const handleSignUpEmailChange = (e) => {
-
-    setSignupTempEmail(e.target.value);
     setSignUpEmailFieldColor("gray");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (emailRegex.test(e.target.value)) {
@@ -115,8 +113,11 @@ const LoginSignUp = ({ setUserId }) => {
       setSignUpEmailFieldColor("gray");
     } else {
       console.log("Empty");
+      setEmail("");
       setSignUpEmailFieldColor("red");
     }
+    setSignupTempEmail(e.target.value);
+    console.log(email);
   };
 
   const handlePasswordChange = (e) => {
