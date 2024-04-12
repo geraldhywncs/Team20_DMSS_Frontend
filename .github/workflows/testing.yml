@@ -44,6 +44,8 @@ jobs:
         
     - name: Install Selenium-Side-Runner
       run: |
+        chrome --version
+        chromedriver --version
         npm install -g selenium-side-runner
 
     - name: Run Selenium Tests
