@@ -13,27 +13,40 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout Repository
+    - name: Checkout code
       uses: actions/checkout@v2
-      
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.13.0'
+
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: 123.0.6312.105
+
+    - name: Setup Chrome Driver
+      uses: nanasess/setup-chromedriver@v2
+      with:
+        chromedriver-version: '123.0.6312.105'
+
+    - name: Start Xvfb
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb
+        sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+        export DISPLAY=:99
+
     - name: Install Node.js and npm
       run: |
         sudo apt-get update
         sudo apt-get install -y nodejs npm
         
-    - name: Install Chromium and Chromedriver
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y chromium-browser chromium-chromedriver
-        
     - name: Install Selenium-Side-Runner
       run: |
         npm install -g selenium-side-runner
-        
-    - name: Set Chrome Binary Path
-      run: |
-        export CHROME_BIN=/usr/bin/chromium-browser
-        
+
     - name: Run Selenium Tests
       run: |
         selenium-side-runner moneygowhere.side || exit 0
