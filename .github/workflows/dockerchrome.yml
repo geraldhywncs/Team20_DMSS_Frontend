@@ -16,13 +16,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Run frontend
+      run: |
+        docker build -t dmss_frontend -f Dockerfile .
+        docker network create selenium-tests
+        docker run -d --name dmss_frontend --network selenium-tests -p 3000:3000 dmss_frontend
+
     - name: Run Selenium Tests in Docker
       run: |
         # Pull the latest selenium/standalone-chrome image
         docker pull selenium/standalone-chrome
         
         # Run the container with the required volume and ports
-        docker run -d --shm-size=2g --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side selenium/standalone-chrome:latest
+        docker run -d --shm-size=2g --network=selenium-tests --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side selenium/standalone-chrome:latest
         
         # Run commands inside the Docker container
         # Execute commands inside the Docker container as root user
