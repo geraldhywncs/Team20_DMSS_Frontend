@@ -13,7 +13,7 @@ RUN npm install
 # Copy the rest of the application files to the container
 COPY src/ /app/src/
 COPY public/ /app/public/
-COPY build/ /app/build/
+# COPY build/ /app/build/
 
 # Set the entrypoint to start the frontend application
 ENTRYPOINT ["npm", "run", "start"]
