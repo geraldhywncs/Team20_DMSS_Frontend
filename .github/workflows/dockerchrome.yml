@@ -42,6 +42,7 @@ jobs:
         docker exec -u root selenium-browsers bash -c 'apt-get install -y nodejs'
         docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
         docker exec -u root selenium-browsers bash -c 'cd app'
+        docker exec -u root selenium-browsers bash -c 'npm install'
         docker exec -u root selenium-browsers bash -c 'npm run build'
         docker exec -u root selenium-browsers bash -c 'npm install -g serve'
         docker exec -u root selenium-browsers bash -c 'serve -s build > log.txt 2>&1 &'
