@@ -23,6 +23,10 @@ jobs:
         docker run -d --name dmss_frontend --network selenium-tests -p 3000:3000 dmss_frontend
         docker ps --filter "name=dmss_frontend"
         
+    - name: Check log
+      run: |
+        docker logs dmss_frontend
+        
     - name: Run Selenium Tests in Docker
       run: |
         # Pull the latest selenium/standalone-chrome image
