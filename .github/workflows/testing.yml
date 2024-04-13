@@ -50,4 +50,5 @@ jobs:
 
     - name: Run Selenium Tests
       run: |
-        selenium-side-runner moneygowhere.side || exit 0
+        selenium-side-runner --browser "chrome" --headless moneygowhere.side
+        # selenium-side-runner moneygowhere.side || exit 0
