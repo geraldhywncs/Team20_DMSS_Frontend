@@ -50,6 +50,7 @@ jobs:
     - name: cd App
       run: |
         docker exec -u root selenium-browsers bash -c 'cd app'
+        docker exec -u root selenium-browsers bash -c 'ls'
         
     - name: npm install
       run: |
