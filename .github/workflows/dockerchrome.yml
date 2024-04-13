@@ -18,7 +18,7 @@ jobs:
 
     - name: Run frontend
       run: |
-        docker build -t dmss_frontend -f Dockerfile .
+        docker build -t dmss_frontend -f $GITHUB_WORKSPACE/Dockerfile .
         docker network create selenium-tests
         docker run -d --name dmss_frontend --network selenium-tests -p 3000:3000 dmss_frontend
 
