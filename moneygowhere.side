@@ -1,27 +1,27 @@
 {
-  "id": "3d240052-57bb-4f19-9bbb-20496df72860",
+  "id": "a9912cd6-f33b-4180-9e9c-751526138aa5",
   "version": "2.0",
-  "name": "moneygowhere",
-  "url": "http://localhost:3000",
+  "name": "testing",
+  "url": "http://moneygowheredmss.s3-website-ap-southeast-1.amazonaws.com",
   "tests": [{
-    "id": "73540b20-fc28-4723-a89a-4ca230405c86",
-    "name": "Sign Up User Existing",
+    "id": "01bdc0fa-8d62-4be3-b475-ee74589bae3c",
+    "name": "Test1",
     "commands": [{
-      "id": "66c4a92a-5444-4202-818d-2d7beb78095d",
+      "id": "82f99ad0-3c95-437b-ac86-e3818e0f9120",
       "comment": "",
       "command": "open",
       "target": "/",
       "targets": [],
       "value": ""
     }, {
-      "id": "d8d06bed-f5f8-4738-b542-d3e60ef1f01e",
+      "id": "cdcb3677-eb62-4ddf-bd9d-96d7a1eadf2e",
       "comment": "",
       "command": "setWindowSize",
       "target": "1280x1040",
       "targets": [],
       "value": ""
     }, {
-      "id": "5364b629-1386-4ca0-b8d6-b417a3b2b870",
+      "id": "c8d191ce-bcae-4117-b80c-24a09329c835",
       "comment": "",
       "command": "click",
       "target": "css=label:nth-child(3)",
@@ -32,7 +32,7 @@
       ],
       "value": ""
     }, {
-      "id": "af5afb13-bbd6-4e3c-846f-41255397c467",
+      "id": "3b962d54-5d26-48a0-8ab1-9d3525873179",
       "comment": "",
       "command": "click",
       "target": "id=signupFirstName",
@@ -46,7 +46,7 @@
       ],
       "value": ""
     }, {
-      "id": "6d6bb17f-2a27-4e76-b0d7-fa5825c4b3a4",
+      "id": "cb52afa6-f21a-4405-9e9e-1a37185eef00",
       "comment": "",
       "command": "type",
       "target": "id=signupFirstName",
@@ -60,7 +60,21 @@
       ],
       "value": "Jun Jie"
     }, {
-      "id": "62d61670-9e9d-463a-be22-2283df298088",
+      "id": "a16ab209-22ed-4754-a6d4-749053bf377c",
+      "comment": "",
+      "command": "click",
+      "target": "id=signupLastName",
+      "targets": [
+        ["id=signupLastName", "id"],
+        ["name=signupLastName", "name"],
+        ["css=#signupLastName", "css:finder"],
+        ["xpath=//input[@id='signupLastName']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/div/div/div[2]/div/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "51908897-803a-487d-a6ef-3239324613f0",
       "comment": "",
       "command": "type",
       "target": "id=signupLastName",
@@ -74,7 +88,21 @@
       ],
       "value": "Wee"
     }, {
-      "id": "00df8fd8-ee29-4b70-8ccd-1dda97464e78",
+      "id": "56f783a5-88de-44a6-b662-7d5be0ef11bd",
+      "comment": "",
+      "command": "click",
+      "target": "id=signupUsername",
+      "targets": [
+        ["id=signupUsername", "id"],
+        ["name=signupUsername", "name"],
+        ["css=#signupUsername", "css:finder"],
+        ["xpath=//input[@id='signupUsername']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/div/div/div[2]/div/div/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "12e89058-78b9-4397-89e2-e3faa1d0f706",
       "comment": "",
       "command": "type",
       "target": "id=signupUsername",
@@ -86,9 +114,9 @@
         ["xpath=//div[@id='root']/div/div/div[2]/div/div/div[2]/div/div/div[3]/input", "xpath:idRelative"],
         ["xpath=//div[3]/input", "xpath:position"]
       ],
-      "value": "junjiewee"
+      "value": "junjiewee2"
     }, {
-      "id": "aebf1912-693f-407d-9a6c-9bad4b959cd5",
+      "id": "76001690-a2f2-4ed1-ae65-f73a9de12bee",
       "comment": "",
       "command": "click",
       "target": "id=signupPassword",
@@ -102,7 +130,7 @@
       ],
       "value": ""
     }, {
-      "id": "a7305204-9e99-4977-8c60-79a01e9e5d39",
+      "id": "e2e82982-ca63-41e9-b937-0e27965fa258",
       "comment": "",
       "command": "type",
       "target": "id=signupPassword",
@@ -116,7 +144,7 @@
       ],
       "value": "Password1111!"
     }, {
-      "id": "48ffff78-2ad9-415b-96eb-74ed6a9fb1a2",
+      "id": "782d8b17-3bf3-4f6e-998b-a823143f797d",
       "comment": "",
       "command": "click",
       "target": "id=signupEmail",
@@ -130,7 +158,7 @@
       ],
       "value": ""
     }, {
-      "id": "64d5ab18-aec3-4f71-a7d1-1f19fe6be8d4",
+      "id": "165bdcd3-1896-4bca-9804-b7c63fdb6011",
       "comment": "",
       "command": "type",
       "target": "id=signupEmail",
@@ -144,7 +172,18 @@
       ],
       "value": "junjie.wee@ncs.com.sg"
     }, {
-      "id": "4d76b6d4-5c68-4292-8568-793c90f08743",
+      "id": "557e409d-4567-4f44-b1cc-a395bcd504f5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.min-h-screen",
+      "targets": [
+        ["css=.min-h-screen", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4581cb3d-cce3-4d21-8c69-90052fb40986",
       "comment": "",
       "command": "click",
       "target": "css=.center-wrap > .col-span-1 .blue-btn",
@@ -155,28 +194,16 @@
         ["xpath=//button[contains(.,'Sign Up')]", "xpath:innerText"]
       ],
       "value": ""
-    }, {
-      "id": "29be4b23-2518-4d7a-80a5-62c35aad54e2",
-      "comment": "",
-      "command": "waitForElementVisible",
-      "target": "xpath=//p[contains(.,'Username already exists!')]",
-      "targets": [
-        ["css=.text-red-500", "css:finder"],
-        ["xpath=//div[@id='root']/div/div/div/div/div/p", "xpath:idRelative"],
-        ["xpath=//p", "xpath:position"],
-        ["xpath=//p[contains(.,'Username already exists!')]", "xpath:innerText"]
-      ],
-      "value": "xpath=//p[contains(.,'Username already exists!')]"
     }]
   }],
   "suites": [{
-    "id": "256cb7a2-096f-4fb6-bea2-4828fad49e66",
-    "name": "Demo",
+    "id": "acea938d-daba-432a-9eec-5a430ebb504b",
+    "name": "Default Suite",
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
-    "tests": ["73540b20-fc28-4723-a89a-4ca230405c86"]
+    "tests": ["01bdc0fa-8d62-4be3-b475-ee74589bae3c"]
   }],
-  "urls": ["http://localhost:3000/"],
+  "urls": ["http://moneygowheredmss.s3-website-ap-southeast-1.amazonaws.com/"],
   "plugins": []
 }
