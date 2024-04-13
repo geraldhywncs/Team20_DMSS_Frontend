@@ -16,17 +16,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Run frontend
-      run: |
-        docker build -t dmss_frontend -f $GITHUB_WORKSPACE/Dockerfile .
-        docker network create selenium-tests
-        docker run -d --name dmss_frontend --network selenium-tests -p 3000:3000 dmss_frontend
-        docker ps --filter "name=dmss_frontend"
+    # - name: Run frontend
+    #   run: |
+    #     docker build -t dmss_frontend -f $GITHUB_WORKSPACE/Dockerfile .
+    #     docker network create selenium-tests
+    #     docker run -d --name dmss_frontend --network selenium-tests -p 3000:3000 dmss_frontend
+    #     docker ps --filter "name=dmss_frontend"
         
-    - name: Check log
-      run: |
-        sleep 60
-        docker logs dmss_frontend
+    # - name: Check log
+    #   run: |
+    #     sleep 60
+    #     docker logs dmss_frontend
         
     - name: Run Selenium Tests in Docker
       run: |
@@ -34,15 +34,19 @@ jobs:
         docker pull selenium/standalone-chrome
         
         # Run the container with the required volume and ports
-        docker run -d --shm-size=2g --network=selenium-tests --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side selenium/standalone-chrome:latest
-        
+        # docker run -d --shm-size=2g --network=selenium-tests --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side selenium/standalone-chrome:latest
+        docker run -d --shm-size=2g --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public selenium/standalone-chrome:latest
         # Run commands inside the Docker container
         # Execute commands inside the Docker container as root user
         docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
         docker exec -u root selenium-browsers bash -c 'apt-get install -y nodejs'
         docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
+        docker exec -u root selenium-browsers bash -c 'cd app'
+        docker exec -u root selenium-browsers bash -c 'npm run build'
+        docker exec -u root selenium-browsers bash -c 'npm install -g serve'
+        docker exec -u root selenium-browsers bash -c 'serve -s build > log.txt 2>&1 &'
         docker exec -u root selenium-browsers bash -c 'selenium-side-runner /tests/moneygowhere.side'
-        
+
         # Clean up the Docker container
         # docker stop selenium-browsers
         # docker rm selenium-browsers
