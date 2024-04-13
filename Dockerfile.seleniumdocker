@@ -1,0 +1,18 @@
+# Start from the Selenium standalone Chrome image
+FROM selenium/standalone-chrome:latest
+
+USER root
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get update && \
+    apt-get install -y nodejs
+
+# Install selenium-side-runner globally
+RUN npm install -g selenium-side-runner
+
+# Copy the .side file to /tests/ in the container
+COPY moneygowhere.side /tests/moneygowhere.side
+
+# Command to run the .side file
+CMD ["selenium-side-runner", "/tests/moneygowhere.side"]
