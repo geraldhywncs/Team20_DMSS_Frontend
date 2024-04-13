@@ -47,26 +47,27 @@ jobs:
       run: |
         docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
         
-    - name: cd App
-      run: |
-        docker exec -u root selenium-browsers bash -c 'cd /app'
-        docker exec -u root selenium-browsers bash -c 'ls'
+    # - name: cd App
+    #   run: |
+    #     docker exec -u root selenium-browsers bash -c 'cd /app'
+    #     docker exec -u root selenium-browsers bash -c 'ls'
         
     - name: npm install
       run: |
-        docker exec -u root selenium-browsers bash -c 'npm install'
+        docker exec -u root selenium-browsers bash -c 'cd /app && npm install'
+        # docker exec -u root selenium-browsers bash -c 'npm install'
         
     - name: npm run build
       run: |
-        docker exec -u root selenium-browsers bash -c 'npm run build'
+        docker exec -u root selenium-browsers bash -c 'cd /app && npm run build'
 
     - name: npm install -g serve
       run: |
-        docker exec -u root selenium-browsers bash -c 'npm install -g serve'
+        docker exec -u root selenium-browsers bash -c 'cd /app && npm install -g serve'
 
     - name: npm build
       run: |
-        docker exec -u root selenium-browsers bash -c 'serve -s build > log.txt 2>&1 &'
+        docker exec -u root selenium-browsers bash -c 'cd /app && serve -s build > log.txt 2>&1 &'
         
     - name: exec selenium side runner
       run: |
