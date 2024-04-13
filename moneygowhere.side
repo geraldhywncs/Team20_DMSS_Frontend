@@ -2,7 +2,7 @@
   "id": "a9912cd6-f33b-4180-9e9c-751526138aa5",
   "version": "2.0",
   "name": "testing",
-  "url": "http://moneygowheredmss.s3-website-ap-southeast-1.amazonaws.com",
+  "url": "http://localhost:3000/",
   "tests": [{
     "id": "01bdc0fa-8d62-4be3-b475-ee74589bae3c",
     "name": "Test1",
