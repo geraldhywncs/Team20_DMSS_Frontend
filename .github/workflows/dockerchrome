@@ -1,0 +1,26 @@
+name: Selenium Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run Selenium Tests in Docker
+      run: |
+        # Pull the Docker image with Google Chrome and ChromeDriver
+        docker pull selenium/standalone-chrome:latest
+
+        # Run the Selenium tests in a Docker container
+        docker run --rm -v "$PWD:/workspace" selenium/standalone-chrome:latest \
+          selenium-side-runner /workspace/moneygowhere.side --capabilities '{"browserName":"chrome","goog:chromeOptions":{"args":["headless","disable-infobars"]}}'
