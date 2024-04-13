@@ -50,5 +50,5 @@ jobs:
 
     - name: Run Selenium Tests
       run: |
-        selenium-side-runner --headless moneygowhere.side
+        selenium-side-runner -c "goog:chromeOptions.args=[disable-infobars, headless]"
         # selenium-side-runner moneygowhere.side || exit 0
