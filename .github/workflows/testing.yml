@@ -26,10 +26,13 @@ jobs:
       with:
         chrome-version: 123.0.6312.105
 
+    # - name: Setup Chrome Driver
+    #   uses: nanasess/setup-chromedriver@v2
+    #   with:
+    #     chromedriver-version: '123.0.6312.105'
+
     - name: Setup Chrome Driver
-      uses: nanasess/setup-chromedriver@v2
-      with:
-        chromedriver-version: '123.0.6312.105'
+      run: sudo apt-get install chromium-chromedriver
 
     - name: Start Xvfb
       run: |
