@@ -9,11 +9,14 @@ COPY package.json package-lock.json tailwind.config.js .env /app/
 
 # Install dependencies
 RUN npm install
+RUN npm install -g serve
 
 # Copy the rest of the application files to the container
 COPY src/ /app/src/
 COPY public/ /app/public/
-# COPY build/ /app/build/
+
+# Build
+RUN npm run build
 
 # Set the entrypoint to start the frontend application
-ENTRYPOINT ["npm", "run", "start"]
+ENTRYPOINT ["serve", "-s", "build"]
