@@ -72,7 +72,8 @@ jobs:
     - name: exec selenium side runner
       run: |
         docker exec -u root selenium-browsers bash -c 'selenium-side-runner /tests/moneygowhere.side'
-
+        exit_code=$?
+        
         if [ $exit_code -ne 0 ]; then
           echo "selenium-side-runner failed with exit code $exit_code"
           exit 1  # Fail the step
