@@ -18,9 +18,10 @@ jobs:
 
     - name: Run Selenium Tests in Docker
       run: |
-        # Pull the Docker image with Google Chrome and ChromeDriver
-        docker pull selenium/standalone-chrome:latest
-
-        # Run the Selenium tests in a Docker container
-        docker run --rm -v "$PWD:/workspace" selenium/standalone-chrome:latest \
-          selenium-side-runner /workspace/moneygowhere.side --capabilities '{"browserName":"chrome","goog:chromeOptions":{"args":["headless","disable-infobars"]}}'
+        docker pull selenium/standalone-chrome
+        docker run -d --shm-size=2g --name selenium-browsers -p 4444:4444 -v moneygowhere.side:/tests/moneygowhere.side selenium/standalone-chrome:latest
+        docker exec -it selenium-browsers sudo /bin/bash
+        curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+        apt-get install -y nodejs
+        npm install -g selenium-side-runner
+        selenium-side-runner /tests/moneygowhere.side
