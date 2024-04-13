@@ -26,13 +26,10 @@ jobs:
       with:
         chrome-version: 123.0.6312.105
 
-    # - name: Setup Chrome Driver
-    #   uses: nanasess/setup-chromedriver@v2
-    #   with:
-    #     chromedriver-version: '123.0.6312.105'
-
     - name: Setup Chrome Driver
-      run: sudo apt-get install chromium-chromedriver
+      uses: nanasess/setup-chromedriver@v2
+      with:
+        chromedriver-version: '123.0.6312.105'
 
     - name: Start Xvfb
       run: |
@@ -50,6 +47,12 @@ jobs:
         chrome --version
         chromedriver --version
         npm install -g selenium-side-runner
+
+    - name: Check Selenium Tests
+      run: |
+          # Determine the path to Chrome's user data directory
+          CHROME_USER_DATA_DIR=$(google-chrome --version | grep -oP '\b[\d\.]+\b')/Default
+          CHROME_USER_DATA_PATH="/home/runner/work/_temp/_github_home/.config/google-chrome/$CHROME_USER_DATA_DIR"
 
     - name: Run Selenium Tests
       run: |
