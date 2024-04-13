@@ -25,8 +25,10 @@ jobs:
         docker run -d --shm-size=2g --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side selenium/standalone-chrome:latest
         
         # Run commands inside the Docker container
-        docker exec selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt-get install -y nodejs && npm install -g selenium-side-runner'
-        docker exec selenium-browsers bash -c 'selenium-side-runner /tests/moneygowhere.side'
+        # Execute commands inside the Docker container as root user
+        docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
+        docker exec -u root selenium-browsers bash -c 'apt-get install -y nodejs'
+        docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
         
         # Clean up the Docker container
         docker stop selenium-browsers
