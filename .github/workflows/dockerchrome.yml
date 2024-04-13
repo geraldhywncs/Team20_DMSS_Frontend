@@ -25,7 +25,7 @@ jobs:
         
     - name: Check log
       run: |
-        sleep 120
+        sleep 180
         docker logs dmss_frontend
         
     - name: Run Selenium Tests in Docker
