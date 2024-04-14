@@ -35,9 +35,13 @@ function GraphWeekLayout({ receiptData }) {
     let totalExpenses = 0;
     receiptData.forEach((receipt) => {
       receipt.expenses.forEach((expense) => {
-        const expenseDate = new Date(receipt.created_datetime);
-        if (isInCurrentWeek(expenseDate)) {
-          totalExpenses += parseFloat(expense.share_amount);
+        const { currency_conversion } = receipt;
+        const conversion = currency_conversion.find((conv) => conv.convert_currency === 2); // Ensure currency conversion type is 2
+        if (conversion) {
+          const expenseDate = new Date(receipt.created_datetime);
+          if (isInCurrentWeek(expenseDate)) {
+            totalExpenses += parseFloat(conversion.converted_amount);
+          }
         }
       });
     });
@@ -48,32 +52,36 @@ function GraphWeekLayout({ receiptData }) {
   const calculateDailyExpenses = (receiptData, totalWeekExpenses) => {
     const dailyExpenses = {};
     const currentWeek = getCurrentWeek();
-
+  
     currentWeek.forEach((day) => {
       const dayOfWeek = day.toLocaleString("en-us", { weekday: "short" });
       const dayOfMonth = day.getDate();
       const monthOfYear = day.getMonth() + 1;
       const key = `${dayOfWeek} ${dayOfMonth}/${monthOfYear}`;
-
+  
       let dailyExpensesTotal = 0;
+  
       receiptData.forEach((receipt) => {
         const createdDate = new Date(receipt.created_datetime);
         if (
           createdDate.getDate() === dayOfMonth &&
-          createdDate.getMonth() === monthOfYear - 1 && 
+          createdDate.getMonth() === monthOfYear - 1 &&
           createdDate.getFullYear() === day.getFullYear()
         ) {
           receipt.expenses.forEach((expense) => {
-            dailyExpensesTotal += expense.share_amount;
+            const { currency_conversion } = receipt;
+            const conversion = currency_conversion.find((conv) => conv.convert_currency === 2);
+            if (conversion) {
+              dailyExpensesTotal += parseFloat(conversion.converted_amount);
+            }
           });
         }
       });
-
-      dailyExpenses[key] = dailyExpensesTotal; 
+  
+      dailyExpenses[key] = dailyExpensesTotal;
     });
-
     return dailyExpenses;
-  };
+  };  
 
   const getCurrentWeek = () => {
     const currDate = new Date(currentWeekStartDate);
@@ -93,8 +101,6 @@ function GraphWeekLayout({ receiptData }) {
   const totalWeekExpenses = calculateTotalWeekExpenses(receiptData);
   const dailyExpenses = calculateDailyExpenses(receiptData, totalWeekExpenses);
 
-  console.log(totalWeekExpenses, dailyExpenses);
-
   const getCurrentWeekHeader = () => {
     const startDate = currentWeekStartDate;
     const endDate = new Date(startDate);
@@ -112,17 +118,21 @@ function GraphWeekLayout({ receiptData }) {
   
     return `${startDayOfWeek} ${startDayOfMonth} ${startMonth} ${startYear} - ${endDayOfWeek} ${endDayOfMonth} ${endMonth} ${endYear}`;
   };
-  
 
   return (
     <React.Fragment>
       <div className="dashboardHeaderButtonsContainer">
-        {currentWeekStartDate.getTime() > earliestExpenseDate.getTime() && (
-          <button className="dashboard-button" onClick={moveToPreviousWeek}>&lt;</button>
-        )}
+        <button
+          className="dashboard-button"
+          onClick={moveToPreviousWeek}
+          style={{ visibility: currentWeekStartDate.getTime() <= earliestExpenseDate.getTime() ? 'hidden' : 'visible' }}
+        >
+          &lt;
+        </button>
         <div className="dashboard-header">{getCurrentWeekHeader()}</div>
         <button className="dashboard-button" onClick={moveToNextWeek}>&gt;</button>
       </div>
+
       {!hasExpenses && <div className="dashboard-null">No Expenses</div>}
 
       <div className="bars-container">

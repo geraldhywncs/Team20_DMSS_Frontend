@@ -4,6 +4,7 @@ import GraphBar from "./GraphBar";
 const GraphDayLayout = ({ receiptData }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [earliestDate, setEarliestDate] = useState(new Date());
+  const [earliestAllowedDate, setEarliestAllowedDate] = useState(new Date());
 
   const moveToPreviousDay = () => {
     const newDate = new Date(currentDate);
@@ -24,6 +25,9 @@ const GraphDayLayout = ({ receiptData }) => {
       const nextDay = new Date(earliest);
       nextDay.setDate(nextDay.getDate());
       setEarliestDate(nextDay);
+      const nextAllowedDay = new Date(earliestAllowedDate);
+      nextAllowedDay.setDate(nextAllowedDay.getDate());
+      setEarliestAllowedDate(nextAllowedDay);
     }
   }, [receiptData]);
 
@@ -42,20 +46,22 @@ const GraphDayLayout = ({ receiptData }) => {
 
   const concatExpenses = receiptData => {
     const dailyExpenses = {};
-
+  
     receiptData.forEach(receipt => {
-      const { category_name, expenses } = receipt;
+      const { category_name, currency_conversion } = receipt;
       if (!dailyExpenses[category_name]) {
         dailyExpenses[category_name] = 0;
       }
-      expenses.forEach(expense => {
-        dailyExpenses[category_name] += expense.share_amount;
-      });
+ 
+      const conversion = currency_conversion.find(conv => conv.convert_currency === 2);
+      if (conversion) {
+        dailyExpenses[category_name] += parseFloat(conversion.converted_amount);
+      }
     });
-
+  
     return dailyExpenses;
   };
-
+  
   const calculateTotalExpenses = expenses => {
     let total = 0;
     Object.values(expenses).forEach(amount => {
@@ -67,10 +73,17 @@ const GraphDayLayout = ({ receiptData }) => {
   const dailyExpenses = concatExpenses(dailyReceipts);
   const totalExpenses = calculateTotalExpenses(dailyExpenses);
 
+
   return (
     <React.Fragment>
       <div className="dashboardHeaderButtonsContainer">
-        {currentDate.getTime() > earliestDate.getTime() && <button className="dashboard-button" onClick={moveToPreviousDay}>&lt;</button>}
+        <button
+          className="dashboard-button"
+          onClick={moveToPreviousDay}
+          style={{ visibility: currentDate.getTime() <= earliestAllowedDate.getTime() ? 'hidden' : 'visible' }}
+        >
+          &lt;
+        </button>
         <div className="dashboard-header">{currentDate.toDateString()}</div>
         <button className="dashboard-button" onClick={moveToNextDay}>&gt;</button>
       </div>
@@ -80,10 +93,10 @@ const GraphDayLayout = ({ receiptData }) => {
       <div className="bars-container">
         {Object.entries(dailyExpenses).map(([category_name, amount], index) => (
           <GraphBar
-          key={index}
-          height={(amount / totalExpenses) * 100}
-          value={category_name}
-          amount={amount}
+            key={index}
+            height={(amount / totalExpenses) * 100}
+            value={category_name}
+            amount={amount}
           />
         ))}
       </div>

@@ -59,7 +59,7 @@ function GraphMonthLayout({ receiptData }) {
       const month = createdDate.getMonth();
       const year = createdDate.getFullYear();
   
-      if (year === currentMonthStartDate.getFullYear() && month === currentMonthStartDate.getMonth()) {
+      if (year === currentMonthStartDate.getFullYear() && month === currentMonthStartDate.getMonth() && receipt.currency_conversion) {
         const weeksInMonth = getWeeksInMonth(new Date(year, month, 1));
         const weekNumber = getWeekNumber(createdDate, weeksInMonth);
         const startDate = weeksInMonth[weekNumber - 1][0];
@@ -69,15 +69,19 @@ function GraphMonthLayout({ receiptData }) {
         if (!monthlyExpenses[key]) {
           monthlyExpenses[key] = 0;
         }
-        const totalExpenseAmount = receipt.expenses.reduce((total, expense) => total + parseFloat(expense.share_amount), 0);
   
-        monthlyExpenses[key] += totalExpenseAmount;
+        const { category_name, currency_conversion } = receipt;
+        currency_conversion.forEach(conversion => {
+          if (conversion.convert_currency === 2) {
+            monthlyExpenses[key] += parseFloat(conversion.converted_amount);
+          }
+        });
       }
     });
   
     return monthlyExpenses;
   };
-   
+  
   const getWeekNumber = (date) => {
     const weeksInMonth = getWeeksInMonth(date);
     for (let i = 0; i < weeksInMonth.length; i++) {
@@ -101,7 +105,6 @@ function GraphMonthLayout({ receiptData }) {
 
   const monthlyExpenses = concatExpenses(receiptData);
   const totalMonthlyExpenses = Object.values(monthlyExpenses).reduce((total, amount) => total + parseFloat(amount), 0);
-  console.log(monthlyExpenses, totalMonthlyExpenses)
 
 return (
   <React.Fragment>

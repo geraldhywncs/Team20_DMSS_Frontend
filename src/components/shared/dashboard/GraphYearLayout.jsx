@@ -43,8 +43,13 @@ function GraphYearLayout({ receiptData }) {
 
   filteredReceiptData.forEach(item => {
     const month = new Date(item.created_datetime).getMonth();
-    const totalExpense = item.expenses.reduce((acc, expense) => acc + parseFloat(expense.share_amount), 0); 
-    monthExpenses[month] += totalExpense;
+    const totalConvertedExpense = item.currency_conversion.reduce((acc, conversion) => {
+      if (conversion.convert_currency === 2) {
+        return acc + parseFloat(conversion.converted_amount);
+      }
+      return acc;
+    }, 0); 
+    monthExpenses[month] += totalConvertedExpense;
   });
 
   const maxExpense = Math.max(...monthExpenses);
