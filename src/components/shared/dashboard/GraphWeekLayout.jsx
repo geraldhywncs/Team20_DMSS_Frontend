@@ -37,12 +37,13 @@ function GraphWeekLayout({ receiptData }) {
       receipt.expenses.forEach((expense) => {
         const expenseDate = new Date(receipt.created_datetime);
         if (isInCurrentWeek(expenseDate)) {
-          totalExpenses += expense.share_amount;
+          totalExpenses += parseFloat(expense.share_amount);
         }
       });
     });
     return totalExpenses;
   };
+  
 
   const calculateDailyExpenses = (receiptData, totalWeekExpenses) => {
     const dailyExpenses = {};
@@ -91,6 +92,8 @@ function GraphWeekLayout({ receiptData }) {
 
   const totalWeekExpenses = calculateTotalWeekExpenses(receiptData);
   const dailyExpenses = calculateDailyExpenses(receiptData, totalWeekExpenses);
+
+  console.log(totalWeekExpenses, dailyExpenses);
 
   const getCurrentWeekHeader = () => {
     const startDate = currentWeekStartDate;
