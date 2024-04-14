@@ -7,7 +7,6 @@ function GraphBar({ height, value, amount }) {
   }
 
   const formattedAmount = formatAmount(amount);
-  console.log(height)
   return (
     <React.Fragment>
       <div className="bar-chartContainer">

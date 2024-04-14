@@ -52,8 +52,6 @@ function GraphContainer({ userId }) {
             return <div className="dashboard-null">No expenses found!</div>;
         }
 
-        console.log("DATA@@"+JSON.stringify(receiptData))
-
         switch (selectedPeriod) {
             case "day":
                 return <GraphDayLayout receiptData={receiptData} />;
