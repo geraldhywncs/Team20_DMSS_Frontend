@@ -69,14 +69,15 @@ function GraphMonthLayout({ receiptData }) {
         if (!monthlyExpenses[key]) {
           monthlyExpenses[key] = 0;
         }
+        const totalExpenseAmount = receipt.expenses.reduce((total, expense) => total + parseFloat(expense.share_amount), 0);
   
-        monthlyExpenses[key] += receipt.expenses.reduce((total, expense) => total + expense.share_amount, 0);
+        monthlyExpenses[key] += totalExpenseAmount;
       }
     });
   
     return monthlyExpenses;
   };
-  
+   
   const getWeekNumber = (date) => {
     const weeksInMonth = getWeeksInMonth(date);
     for (let i = 0; i < weeksInMonth.length; i++) {
@@ -99,7 +100,8 @@ function GraphMonthLayout({ receiptData }) {
   };
 
   const monthlyExpenses = concatExpenses(receiptData);
-  const totalMonthlyExpenses = Object.values(monthlyExpenses).reduce((total, amount) => total + amount, 0);
+  const totalMonthlyExpenses = Object.values(monthlyExpenses).reduce((total, amount) => total + parseFloat(amount), 0);
+  console.log(monthlyExpenses, totalMonthlyExpenses)
 
 return (
   <React.Fragment>

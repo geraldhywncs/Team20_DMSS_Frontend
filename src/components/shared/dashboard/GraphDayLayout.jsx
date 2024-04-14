@@ -59,7 +59,7 @@ const GraphDayLayout = ({ receiptData }) => {
   const calculateTotalExpenses = expenses => {
     let total = 0;
     Object.values(expenses).forEach(amount => {
-      total += amount;
+      total += parseFloat(amount);
     });
     return total;
   };
