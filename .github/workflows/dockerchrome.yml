@@ -16,28 +16,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # - name: Run frontend
-    #   run: |
-    #     docker build -t dmss_frontend -f $GITHUB_WORKSPACE/Dockerfile .
-    #     docker network create selenium-tests
-    #     docker run -d --name dmss_frontend --network selenium-tests -p 3000:3000 dmss_frontend
-    #     docker ps --filter "name=dmss_frontend"
-        
-    # - name: Check log
-    #   run: |
-    #     sleep 60
-    #     docker logs dmss_frontend
         
     - name: Run Selenium Tests in Docker
       run: |
-        # Pull the latest selenium/standalone-chrome image
         docker pull selenium/standalone-chrome
         docker run -d --shm-size=2g --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest
-        # Run the container with the required volume and ports
-        # docker run -d --shm-size=2g --network=selenium-tests --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side selenium/standalone-chrome:latest
-        # docker run -d --shm-size=2g --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public selenium/standalone-chrome:latest
-        # Run commands inside the Docker container
-        # Execute commands inside the Docker container as root user
+        
     - name: Download nodejs
       run: |
         docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
@@ -47,10 +31,6 @@ jobs:
       run: |
         docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
         
-    # - name: cd App
-    #   run: |
-    #     docker exec -u root selenium-browsers bash -c 'cd /app'
-    #     docker exec -u root selenium-browsers bash -c 'ls'
         
     - name: npm install
       run: |
@@ -81,6 +61,7 @@ jobs:
           echo "selenium-side-runner completed successfully"
         fi
 
-        # Clean up the Docker container
-        # docker stop selenium-browsers
-        # docker rm selenium-browsers
+    - name: Remove Docker container
+      run: |
+        docker stop selenium-browsers
+        docker rm selenium-browsers
