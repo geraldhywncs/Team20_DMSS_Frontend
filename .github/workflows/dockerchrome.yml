@@ -70,6 +70,12 @@ jobs:
         docker stop selenium-browsers
         docker rm selenium-browsers
 
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build frontend with ESLint warnings ignored
+      run: npm run build-no-eslint
+
     - name: Configure AWS CLI
       run: |
         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
