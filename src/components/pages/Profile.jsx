@@ -7,6 +7,7 @@ import Groups from "../shared/Groups";
 import AddTransactionButton from "../shared/AddTransactionButton";
 import callApi from "../shared/callAPI";
 import LoadingMessage from "../shared/LoadingMessage";
+import { REACT_APP_apiHost } from "../../ENV";
 
 function Profile({ userId }) {
   const [friends, setFriends] = useState([]);
@@ -22,7 +23,7 @@ function Profile({ userId }) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const endpoint = process.env.REACT_APP_apiHost + `/profile/${userId}`;
+        const endpoint = REACT_APP_apiHost + `/profile/${userId}`;
         const response = await callApi(endpoint, "GET");
 
         setFriends(
@@ -100,7 +101,7 @@ function MyProfile(props) {
     if (isEdit) {
       setLoading(true);
       try {
-        const endPoint = process.env.REACT_APP_apiHost + `/user/${userId}`;
+        const endPoint = REACT_APP_apiHost + `/user/${userId}`;
         const data = JSON.stringify({
           user_details: {
             first_name: firstName,
