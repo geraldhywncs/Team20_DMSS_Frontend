@@ -1,63 +1,76 @@
-import React, { useState } from "react";
+import { useState, useEffect } from 'react';
 import callApi from "../shared/callAPI";
-import FormSection from "../shared/FormSection";
-import Button from "../shared/Button";
-import { REACT_APP_apiHost } from "../../ENV";
+import FormSection from '../shared/FormSection';
+import Button from '../shared/Button';
 
-function EditTransaction({
-  transactionData,
-  setShowErrorMessage,
-  setShowSuccessMessage,
-  setShowLoadingMessage,
-}) {
-  // console.log(transactionData);
-  const {
-    transactionTitle,
-    selectedCategory,
-    description,
-    selectedIconOption,
-    selectedGroupOption,
-    splitAmount,
-    selectCategoryName,
-    selectedRecurringFrequency,
-  } = transactionData;
+// function EditTransaction({ user_id, transactionData, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage}) {
+  function EditTransaction({transactionTitle, selectedCategory, currency, splitAmount, description, selectedIconOption, selectedGroupOption, selectedRecurringFrequency, userId, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage}) {
 
-  const handleEditTransaction = async () => {
-    try {
-      setShowErrorMessage(false);
-      setShowLoadingMessage(true);
+    useEffect(() => {
+      console.log('Transaction Title:', transactionTitle);
+      console.log('Selected Category:', selectedCategory);
+      console.log('Currency:', currency);
+      console.log('Description:', description);
+      console.log('Selected Group Option:', selectedGroupOption);
+      console.log('Split Amount:', splitAmount);
+      console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
+    }, [transactionTitle, selectedCategory, currency, description, selectedGroupOption, splitAmount, selectedIconOption, selectedRecurringFrequency]);
+  
+    const [result, setResult] = useState({ message: null, statusCode: null });
+  
+    const fetchData = async () => {
+      const apiEndpoint = process.env.REACT_APP_apiHost + "/expenses/update";
 
-      const apiEndpoint = REACT_APP_apiHost + "/expenses/update";
       const data = {
-        receipt_id: 67,
-        title: transactionTitle,
-        description: description,
-        group_id: selectedGroupOption,
-        recur_id: selectedRecurringFrequency,
-        cat_id: selectedCategory,
-        icon_id: selectedIconOption,
-        category_name: selectCategoryName,
-        share_amount: splitAmount,
-        // "from_currency": currency,
-        // Add other fields as needed
+              title: transactionTitle,
+              description: description,
+              group_id: selectedGroupOption,
+              recur_id: selectedRecurringFrequency,
+              share_amount: splitAmount,
+              cat_id: selectedCategory,
+              icon_id: selectedIconOption,
+              currency_id: currency
       };
-      console.log(data);
 
-      const response = await callApi(apiEndpoint, "POST", data);
+      console.log("EditTransaction data:", data)
 
-      if (response && response.status_code === 200) {
+      try {
+        console.log("ET data", data)
+        const response = await callApi(apiEndpoint, "POST", data);
+        return response.status_code;
+      } catch (error) {
+        return null;
+      }
+    };
+    
+
+    const handleEditTransaction = async () => {
+    try {
+      if (!transactionTitle || !selectedCategory || !currency || !selectedIconOption || !splitAmount) {
+        console.log('Please fill all fields');
+        setShowErrorMessage(true);
+      } else {
+        setShowErrorMessage(false);
+        setShowLoadingMessage(true);
+        const statusCode = await fetchData();
+        console.log('Created Transaction');
+        // console.log("ET data", data)
+
+      if (statusCode === 200) {
+        // console.log("response", response);
         setShowLoadingMessage(false);
         setShowSuccessMessage(true);
-        console.log("Transaction edited successfully");
+        console.log('Transaction edited successfully');
       } else {
         setShowLoadingMessage(false);
         setShowErrorMessage(true);
-        console.log("Failed to edit transaction");
+        console.log('Failed to edit transaction');
       }
+    }
     } catch (error) {
-      console.error("Error editing transaction:", error);
-      setShowLoadingMessage(false);
-      setShowErrorMessage(true);
+        console.error('Error editing transaction:', error);
+        setShowLoadingMessage(false);
+        setShowErrorMessage(true);
     }
   };
 

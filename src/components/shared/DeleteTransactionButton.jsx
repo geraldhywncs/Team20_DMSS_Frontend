@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import Button from "./Button";
 import DeleteExpenseConfirmation from "../pages/DeleteExpenseConfirmation";
+import { resetTransaction } from '../../redux/transactionReducer';
+import { useDispatch } from 'react-redux';
 
-const DeleteTransactionButton = ({expenseId, onDelete, receipt_id }) => {
+const DeleteTransactionButton = ({ receipt_id, handleExpenseDeleted }) => {
     const [popupVisible, setPopupVisible] = useState(false);
-    const handleButtonClick = () => {
-        setPopupVisible(true);
-    };
+    const dispatch = useDispatch();
+
+    const handleButtonClick = async () => {
+        if (!popupVisible){
+            await dispatch(resetTransaction());
+            setPopupVisible(true);
+        }
+    }; 
 
     const closePopup = () => {
         setPopupVisible(false)
@@ -16,7 +23,10 @@ const DeleteTransactionButton = ({expenseId, onDelete, receipt_id }) => {
         <div className="button-container">
             <div class="flex justify-end">
                 <div class="w-36">
-                    <Button color={"red"} text={"Delete"} onClick={handleButtonClick} className="red-btn"/>
+                    <Button color={"red"} text={"Delete"} onClick={() => {
+                        handleButtonClick();
+                        handleExpenseDeleted(); // Call handleExpenseDeleted when deleting
+                    }} className="red-btn"/>
                 </div>
             </div>
 
@@ -27,7 +37,7 @@ const DeleteTransactionButton = ({expenseId, onDelete, receipt_id }) => {
                         <div className="modal-content rounded-lg shadow h-full p-4">
                             <div>
                             </div>
-                            <DeleteExpenseConfirmation receipt_id={receipt_id} closePopup={closePopup} />
+                            <DeleteExpenseConfirmation receipt_id={receipt_id} closePopup={closePopup} handleExpenseDeleted={handleExpenseDeleted}/>
                         </div>
                     </div>
                 </div>

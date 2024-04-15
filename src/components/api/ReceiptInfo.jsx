@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import callApi from "../shared/callAPI";
 import { REACT_APP_apiHost } from "../../ENV";
 
@@ -13,7 +12,7 @@ function getReceiptData(receiptId) {
       return response;
     })
     .catch((error) => {
-      console.log("Error when adding category: ", error);
+      console.log("Error with ReceiptInfo: ", error);
       throw error;
     });
 }
