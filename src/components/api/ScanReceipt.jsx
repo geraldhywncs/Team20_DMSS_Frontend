@@ -3,6 +3,7 @@ import callApi from "../shared/callAPI";
 import FormSection from "../shared/FormSection";
 import Button from "../shared/Button";
 import UploadWindow from "../shared/UploadWindow";
+import { REACT_APP_apiHost } from "../../ENV";
 
 function ScanReceipt({
   setShowLoadingMessage,
@@ -10,7 +11,7 @@ function ScanReceipt({
   setSuccessScanReceiptMessage,
   setErrorScanReceiptMessage,
   setAmountFieldColour,
-  setDescription
+  setDescription,
 }) {
   const [showUploadWindow, setShowUploadWindow] = useState(false);
   const [error, setError] = useState(null);
@@ -25,7 +26,7 @@ function ScanReceipt({
   };
 
   const handleFileUpload = async (file) => {
-    const apiEndpoint = process.env.REACT_APP_apiHost + "/ocr";
+    const apiEndpoint = REACT_APP_apiHost + "/ocr";
 
     try {
       setShowLoadingMessage(true);
@@ -39,8 +40,8 @@ function ScanReceipt({
 
       if ((response.ocr_status_code = 200)) {
         setAmount(response.receipt_amount);
-        setDescription(response.receipt_text)
-        setAmountFieldColour("gray")
+        setDescription(response.receipt_text);
+        setAmountFieldColour("gray");
         setSuccessScanReceiptMessage(true);
         setShowLoadingMessage(false);
       } else {
@@ -48,7 +49,6 @@ function ScanReceipt({
         setShowLoadingMessage(false);
         setErrorScanReceiptMessage(true);
       }
-
     } catch (error) {
       console.error("Error uploading file:", error);
       setError("An error occurred while uploading the file.");

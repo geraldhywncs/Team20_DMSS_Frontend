@@ -2,6 +2,7 @@ import React from "react";
 import callApi from "../shared/callAPI";
 import FormSection from "../shared/FormSection";
 import Button from "../shared/Button";
+import { REACT_APP_apiHost } from "../../ENV";
 
 function SignUp({
   firstname,
@@ -13,14 +14,14 @@ function SignUp({
   setShowLoadingMessage,
   setErrorMessage,
   setSuccessMessage,
-  setShowSuccessMessage
+  setShowSuccessMessage,
 }) {
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()\-_=+[{\]}\\|;:'",<.>/?]).{8,}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()\-_=+[{\]}\\|;:'",<.>/?]).{8,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const fetchData = async () => {
-    const apiEndpoint = process.env.REACT_APP_apiHost + "/user/createUser";
+    const apiEndpoint = REACT_APP_apiHost + "/user/createUser";
     const data = {
       user_name: username,
       email: email,
@@ -44,7 +45,6 @@ function SignUp({
     let isError = false;
 
     try {
-
       if (!firstname || !lastname || !username || !password || !email) {
         setErrorMessage("Please fill in all fields.");
         setShowErrorMessage(true);
@@ -72,12 +72,11 @@ function SignUp({
           console.log("Sign up successful.");
           setSuccessMessage("Sign up successful! Please log in.");
           setShowSuccessMessage(true);
-        } else if (response.user_status_code ===501) {
+        } else if (response.user_status_code === 501) {
           setShowLoadingMessage(false);
           setShowErrorMessage(true);
           setErrorMessage(response.message);
-        }
-        else {
+        } else {
           setShowLoadingMessage(false);
           setShowErrorMessage(true);
           setErrorMessage("Sign up failed. Please try again.");
