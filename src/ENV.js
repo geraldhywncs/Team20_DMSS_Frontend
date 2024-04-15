@@ -7,7 +7,7 @@ function isHostedOnAWS() {
 
 // Example usage
 if (isHostedOnAWS()) {
-  apiHost = "http://3.26.56.52/:5000";
+  apiHost = "http://3.26.56.52:5000";
 } else {
   apiHost = "http://localhost:5000";
 }
