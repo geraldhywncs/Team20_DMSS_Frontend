@@ -6,6 +6,7 @@ import GroupsView from "../shared/Groups";
 import Button from "../shared/Button";
 import callApi from "../shared/callAPI";
 import LoadingMessage from "../shared/LoadingMessage";
+import { REACT_APP_apiHost } from "../../ENV";
 
 function Groups() {
   const [groups, setGroups] = useState([]);
@@ -16,7 +17,7 @@ function Groups() {
       setLoading(true);
       const userID = localStorage.getItem("userId");
       try {
-        const endPoint = process.env.REACT_APP_apiHost + `/groups/${userID}`;
+        const endPoint = REACT_APP_apiHost + `/groups/${userID}`;
         const response = await callApi(endPoint, "GET");
         setGroups(response.groups);
       } catch (error) {
@@ -59,12 +60,11 @@ function CreateGroup(props) {
       setLoading(true);
       const userID = localStorage.getItem("userId");
       try {
-        const usersEndPoint = process.env.REACT_APP_apiHost + "/users";
+        const usersEndPoint = REACT_APP_apiHost + "/users";
         const usersResponse = await callApi(usersEndPoint, "GET");
         setAllUsers(usersResponse.users);
 
-        const friendsEndPoint =
-          process.env.REACT_APP_apiHost + `/friends/${userID}`;
+        const friendsEndPoint = REACT_APP_apiHost + `/friends/${userID}`;
         const friendsResponse = await callApi(friendsEndPoint, "GET");
         setAllFriends(friendsResponse.friends);
       } catch (error) {
@@ -110,7 +110,7 @@ function CreateGroup(props) {
     setIsValidGroup(groupName !== "" && addedMembers.length !== 0);
     if (groupName !== "" && addedMembers.length !== 0) {
       try {
-        const endPoint = process.env.REACT_APP_apiHost + "/groups";
+        const endPoint = REACT_APP_apiHost + "/groups";
         const data = JSON.stringify({
           group_name: groupName,
           group_member_ids: [

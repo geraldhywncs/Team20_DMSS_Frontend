@@ -5,6 +5,7 @@ import constants from "../../../constants/constants";
 function GraphYearLayout({ receiptData }) {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [earliestYear, setEarliestYear] = useState(null);
+  const [hasExpenses, setHasExpenses] = useState(false);
 
   useEffect(() => {
     if (receiptData && receiptData.length > 0) {
@@ -13,6 +14,15 @@ function GraphYearLayout({ receiptData }) {
       setEarliestYear(earliest);
     }
   }, [receiptData]);
+
+  useEffect(() => {
+    const yearExpenses = receiptData.filter(receipt => {
+      const year = new Date(receipt.created_datetime).getFullYear();
+      return year === currentYear;
+    });
+
+    setHasExpenses(yearExpenses.length > 0);
+  }, [receiptData, currentYear]);
 
   const moveToPreviousYear = () => {
     if (currentYear > earliestYear) {
@@ -33,15 +43,19 @@ function GraphYearLayout({ receiptData }) {
 
   filteredReceiptData.forEach(item => {
     const month = new Date(item.created_datetime).getMonth();
-    const totalExpense = item.expenses.reduce((acc, expense) => acc + expense.share_amount, 0);
-    monthExpenses[month] += totalExpense;
+    const totalConvertedExpense = item.currency_conversion.reduce((acc, conversion) => {
+      if (conversion.convert_currency === 2) {
+        return acc + parseFloat(conversion.converted_amount);
+      }
+      return acc;
+    }, 0); 
+    monthExpenses[month] += totalConvertedExpense;
   });
 
   const maxExpense = Math.max(...monthExpenses);
 
   return (
     <React.Fragment>
-     
       <div className="dashboardHeaderButtonsContainer">
         {currentYear > earliestYear && (
           <button className="dashboard-button" onClick={moveToPreviousYear}>&lt;</button>
@@ -51,17 +65,23 @@ function GraphYearLayout({ receiptData }) {
       </div>
 
       <div className="bars-container">
-        {monthExpenses.every(expense => expense === 0) ? (
+        {hasExpenses ? (
+          monthExpenses.map((totalExpense, index) => {
+            if (totalExpense === 0) {
+              return null; 
+            }
+
+            return (
+              <GraphBar
+                key={index}
+                height={(totalExpense / maxExpense) * 100} 
+                value={constants.months[Object.keys(constants.months)[index]]}
+                amount={totalExpense} 
+              />
+            );
+          })
+        ) : (
           <div className="dashboard-null">No Expenses</div>
-          ) : (
-            monthExpenses.map((totalExpense, index) => (
-            <GraphBar
-              key={index}
-              height={(totalExpense / maxExpense) * 100} 
-              value={constants.months[Object.keys(constants.months)[index]]}
-              amount={totalExpense} 
-            />
-          ))
         )}
       </div>
     </React.Fragment>

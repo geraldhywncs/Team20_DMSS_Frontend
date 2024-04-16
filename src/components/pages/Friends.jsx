@@ -4,6 +4,7 @@ import SearchFriends from "../shared/SearchFriends";
 import { useState, useEffect } from "react";
 import callApi from "../shared/callAPI";
 import LoadingMessage from "../shared/LoadingMessage";
+import { REACT_APP_apiHost } from "../../ENV";
 
 function Friends() {
   const [allUsers, setAllUsers] = useState([]);
@@ -18,12 +19,11 @@ function Friends() {
       const userID = localStorage.getItem("userId");
       setLoading(true);
       try {
-        const usersEndPoint = process.env.REACT_APP_apiHost + "/users";
+        const usersEndPoint = REACT_APP_apiHost + "/users";
         const usersResponse = await callApi(usersEndPoint, "GET");
         setAllUsers(usersResponse.users);
 
-        const friendsEndPoint =
-          process.env.REACT_APP_apiHost + `/friends/${userID}`;
+        const friendsEndPoint = REACT_APP_apiHost + `/friends/${userID}`;
         const friendsResponse = await callApi(friendsEndPoint, "GET");
         setAllFriends(friendsResponse.friends);
       } catch (error) {
@@ -64,7 +64,7 @@ function Friends() {
     const friendIds = allFriends.map((f) => f.friend_id);
     const userID = localStorage.getItem("userId");
     try {
-      const apiEndpoint = process.env.REACT_APP_apiHost + `/friends/${userID}`;
+      const apiEndpoint = REACT_APP_apiHost + `/friends/${userID}`;
       const params = { friend_id: friend.id };
 
       if (friendIds.includes(friend.id)) {
