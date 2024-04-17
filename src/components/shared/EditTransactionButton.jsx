@@ -6,7 +6,7 @@ import { resetTransaction } from '../../redux/transactionReducer';
 import Button from "./Button";
 import { getReceiptData } from '../api/ReceiptInfo';
 
-const EditTransactionButton = ({ userId, receipt_id }) => {
+const EditTransactionButton = ({ userId, receipt_id, receipt }) => {
 
     const [receiptData, setReceiptData] = useState([]);
     const [currencyData, setCurrencyData] = useState(null);
@@ -16,10 +16,9 @@ const EditTransactionButton = ({ userId, receipt_id }) => {
     const dispatch = useDispatch();
 
     const handleButtonClick = () => {
-        console.log("EditTransButton", receipt_id);
         if(receipt_id) {
             setReceiptData(getReceiptData(receipt_id));
-            console.log("this:", receiptData);
+            console.log("this: " + receiptData);
             getReceiptData(receipt_id) //Extracts data from read_expense API
                 .then(data => {
                     console.log("thises", data);
@@ -35,8 +34,6 @@ const EditTransactionButton = ({ userId, receipt_id }) => {
                         setShareAmtData(expenses[0].share_amount);
                         setCurrencyData(expenses[0].currency_id);
                         setCurrencyNameData(expenses[0].currency_name);
-
-                        // const firstShareAmount = AmtCurrData[0] ? AmtCurrData[0].share_amount : null;
                         
                         const { title, cat_id, currencyid, shareAmounts, icon_id, splitAmounts, descriptions, group_id, recur_id,
                             created_datetime, created_user_id, status_code, category_name, group_name, icon_name,recurring_name  } = receiptData;

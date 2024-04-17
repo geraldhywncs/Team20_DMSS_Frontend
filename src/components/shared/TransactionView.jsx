@@ -12,8 +12,8 @@ function TransactionView({ userId, closePopup }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const transactionAdded = useSelector(state => state.transaction.transactionAdded);
-    console.log("using Error", error)
-    const handleExpenseDeleted = async () => {
+    
+    const handleExpenseDeleted = async () => {  
       try {
           console.log("Deleting expenses.................");
           const data = await getExpenseData(userId);
@@ -32,7 +32,7 @@ function TransactionView({ userId, closePopup }) {
         setLoading(true);
         try {
             const data = await getExpenseData(userId);
-            console.log("Received data:", data);
+            console.log("Received data trans View:", data);
             setReceipts(data);
             setLoading(false);
         } catch (error) {

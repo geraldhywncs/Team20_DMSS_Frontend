@@ -23,6 +23,7 @@ const EditTransactionPage = ({ closePopup, userId, receipt_id, receiptData, shar
     const { title, cat_id, currencyid, shareAmounts, icon_id, splitAmounts, descriptions, group_id, recur_id,
             created_datetime, created_user_id, status_code } = receiptData;
 
+    console.log('EditTransactionPage', receiptData);
     const [transactionTitle, setTransactionTitle] = useState(receiptData?.sd || '');
     console.log("title::", title);
     const [selectedCategory, setSelectedCategory] = useState(receiptData?.cat_id || '');
@@ -31,7 +32,6 @@ const EditTransactionPage = ({ closePopup, userId, receipt_id, receiptData, shar
     console.log("currID::", currencyData)
     const [amount, setAmount] = useState(receiptData?.shareAmtData || '');
     console.log("amounts::", shareAmtData)
-    // console.log("ShareAmounts::", shareAmounts)
     const [selectedIconOption, setIconSelectedOption] = useState(receiptData?.icon_id || 1);
     console.log("iconID::", icon_id)
     const [splitAmount, setSplitAmount] = useState(receiptData?.splitAmount || '');
@@ -64,26 +64,35 @@ const EditTransactionPage = ({ closePopup, userId, receipt_id, receiptData, shar
     const [updateCategoryComponent, setUpdateCategoryComponent] = useState(false);
 
     useEffect(() => {
+        setShowLoadingMessage(true)
         if (receipt_id) {
             getReceiptData(receipt_id)
                 .then(response => {
+                    console.log('VALUES UPDATED')
                     const { title, description, group_id, currency_id, icon_id, cat_id, amount, splitAmount, recur_id } = response;
-                    console.log(cat_id);
+                    console.log('receiptData')
+                    console.log(response);
                     setTransactionTitle(title);
                     setSelectedCategory(cat_id);
-                    setCurrency(currency_id);
-                    setAmount(amount);
+                    setCurrency(response.expenses[0].currency_id);
+                    setAmount(response.expenses[0].share_amount);
                     setSplitAmount(splitAmount);
                     setDescription(description);
                     setGroupOption(group_id);
                     setIconSelectedOption(icon_id);
                     setRecurringFrequency(recur_id);
+                    setShowLoadingMessage(false)
+
                 })
                 .catch(error => {
                     console.error('Error fetching receipt data:', error);
                 });
         }
-    }, [receipt_id]);
+    
+    
+    
+    }
+    , [receipt_id]);
 
     const handleTransactionTitle = (e) => {
         if (e.target.value === "") {
@@ -192,7 +201,7 @@ const EditTransactionPage = ({ closePopup, userId, receipt_id, receiptData, shar
         setCategoryValue('');
         setCurrency(receiptData?.currency_id || '');
         setAmount(receiptData?.amount || '');
-        setSplitAmount(/*receiptData?.splitAmount ||*/ '');
+        setSplitAmount(receiptData?.splitAmount || '');
         setDescription(receiptData?.description || '');
         setGroupOption(receiptData?.group_id || '');
         setIconSelectedOption(receiptData?.icon_id || 1);
@@ -377,6 +386,8 @@ const EditTransactionPage = ({ closePopup, userId, receipt_id, receiptData, shar
                         selectedGroupOption={selectedGroupOption}
                         amount={amount}
                         fieldColour = {splitAmountFieldColour}
+                        receipt_id = {receipt_id}
+                        setShowLoadingMessage={setShowLoadingMessage}
                     />
 
                     <GetRecurringFrequencySelection
@@ -400,12 +411,14 @@ const EditTransactionPage = ({ closePopup, userId, receipt_id, receiptData, shar
                     transactionTitle={transactionTitle}
                     selectedCategory={selectedCategory}
                     currency = {currency}
-                    // splitAmount = {splitAmount}
+                    shareAmtData={amount}
+                    amount={amount}
+                    splitAmount = {splitAmount}
                     description={description}
                     selectedIconOption={selectedIconOption}
                     selectedGroupOption={selectedGroupOption}
                     selectedRecurringFrequency={selectedRecurringFrequency}
-                    userId={userId}
+                    receiptData={receiptData}
                     setShowErrorMessage={setShowErrorMessage}
                     setShowSuccessMessage={setShowSuccessMessage}
                     setShowLoadingMessage={setShowLoadingMessage}
