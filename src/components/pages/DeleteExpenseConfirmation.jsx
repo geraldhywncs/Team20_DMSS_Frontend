@@ -1,36 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
 import Button from "../shared/Button";
 import { DeleteTransaction } from '../api/DeleteTransaction';
 
-const DeleteExpenseConfirmation = ({ closePopup, receipt_id }) => {
+const DeleteExpenseConfirmation = ({ closePopup, receipt_id, handleExpenseDeleted }) => {
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-
-    const transactionDeleted = useSelector(state => state.transaction.transactionDeleted);
 
     const handleDelete = async () => {
         try {
             await DeleteTransaction(receipt_id);
             setShowSuccessMessage(true);
-            // console.log(receipt);
             console.log("Success", receipt_id);
         } catch (error) {
             setShowErrorMessage(true);
             console.error("Error deleting expense:", error);
-            // console.log(receipt);
             console.log("Error", receipt_id);
         }
     };
 
-    useEffect(() => {
-        if (transactionDeleted) {
-            window.location.reload();
-        }
-    }, [transactionDeleted]);
-
-    
     return (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
             <div className="absolute inset-0 bg-gray-500 bg-opacity-50"></div>
@@ -58,14 +46,15 @@ const DeleteExpenseConfirmation = ({ closePopup, receipt_id }) => {
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <div className="bg-white p-8 rounded-md shadow-md text-center">
                             <p className="text-green-500 mb-4 font-large font-bold">Expense deleted successfully!</p>
-                            <button className="bg-green-500 text-white px-4 py-2 rounded-md" onClick={closePopup}>Close</button>
+                            <button className="bg-green-500 text-white px-4 py-2 rounded-md" onClick={() => {
+                                handleExpenseDeleted(); closePopup();}}>Close</button>
                         </div>
                     </div>
                 )}
 
                 <div className="px-7 md:px-7 py-0 grid gap-4 mb-4">
                     <div className="body-large font-large font-bold">Delete this Expense?</div>
-                    <Button color="red" text="Delete" onClick={handleDelete} />
+                    <Button color="red" text="Delete" onClick={handleDelete}/>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import FormLabel from "../shared/FormLabel";
 import FormSelection from "../shared/FormSelection";
 import { REACT_APP_apiHost } from "../../ENV";
 
-function GetCurrencySelection({ currency, handleCurrency, fieldColour }) {
+function GetCurrencySelection({ currency, handleCurrency, fieldColour, currencyData }) {
   const [optionsList, setOptionsList] = useState([]);
   const [apiCalled, setApiCalled] = useState(false);
 

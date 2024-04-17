@@ -4,10 +4,10 @@ import FormSection from '../shared/FormSection';
 import Button from '../shared/Button';
 
 // function EditTransaction({ user_id, transactionData, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage}) {
-  function EditTransaction({transactionTitle, selectedCategory, currency, shareAmtData, amount,
-                              splitAmount, description, selectedIconOption, selectedGroupOption, 
-                                selectedRecurringFrequency, receiptData, setShowErrorMessage, 
-                                  setShowSuccessMessage, setShowLoadingMessage, receipt_id}) {
+  function EditTransaction({transactionTitle, selectedCategory, currency, currencyData, shareAmtData, amount,
+                              splitAmount, description, selectedIconOption, selectedGroupOption, selectedRecurringFrequency, 
+                                receiptData, setShowErrorMessage, setShowSuccessMessage, setShowLoadingMessage}) {
+
     useEffect(() => {
       console.log('Transaction Title:', transactionTitle);
       console.log('Selected Category:', selectedCategory);
@@ -19,9 +19,10 @@ import Button from '../shared/Button';
       console.log('Selected Group Option:', selectedGroupOption);
       console.log('Split Amount:', splitAmount);
       console.log('Selected Recurring Frequency:', selectedRecurringFrequency);
-    }, [transactionTitle, selectedCategory, currency, amount, description, selectedGroupOption, splitAmount, selectedIconOption, selectedRecurringFrequency]);
-
-    // const [result, setResult] = useState({ message: null, statusCode: null });
+    }, [transactionTitle, selectedCategory, currency, currencyData, shareAmtData, 
+          description, selectedGroupOption, splitAmount, selectedIconOption, selectedRecurringFrequency]);
+  
+    const [result, setResult] = useState({ message: null, statusCode: null });
   
     const fetchData = async () => {
       const apiEndpoint = process.env.REACT_APP_apiHost + "/expenses/update";
@@ -31,13 +32,12 @@ import Button from '../shared/Button';
             description: description,
             group_id: selectedGroupOption,
             recur_id: selectedRecurringFrequency,
-            amount: amount,
+            amount: shareAmtData,
             share_amount: splitAmount,
             cat_id: selectedCategory,
             icon_id: selectedIconOption,
-            // currency_id: currencyData
-            currency_id: currency,
-            receipt_id: receipt_id
+            currency_id: currencyData
+            // currency_id: currency
       };
 
       console.log("EditTransaction data:", data)
@@ -54,28 +54,32 @@ import Button from '../shared/Button';
 
     const handleEditTransaction = async () => {
     try {
-      if (!transactionTitle /*|| !selectedCategory || !currency  || !selectedIconOption || !splitAmount*/) {
+      if (!transactionTitle 
+        || !selectedCategory 
+      /*  || !currency*/ 
+        || !currencyData 
+        || !selectedIconOption 
+        || !splitAmount) {
         console.log('Please fill all fields');
         setShowErrorMessage(true);
       } else {
-          setShowErrorMessage(false);
-          setShowLoadingMessage(true);
-          const statusCode = await fetchData();
-          setShowLoadingMessage(false);
-          console.log('Edited Transaction');
-          // console.log("ET data", data)
+        setShowErrorMessage(false);
+        setShowLoadingMessage(true);
+        const statusCode = await fetchData();
+        console.log('Edited Transaction');
+        // console.log("ET data", data)
 
-        if (statusCode === 200) {
-          // console.log("response", response);
-          setShowLoadingMessage(false);
-          setShowSuccessMessage(true);
-          console.log('Transaction edited successfully');
-        } else {
-          setShowLoadingMessage(false);
-          setShowErrorMessage(true);
-          console.log('Failed to edit transaction');
-        }
+      if (statusCode === 200) {
+        // console.log("response", response);
+        setShowLoadingMessage(false);
+        setShowSuccessMessage(true);
+        console.log('Transaction edited successfully');
+      } else {
+        setShowLoadingMessage(false);
+        setShowErrorMessage(true);
+        console.log('Failed to edit transaction');
       }
+    }
     } catch (error) {
         console.error('Error editing transaction:', error);
         setShowLoadingMessage(false);
