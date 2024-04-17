@@ -12,8 +12,10 @@ function FormSelection({ id, value, onChange, optionsList, label, fieldColour}) 
       className={classDesign}
     >
       <option value="">{`${label}`}</option>
-      {optionsList.map((option) => (
-        <option key={option.value} value={option.value}>
+      {/* {optionsList.map((option) => (
+        <option key={option.value} value={option.value}> */}
+      {optionsList.map((option, index) => (
+        <option key={index} value={option.value}>
           {option.label}
         </option>
       ))}

@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
 import callApi from "../shared/callAPI";
 import { REACT_APP_apiHost } from "../../ENV";
 
 function getReceiptData(receiptId) {
   const apiEndpoint = REACT_APP_apiHost + "/expenses/read_receipt_by_id";
   const data = { receipt_id: receiptId };
-  console.log(data);
+  console.log("what data", data);
   return callApi(apiEndpoint, "POST", data)
     .then((response) => {
-      console.log(response);
-      console.log("Success", response);
+      console.log("Success Receipt_id data", response);
       return response;
     })
     .catch((error) => {
-      console.log("Error when adding category: ", error);
+      console.log("Error with ReceiptInfo: ", error);
       throw error;
     });
 }

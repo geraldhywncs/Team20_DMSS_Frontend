@@ -7,18 +7,32 @@ import EditTransactionButton from '../shared/EditTransactionButton';
 import LoadingMessage from "../shared/LoadingMessage";
 import { useSelector } from 'react-redux';
 
-function TransactionView({ userId }) {
+function TransactionView({ userId, closePopup }) {
     const [receipts, setReceipts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const transactionAdded = useSelector(state => state.transaction.transactionAdded);
+    
+    const handleExpenseDeleted = async () => {  
+      try {
+          console.log("Deleting expenses.................");
+          const data = await getExpenseData(userId);
+          setReceipts(data);
+          setLoading(false);
+          console.log("Receipts after deletion:", receipts);
+      } catch (error) {
+          setLoading(false); 
+          console.error("Error fetching receipt data:", error);
+          setError(error);
+      }
+  };
 
     useEffect(() => { 
-        const fetchData = async () => {
+      const fetchData = async () => {
         setLoading(true);
         try {
             const data = await getExpenseData(userId);
-            console.log("Received data:", data);
+            console.log("Received data trans View:", data);
             setReceipts(data);
             setLoading(false);
         } catch (error) {
@@ -26,9 +40,8 @@ function TransactionView({ userId }) {
             setError(error);
             console.error("Error fetching receipt data:", error);
       }
-    };
-     
-    fetchData();
+    }; 
+      fetchData();
     }, [userId, transactionAdded]);
 
     const getMaterialIcon = (iconId) => {
@@ -77,18 +90,17 @@ function TransactionView({ userId }) {
                   <div className="font-medium ">{receipt.description}</div>
                 </div>
                 <div className="transaction-amount font-bold">
-                    {receipt.expenses.map((expense, index) => (
-                        <div key={index}>${expense.share_amount}</div>
-                    ))}
+                  {receipt.group_id ? ( 
+                        <div>${receipt.total_amount}</div>
+                    ) : (
+                        receipt.expenses.map((expense, index) => (
+                            <div key={index}>${expense.converted_amount}</div>
+                        ))
+                    )}
                 </div>
-                <EditTransactionButton receipt_id={receipt.receipt_id} 
-                                        title={receipt.title} 
-                                        userId={userId} 
-                                        description={receipt.description}
-                                        selectedGroupOption={receipt.group_id}
-                                        />
+                <EditTransactionButton receipt_id={receipt.receipt_id} userId={userId}/>
                 <div style={{ marginRight: '10px' }}></div>
-                <DeleteTransactionButton receipt_id={receipt.receipt_id} closePopup={() => {}} className="red-btn"/>                  
+                <DeleteTransactionButton receipt_id={receipt.receipt_id} className="red-btn" handleExpenseDeleted={handleExpenseDeleted}/>                  
             </div>
             )
         ))}
