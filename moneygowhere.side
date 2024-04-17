@@ -114,11 +114,7 @@
         ["xpath=//div[@id='root']/div/div/div[2]/div/div/div[2]/div/div/div[3]/input", "xpath:idRelative"],
         ["xpath=//div[3]/input", "xpath:position"]
       ],
-<<<<<<< HEAD
-      "value": "junjiewee2"
-=======
       "value": "testing"
->>>>>>> development
     }, {
       "id": "76001690-a2f2-4ed1-ae65-f73a9de12bee",
       "comment": "",
@@ -198,8 +194,6 @@
         ["xpath=//button[contains(.,'Sign Up')]", "xpath:innerText"]
       ],
       "value": ""
-<<<<<<< HEAD
-=======
     }, {
       "id": "5cfe8cb4-7eab-4f1f-bc40-d188731dc151",
       "comment": "",
@@ -1774,13 +1768,13 @@
       "id": "df6ae142-32d0-4e49-bbda-cf82803293be",
       "comment": "",
       "command": "assertElementPresent",
-      "target": "xpath=//div[@id='root']/div/div/div/section/div[4]/div[2]/div/div",
+      "target": "xpath=//div[4]/div[2]/div",
       "targets": [
-        ["css=.friend-info", "css:finder"],
-        ["xpath=//div[@id='root']/div/div/div/section/div[4]/div[2]/div/div", "xpath:idRelative"],
-        ["xpath=//div[2]/div/div", "xpath:position"]
+        ["css=.friend-container", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/section/div[4]/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[4]/div[2]/div", "xpath:position"]
       ],
-      "value": ""
+      "value": "xpath=//div[4]/div[2]/div"
     }]
   }, {
     "id": "e9fb8d19-bb39-428b-ab3e-80be461fa809",
@@ -2274,7 +2268,7 @@
       "id": "def9eff1-5a50-48a4-8cc0-5445ed14e7f9",
       "comment": "",
       "command": "pause",
-      "target": "10000",
+      "target": "5000",
       "targets": [],
       "value": ""
     }, {
@@ -2322,6 +2316,13 @@
         ["xpath=//div[2]/div[2]/div/div/button", "xpath:position"],
         ["xpath=//button[contains(.,'Create Transaction')]", "xpath:innerText"]
       ],
+      "value": ""
+    }, {
+      "id": "098cbba3-9603-4f71-82aa-3cee44291b13",
+      "comment": "",
+      "command": "pause",
+      "target": "10000",
+      "targets": [],
       "value": ""
     }, {
       "id": "bc472dec-a77d-4cc1-b9b3-85c81b6abd97",
@@ -2391,25 +2392,16 @@
         ["xpath=//button[contains(.,'Delete Category')]", "xpath:innerText"]
       ],
       "value": ""
->>>>>>> development
     }]
   }],
   "suites": [{
     "id": "acea938d-daba-432a-9eec-5a430ebb504b",
-<<<<<<< HEAD
-    "name": "Default Suite",
-    "persistSession": false,
-    "parallel": false,
-    "timeout": 300,
-    "tests": ["01bdc0fa-8d62-4be3-b475-ee74589bae3c"]
-=======
     "name": "moneygowhere",
     "persistSession": false,
     "parallel": false,
     "timeout": 300,
     "tests": ["01bdc0fa-8d62-4be3-b475-ee74589bae3c", "18621d3f-2300-412b-8c27-3d0238d86f14", "49b7347b-b6c2-48ec-aa97-b1d0ef0f0b42", "f0809152-cb99-400f-ad64-dc9d7055eae5", "b2457d14-69a6-4815-87e9-df0779dd6e6f", "e0267f4b-6576-459c-a7ed-67a7b317f160", "401eb441-da61-4c2e-8924-811cd1af461e", "2b4b45ea-db06-455d-adc1-85cbdd66cefd", "03f7c386-d08a-4298-867d-ff79a41244a8", "9b292f25-40e5-4b9e-b97d-0bde73444a0c", "c9bcf147-a576-4ab7-b7d0-09299159e9ba", "ce914397-57a6-4e84-908a-88a253f90f29", "e9fb8d19-bb39-428b-ab3e-80be461fa809", "4ef54f33-965b-4d25-a0eb-5c5f59a9d099", "cd225633-044b-400e-ad1f-1d0a06134008"]
->>>>>>> development
   }],
-  "urls": ["http://moneygowheredmss.s3-website-ap-southeast-1.amazonaws.com/"],
+  "urls": ["http://moneygowheredmss.s3-website-ap-southeast-1.amazonaws.com/", "http://localhost:3000/"],
   "plugins": []
 }
