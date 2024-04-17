@@ -21,11 +21,20 @@ jobs:
       with:
         node-version: '18.13.0'
 
-    - name: Run Selenium Tests in Docker
+    - name: Pull selenium chrome image
       run: |
         docker pull selenium/standalone-chrome
-        docker run -d --shm-size=2g --name selenium-browsers -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest
-        
+        docker run -d --shm-size=2g --name selenium-browsers --network=dmss -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest
+
+    - name: Pull docker backend
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws configure set default.region ap-southeast-2
+        aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com
+        docker pull 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com/dmss-backend
+        docker run -d -e EC2=true --name dmss_python_container --network=dmss -p 5000:5000 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com/dmss-backend
+
     - name: Download nodejs
       run: |
         docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
@@ -34,7 +43,6 @@ jobs:
     - name: Install selenium side runner
       run: |
         docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
-        
         
     - name: npm install
       run: |
@@ -76,11 +84,11 @@ jobs:
     - name: Build frontend with ESLint warnings ignored
       run: npm run build-no-eslint
 
-    - name: Configure AWS CLI
-      run: |
-        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws configure set default.region ap-southeast-2
+    # - name: Configure AWS CLI
+    #   run: |
+    #     aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws configure set default.region ap-southeast-2
 
     - name: Sync build output to S3
       run: aws s3 sync build/ s3://moneygowheredmss --delete
