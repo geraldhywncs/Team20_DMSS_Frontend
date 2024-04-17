@@ -34,7 +34,7 @@ jobs:
         aws configure set default.region ap-southeast-2
         aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com
         docker pull 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com/dmss-backend
-        docker run -d -e EC2=true --name dmss_python_container --network=dmss -p 5000:5000 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com/dmss-backend
+        docker run -d --name dmss_python_container --network=dmss -p 5000:5000 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com/dmss-backend
 
     - name: Download nodejs
       run: |
