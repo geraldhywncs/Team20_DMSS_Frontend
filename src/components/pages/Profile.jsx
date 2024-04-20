@@ -10,6 +10,7 @@ import LoadingMessage from "../shared/LoadingMessage";
 import { REACT_APP_apiHost } from "../../ENV";
 
 function Profile({ userId }) {
+  const [allUsers, setAllUsers] = useState([]);
   const [friends, setFriends] = useState([]);
   const [groups, setGroups] = useState([]);
   const [firstName, setFirstName] = useState("");
@@ -23,6 +24,10 @@ function Profile({ userId }) {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const usersEndPoint = REACT_APP_apiHost + "/users";
+        const usersResponse = await callApi(usersEndPoint, "GET");
+        setAllUsers(usersResponse.users);
+
         const endpoint = REACT_APP_apiHost + `/profile/${userId}`;
         const response = await callApi(endpoint, "GET");
 
@@ -67,6 +72,8 @@ function Profile({ userId }) {
         setProfileChange={setProfileChange}
         userId={userId}
         setLoading={setLoading}
+        allUsers={allUsers}
+        setAllUsers={setAllUsers}
       />
       <Section headerName="Friends">
         <Friends friends={friends} showFriend={true} showButton={false} />
@@ -94,11 +101,15 @@ function MyProfile(props) {
     setProfileChange,
     userId,
     setLoading,
+    allUsers,
+    setAllUsers,
   } = props;
   const [isEdit, setIsEdit] = useState(false);
+  const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
 
   const handleButtonClick = async () => {
     if (isEdit) {
+      if (isUsernameInvalid) return;
       setLoading(true);
       try {
         const endPoint = REACT_APP_apiHost + `/user/${userId}`;
@@ -150,10 +161,22 @@ function MyProfile(props) {
             <div className="profile-info-edit">
               <label>Username</label>
               <input
-                className="profile-edit-username"
+                className={
+                  isUsernameInvalid
+                    ? "profile-edit-username bg-red-50 border border-red-300 text-red-900"
+                    : "profile-edit-username"
+                }
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  const allUsernames = allUsers.map((user) => user.user_name);
+                  if (allUsernames.includes(e.target.value)) {
+                    setIsUsernameInvalid(true);
+                  } else {
+                    setIsUsernameInvalid(false);
+                  }
+                }}
               />
             </div>
             <div className="profile-info-edit">
