@@ -27,15 +27,6 @@ jobs:
         docker network create dmss
         docker run -d --shm-size=2g --name selenium-browsers --network=dmss -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest
 
-    - name: Pull docker backend
-      run: |
-        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws configure set default.region ap-southeast-2
-        aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com
-        docker pull 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com/dmss-backend
-        docker run -d --name dmss_python_container --network=dmss -p 5000:5000 409151997352.dkr.ecr.ap-southeast-2.amazonaws.com/dmss-backend
-
     - name: Download nodejs
       run: |
         docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
