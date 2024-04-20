@@ -244,85 +244,89 @@ const LoginSignUp = ({ setUserId }) => {
             {/* Sign Up page */}
             <div class="card-back">
               <div class="center-wrap">
-                <h4 class="mb-3 pb-3">Sign Up</h4>
+                <div className="grid grid-cols-1 mb-4">
+                  <h1 class="mb-0 pb-3 text-xl text-left font-bold text-indigo-500">
+                    Sign Up
+                  </h1>
 
-                {/* start of sign up page */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <FormSection col="1">
-                    <FormLabel label={"First Name"} />
-                    <FormInput
-                      id="signupFirstName"
-                      placeholder="First Name"
-                      type="text"
-                      value={firstName}
-                      onChange={handleFirstNameChange}
-                      fieldColour={firstNameFieldColor}
-                    />
-                  </FormSection>
-                  <FormSection col="1">
-                    <FormLabel label={"Last Name"} />
-                    <FormInput
-                      id="signupLastName"
-                      placeholder="Last Name"
-                      type="text"
-                      value={lastName}
-                      onChange={handleLastNameChange}
-                      fieldColour={lastNameFieldColor}
-                    />
-                  </FormSection>
-                  <FormSection col="1">
-                    <FormLabel label={"Username"} />
-                    <FormInput
-                      id="signupUsername"
-                      placeholder="Username"
-                      type="text"
-                      value={username}
-                      onChange={handleUsernameChange}
-                      fieldColour={usernameFieldColor}
-                    />
-                  </FormSection>
-                  <FormSection col="1">
-                    <FormLabel label={"Password"} />
-                    <FormInput
-                      id="signupPassword"
-                      placeholder="Password"
-                      type="password"
-                      value={signupTempPassword}
-                      onChange={handlePasswordChange}
-                      fieldColour={signUpPasswordFieldColor}
-                    />
-                  </FormSection>
-                </div>
+                  {/* start of sign up page */}
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <FormSection col="1">
+                      <FormLabel label={"First Name"} />
+                      <FormInput
+                        id="signupFirstName"
+                        placeholder="First Name"
+                        type="text"
+                        value={firstName}
+                        onChange={handleFirstNameChange}
+                        fieldColour={firstNameFieldColor}
+                      />
+                    </FormSection>
+                    <FormSection col="1">
+                      <FormLabel label={"Last Name"} />
+                      <FormInput
+                        id="signupLastName"
+                        placeholder="Last Name"
+                        type="text"
+                        value={lastName}
+                        onChange={handleLastNameChange}
+                        fieldColour={lastNameFieldColor}
+                      />
+                    </FormSection>
+                    <FormSection col="1">
+                      <FormLabel label={"Username"} />
+                      <FormInput
+                        id="signupUsername"
+                        placeholder="Username"
+                        type="text"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        fieldColour={usernameFieldColor}
+                      />
+                    </FormSection>
+                    <FormSection col="1">
+                      <FormLabel label={"Password"} />
+                      <FormInput
+                        id="signupPassword"
+                        placeholder="Password"
+                        type="password"
+                        value={signupTempPassword}
+                        onChange={handlePasswordChange}
+                        fieldColour={signUpPasswordFieldColor}
+                      />
+                    </FormSection>
+                  </div>
 
-                <FormSection col="1">
-                  <FormLabel label={"Email"} />
-                  <FormInput
-                    id="signupEmail"
-                    placeholder="Email"
-                    type="email"
-                    value={signupTempEmail}
-                    onChange={handleSignUpEmailChange}
-                    fieldColour={signUpEmailFieldColor}
+                  <FormSection col="1">
+                    <FormLabel label={"Email"} />
+                    <FormInput
+                      id="signupEmail"
+                      placeholder="Email"
+                      type="email"
+                      value={signupTempEmail}
+                      onChange={handleSignUpEmailChange}
+                      fieldColour={signUpEmailFieldColor}
+                    />
+                  </FormSection>
+                  <br />
+
+                  <SignUp
+                    class="min-h-screen bg-indigo-600"
+                    firstname={firstName}
+                    lastname={lastName}
+                    email={email}
+                    username={username}
+                    password={password}
+                    setShowErrorMessage={setShowErrorMessage}
+                    setShowLoadingMessage={setShowLoadingMessage}
+                    setErrorMessage={setErrorMessage}
+                    setSuccessMessage={setSuccessMessage}
+                    setShowSuccessMessage={setShowSuccessMessage}
+                    setUserId={setUserId}
                   />
-                </FormSection>
-                <br />
 
-                <SignUp
-                  class="min-h-screen bg-indigo-600"
-                  firstname={firstName}
-                  lastname={lastName}
-                  email={email}
-                  username={username}
-                  password={password}
-                  setShowErrorMessage={setShowErrorMessage}
-                  setShowLoadingMessage={setShowLoadingMessage}
-                  setErrorMessage={setErrorMessage}
-                  setSuccessMessage={setSuccessMessage}
-                  setShowSuccessMessage={setShowSuccessMessage}
-                  setUserId={setUserId}
-                />
-
-                {/* end of sign up page */}
+                  {/* end of sign up page */}
+                </div>
               </div>
             </div>
           </div>
