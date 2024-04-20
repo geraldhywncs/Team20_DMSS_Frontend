@@ -23,7 +23,7 @@ jobs:
 
     - name: Connect to RDS and export data
       run: |
-        mysql -h $moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/loadData.sql
+        mysql -h moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/loadData.sql
         # mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/loadData.sql
     
     - name: Pull selenium chrome image
@@ -93,5 +93,5 @@ jobs:
     - name: Truncate data from MySQL
       if: always()
       run: |
-        mysql -h $moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/truncateData.sql
+        mysql -h moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/truncateData.sql
         # mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/truncateData.sql
