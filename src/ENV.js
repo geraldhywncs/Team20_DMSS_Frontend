@@ -5,7 +5,7 @@ function isHostedOnAWS() {
   return hostname.includes("amazonaws.com");
 }
 
-// Example usage
+
 if (isHostedOnAWS()) {
   apiHost = "http://3.26.203.126:5000";
 } else {
