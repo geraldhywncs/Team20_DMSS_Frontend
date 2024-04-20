@@ -21,12 +21,17 @@ jobs:
       with:
         node-version: '18.13.0'
 
+    - name: Connect to RDS and export data
+      run: |
+        mysql -h moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/loadData.sql
+        # mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/loadData.sql
+    
     - name: Pull selenium chrome image
       run: |
         docker pull selenium/standalone-chrome
         docker network create dmss
-        docker run -d --shm-size=2g --name selenium-browsers --network=dmss -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest
-        
+        docker run -d --shm-size=2g --name selenium-browsers --network=dmss -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest    
+    
     - name: Download nodejs
       run: |
         docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
@@ -84,3 +89,9 @@ jobs:
 
     - name: Sync build output to S3
       run: aws s3 sync build/ s3://moneygowheredmss --delete
+
+    - name: Truncate data from MySQL
+      if: always()
+      run: |
+        mysql -h moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/truncateData.sql
+        # mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/truncateData.sql
