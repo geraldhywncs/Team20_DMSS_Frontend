@@ -7,91 +7,89 @@ on:
   pull_request:
     branches:
       - main
-      
+
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18.13.0'
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.13.0"
 
-    - name: Connect to RDS and export data
-      run: |
-        mysql -h moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/loadData.sql
-        # mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/loadData.sql
-    
-    - name: Pull selenium chrome image
-      run: |
-        docker pull selenium/standalone-chrome
-        docker network create dmss
-        docker run -d --shm-size=2g --name selenium-browsers --network=dmss -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest    
-    
-    - name: Download nodejs
-      run: |
-        docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
-        docker exec -u root selenium-browsers bash -c 'apt-get install -y nodejs'
-   
-    - name: Install selenium side runner
-      run: |
-        docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
-        
-    - name: npm install
-      run: |
-        docker exec -u root selenium-browsers bash -c 'cd /app && npm install'
-        # docker exec -u root selenium-browsers bash -c 'npm install'
-        
-    - name: npm run build
-      run: |
-        docker exec -u root selenium-browsers bash -c 'cd /app && npm run build'
+      - name: Connect to RDS and export data
+        run: |
+          mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/loadData.sql
 
-    - name: npm install -g serve
-      run: |
-        docker exec -u root selenium-browsers bash -c 'cd /app && npm install -g serve'
+      - name: Pull selenium chrome image
+        run: |
+          docker pull selenium/standalone-chrome
+          docker network create dmss
+          docker run -d --shm-size=2g --name selenium-browsers --network=dmss -p 4444:4444 -v $GITHUB_WORKSPACE/moneygowhere.side:/tests/moneygowhere.side -v $GITHUB_WORKSPACE/src:/app/src -v $GITHUB_WORKSPACE/public:/app/public -v $GITHUB_WORKSPACE/tailwind.config.js:/app/tailwind.config.js -v $GITHUB_WORKSPACE/package.json:/app/package.json selenium/standalone-chrome:latest
 
-    - name: npm build
-      run: |
-        docker exec -u root selenium-browsers bash -c 'cd /app && serve -s build > log.txt 2>&1 &'
-        
-    - name: exec selenium side runner
-      run: |
-        docker exec -u root selenium-browsers bash -c 'selenium-side-runner /tests/moneygowhere.side'
-        exit_code=$?
-        
-        if [ $exit_code -ne 0 ]; then
-          echo "selenium-side-runner failed with exit code $exit_code"
-          exit 1  # Fail the step
-        else
-          echo "selenium-side-runner completed successfully"
-        fi
+      - name: Download nodejs
+        run: |
+          docker exec -u root selenium-browsers bash -c 'curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -'
+          docker exec -u root selenium-browsers bash -c 'apt-get install -y nodejs'
 
-    - name: Remove Docker container
-      run: |
-        docker stop selenium-browsers
-        docker rm selenium-browsers
+      - name: Install selenium side runner
+        run: |
+          docker exec -u root selenium-browsers bash -c 'npm install -g selenium-side-runner'
 
-    - name: Install dependencies
-      run: npm install
+      - name: npm install
+        run: |
+          docker exec -u root selenium-browsers bash -c 'cd /app && npm install'
+          # docker exec -u root selenium-browsers bash -c 'npm install'
 
-    - name: Build frontend with ESLint warnings ignored
-      run: npm run build-no-eslint
+      - name: npm run build
+        run: |
+          docker exec -u root selenium-browsers bash -c 'cd /app && npm run build'
 
-    - name: Configure AWS CLI
-      run: |
-        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws configure set default.region ap-southeast-2
+      - name: npm install -g serve
+        run: |
+          docker exec -u root selenium-browsers bash -c 'cd /app && npm install -g serve'
 
-    - name: Sync build output to S3
-      run: aws s3 sync build/ s3://moneygowheredmss --delete
+      - name: npm build
+        run: |
+          docker exec -u root selenium-browsers bash -c 'cd /app && serve -s build > log.txt 2>&1 &'
 
-    - name: Truncate data from MySQL
-      if: always()
-      run: |
-        mysql -h moneygowhere-test.c7qu20m62r96.ap-southeast-2.rds.amazonaws.com -P 3307 -u root -p"default1111" moneygowhere < $GITHUB_WORKSPACE/sql/truncateData.sql
-        # mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/truncateData.sql
+      - name: exec selenium side runner
+        run: |
+          docker exec -u root selenium-browsers bash -c 'selenium-side-runner /tests/moneygowhere.side'
+          exit_code=$?
+
+          if [ $exit_code -ne 0 ]; then
+            echo "selenium-side-runner failed with exit code $exit_code"
+            exit 1  # Fail the step
+          else
+            echo "selenium-side-runner completed successfully"
+          fi
+
+      - name: Remove Docker container
+        run: |
+          docker stop selenium-browsers
+          docker rm selenium-browsers
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build frontend with ESLint warnings ignored
+        run: npm run build-no-eslint
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ap-southeast-2
+
+      - name: Sync build output to S3
+        run: aws s3 sync build/ s3://moneygowheredmss --delete
+
+      - name: Truncate data from MySQL
+        if: always()
+        run: |
+          mysql -h ${{ secrets.DB_HOST }} -P ${{ secrets.DB_PORT }} -u ${{ secrets.DB_USERNAME }} -p"${{ secrets.DB_PASSWORD }}" ${{ secrets.DB_NAME }} < $GITHUB_WORKSPACE/sql/truncateData.sql
