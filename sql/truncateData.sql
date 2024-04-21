@@ -1,5 +1,6 @@
 use moneygowhere;
-
+ALTER TABLE friends DROP FOREIGN KEY friends_ibfk_1;
+ALTER TABLE friends DROP FOREIGN KEY friends_ibfk_2;
 truncate table friends;
 truncate table currency_conversion;
 truncate table expenses;
