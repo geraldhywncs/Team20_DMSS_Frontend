@@ -33,6 +33,8 @@ const EditTransactionPage = ({
   receiptData,
   shareAmtData,
   currencyData,
+  receipt,
+  setSuccessTransaction
 }) => {
   const dispatch = useDispatch();
   const {
@@ -61,7 +63,7 @@ const EditTransactionPage = ({
   // console.log("catID::", cat_id)
   const [currency, setCurrency] = useState(receiptData?.currencyData || "");
   // console.log("currID::", currencyData)
-  const [amount, setAmount] = useState(receiptData?.shareAmtData || "");
+  const [amount, setAmount] = useState(receipt?.total_amount || "");
   // console.log("amounts::", shareAmtData)
   const [selectedIconOption, setIconSelectedOption] = useState(
     receiptData?.icon_id || 1
@@ -114,10 +116,12 @@ const EditTransactionPage = ({
 
   useEffect(() => {
     setShowLoadingMessage(true);
+
+    console.log('EDIT PAGE RECEIPT TOTAL AMOPUNT: ', +receipt.total_amount)
     if (receipt_id) {
       getReceiptData(receipt_id)
         .then((response) => {
-          // console.log('VALUES UPDATED')
+          console.log('VALUES UPDATED')
           const {
             title,
             description,
@@ -130,12 +134,12 @@ const EditTransactionPage = ({
             recur_id,
           } = response;
           // console.log('receiptData')
-          // console.log(response);
+          console.log(response);
           setTransactionTitle(title);
           setSelectedCategory(cat_id);
           setCurrency(response.expenses[0].currency_id);
-          setAmount(response.expenses[0].share_amount);
-          setSplitAmount(splitAmount);
+          setAmount(receipt.total_amount);
+          setSplitAmount(receipt.expenses[0].converted_amount);
           setDescription(description);
           setGroupOption(group_id);
           setIconSelectedOption(icon_id);
@@ -287,6 +291,25 @@ const EditTransactionPage = ({
     closePopup();
     resetFormFields();
     dispatch(editTransaction());
+    setSuccessTransaction(true);
+
+    // handleExpenseEdited();
+
+    // const handleSucessMessage = () => {
+    //   setShowSuccessMessage(false);
+    //   setUsername("");
+    //   setSignupTempPassword("");
+    //   setSignupTempEmail("");
+    //   setFirstName("");
+    //   setLastName("");
+    //   setPassword("");
+    //   setEmail("");
+  
+    //   const checkbox = document.getElementById("reg-log");
+    //   checkbox.checked = !checkbox.checked;
+    // };
+
+
   };
 
   return (

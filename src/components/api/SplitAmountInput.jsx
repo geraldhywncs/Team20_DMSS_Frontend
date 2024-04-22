@@ -12,6 +12,8 @@ function SplitAmountInput({
   selectedGroupOption,
   amount,
   fieldColour,
+  receipt_id,
+  setShowLoadingMessage,
 }) {
   let debounceTimeout;
 
@@ -24,9 +26,44 @@ function SplitAmountInput({
   }, [amount, selectedGroupOption]);
 
   async function fetchData() {
+    console.log("split amount called!! ", +receipt_id);
+    console.log("group option received ", selectedGroupOption);
     try {
-      if (selectedGroupOption !== "") {
-        if (amount !== "") {
+      // setShowLoadingMessage(true);
+      if (!receipt_id) {
+        if (selectedGroupOption !== "") {
+          if (amount !== "") {
+            const apiEndpoint = REACT_APP_apiHost + "/expenses/splitExpense";
+            const data = { groupId: selectedGroupOption, amount: amount };
+
+            const response = await callApi(apiEndpoint, "POST", data);
+
+            if (response.status_code === "200") {
+              const newSplitAmount = response.expenses_per_ppl;
+              setSplitAmount(newSplitAmount);
+              setShowLoadingMessage(false);
+            } else {
+              console.log(response.message);
+              setShowLoadingMessage(false);
+            }
+          } else {
+            setSplitAmount("");
+            setShowLoadingMessage(false);
+          }
+        } else {
+          setSplitAmount(amount);
+          setShowLoadingMessage(false);
+        }
+      } else {
+        // to account for EXISTING txn
+        if (selectedGroupOption== "") {
+          // to account for existing personal txn
+          console.log("DETECTED PERSONAL TXN AS EXISTING");
+          setSplitAmount(amount);
+          setShowLoadingMessage(false);
+        } else {
+          // to account for existing group txn
+          console.log("GROUP ID: " + selectedGroupOption);
           const apiEndpoint = REACT_APP_apiHost + "/expenses/splitExpense";
           const data = { groupId: selectedGroupOption, amount: amount };
 
@@ -35,14 +72,12 @@ function SplitAmountInput({
           if (response.status_code === "200") {
             const newSplitAmount = response.expenses_per_ppl;
             setSplitAmount(newSplitAmount);
+            setShowLoadingMessage(false);
           } else {
-            console.log(response.message);
+            console.log("ERROR: " + response);
+            setShowLoadingMessage(false);
           }
-        } else {
-          setSplitAmount("");
         }
-      } else {
-        setSplitAmount(amount);
       }
     } catch (error) {
       console.log("Error when splitting amount: ", error);

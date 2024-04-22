@@ -38,20 +38,68 @@ function EditTransaction({
 
   const fetchData = async () => {
     const apiEndpoint = process.env.REACT_APP_apiHost + "/expenses/update";
+    console.log('EDIT TXN CALLED!!')
+    let data = {}
+    console.log('selectedGroupOption: ' + selectedGroupOption)
+    console.log('selectedRecurringFrequency: ' + selectedRecurringFrequency)
+    
+    if (selectedGroupOption == "" && selectedRecurringFrequency != "") {
+       data = {
+        title: transactionTitle,
+        description: description,
+        recur_id: selectedRecurringFrequency,
+        amount: amount,
+        share_amount: splitAmount,
+        cat_id: selectedCategory,
+        icon_id: selectedIconOption,
+        // currency_id: currencyData
+        currency_id: currency,
+        receipt_id: receipt_id,
+      };
+    } else if (selectedRecurringFrequency == null && selectedGroupOption != "") {
+        data = {
+        title: transactionTitle,
+        description: description,
+        group_id: selectedGroupOption,
+        amount: amount,
+        share_amount: splitAmount,
+        cat_id: selectedCategory,
+        icon_id: selectedIconOption,
+        // currency_id: currencyData
+        currency_id: currency,
+        receipt_id: receipt_id,
+      };
 
-    const data = {
-      title: transactionTitle,
-      description: description,
-      group_id: selectedGroupOption,
-      recur_id: selectedRecurringFrequency,
-      amount: amount,
-      share_amount: splitAmount,
-      cat_id: selectedCategory,
-      icon_id: selectedIconOption,
-      // currency_id: currencyData
-      currency_id: currency,
-      receipt_id: receipt_id,
-    };
+    } else if (selectedRecurringFrequency == "" && selectedGroupOption == "") {
+       data = {
+        title: transactionTitle,
+        description: description,
+        amount: amount,
+        share_amount: splitAmount,
+        cat_id: selectedCategory,
+        icon_id: selectedIconOption,
+        // currency_id: currencyData
+        currency_id: currency,
+        receipt_id: receipt_id,
+      };
+    } else {
+        data = {
+        title: transactionTitle,
+        description: description,
+        group_id: selectedGroupOption,
+        recur_id: selectedRecurringFrequency,
+        amount: amount,
+        share_amount: splitAmount,
+        cat_id: selectedCategory,
+        icon_id: selectedIconOption,
+        // currency_id: currencyData
+        currency_id: currency,
+        receipt_id: receipt_id,
+        
+      };
+      console.log('FWEAFAWE CALLED!!'+ data)
+
+    }
 
     console.log("EditTransaction data:", data);
 
