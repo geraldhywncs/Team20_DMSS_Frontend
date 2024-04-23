@@ -7,76 +7,79 @@ import Button from "./Button";
 import { getReceiptData } from "../api/ReceiptInfo";
 
 const EditTransactionButton = ({ userId, receipt_id, receipt, setSuccessTransaction, setRefreshEditButton }) => {
-    console.log('In EditTransactionButton',receipt)
+    console.log('In EditTransactionButton',receipt_id);
     const [receiptData, setReceiptData] = useState([]);
     const [currencyData, setCurrencyData] = useState(null);
     const [currencyName, setCurrencyNameData] = useState(null);
     const [shareAmtData, setShareAmtData] = useState(null);
     const [popupVisible, setPopupVisible] = useState(false);
     const dispatch = useDispatch();
+    
 
   const handleButtonClick = () => {
-    if (receipt_id) {
-      setReceiptData(getReceiptData(receipt_id));
-      console.log("this: " + receiptData);
-      getReceiptData(receipt_id) //Extracts data from read_expense API
-        .then((data) => {
-          console.log("thises", data);
-          if (data.status_code === "200") {
-            setReceiptData(data);
-            const { expenses } = data;
-            const AmtCurrData = expenses.map((expense) => ({
-              share_amount: expense.share_amount,
-              currency_id: expense.currency_id,
-              currency_name: expense.currency_name,
-            }));
+    // if (receipt_id) {
+    //   setReceiptData(getReceiptData(receipt_id));
+    //   console.log("this: " + receiptData);
+    //   getReceiptData(receipt_id) //Extracts data from read_expense API
+    //     .then((data) => {
+    //       console.log("thises", data);
+    //       if (data.status_code === "200") {
+    //         setReceiptData(data);
+    //         const { expenses } = data;
+    //         const AmtCurrData = expenses.map((expense) => ({
+    //           share_amount: expense.share_amount,
+    //           currency_id: expense.currency_id,
+    //           currency_name: expense.currency_name,
+    //         }));
 
-            setShareAmtData(expenses[0].share_amount);
-            setCurrencyData(expenses[0].currency_id);
-            setCurrencyNameData(expenses[0].currency_name);
+    //         setShareAmtData(expenses[0].share_amount);
+    //         setCurrencyData(expenses[0].currency_id);
+    //         setCurrencyNameData(expenses[0].currency_name);
 
-            const {
-              title,
-              cat_id,
-              currencyid,
-              shareAmounts,
-              icon_id,
-              splitAmounts,
-              descriptions,
-              group_id,
-              recur_id,
-              created_datetime,
-              created_user_id,
-              status_code,
-              category_name,
-              group_name,
-              icon_name,
-              recurring_name,
-            } = receiptData;
+    //         const {
+    //           title,
+    //           cat_id,
+    //           currencyid,
+    //           shareAmounts,
+    //           icon_id,
+    //           splitAmounts,
+    //           descriptions,
+    //           group_id,
+    //           recur_id,
+    //           created_datetime,
+    //           created_user_id,
+    //           status_code,
+    //           category_name,
+    //           group_name,
+    //           icon_name,
+    //           recurring_name,
+    //         } = receiptData;
 
-            console.log(
-              "First expense share amount:",
-              expenses[0].share_amount
-            );
-            console.log(
-              "First expense currency name:",
-              AmtCurrData[0].currency_name
-            );
-            console.log("First expense currency id:", expenses[0].currency_id);
-            console.log("shareamtdat:ddd", shareAmtData);
-            console.log("scurencydat:ddd", currencyData);
+    //         console.log(
+    //           "First expense share amount:",
+    //           expenses[0].share_amount
+    //         );
+    //         console.log(
+    //           "First expense currency name:",
+    //           AmtCurrData[0].currency_name
+    //         );
+    //         console.log("First expense currency id:", expenses[0].currency_id);
+    //         console.log("shareamtdat:ddd", shareAmtData);
+    //         console.log("scurencydat:ddd", currencyData);
 
-            // console.log("SA", firstShareAmount);
-            console.log("cID", cat_id);
-            console.log("here", receiptData);
-          } else {
-            console.log(data.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching receipt data:", error);
-        });
-    }
+    //         // console.log("SA", firstShareAmount);
+    //         console.log("cID", cat_id);
+    //         console.log("here", receiptData);
+    //       } else {
+    //         console.log(data.message);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error fetching receipt data:", error);
+    //     });
+    // } else {
+    //     console.log('In EditTransactionButton no id',receipt_id);
+    // }
     setPopupVisible(true);
     dispatch(resetTransaction());
   };

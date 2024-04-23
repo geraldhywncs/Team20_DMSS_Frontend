@@ -57,10 +57,10 @@ function TransactionView({ userId, closePopup }) {
             console.error("Error fetching receipt data:", error);
       }
     }; 
-      setRefreshEditButton(true)
+      // setRefreshEditButton(true)
       setSuccessTransaction(false)
       fetchData();
-    }, [userId, transactionAdded, successTransaction, refreshEditButton]);
+    }, [userId, transactionAdded, successTransaction]);
 
   const getMaterialIcon = (iconId) => {
     const iconMapping = {
@@ -132,7 +132,7 @@ function TransactionView({ userId, closePopup }) {
                     ))
                   )}
                 </div>
-                {console.log('In View',receipt)}
+                {console.log('In View',receipt.receipt_id)}
                 {refreshEditButton && (
                 <EditTransactionButton receipt_id={receipt.receipt_id} userId={userId} setSuccessTransaction={setSuccessTransaction} receipt={receipt} setRefreshEditButton={setRefreshEditButton}/>
                 )}

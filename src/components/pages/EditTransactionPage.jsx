@@ -38,21 +38,21 @@ const EditTransactionPage = ({
   setRefreshEditButton
 }) => {
   const dispatch = useDispatch();
-  const {
-    title,
-    cat_id,
-    currencyid,
-    shareAmounts,
-    icon_id,
-    splitAmounts,
-    descriptions,
-    group_id,
-    recur_id,
-    created_datetime,
-    created_user_id,
-    status_code,
-  } = receiptData;
-  console.log("receiptData",receiptData);
+  // const {
+  //   title,
+  //   cat_id,
+  //   currencyid,
+  //   shareAmounts,
+  //   icon_id,
+  //   splitAmounts,
+  //   descriptions,
+  //   group_id,
+  //   recur_id,
+  //   created_datetime,
+  //   created_user_id,
+  //   status_code,
+  // } = receiptData;
+  // console.log("receiptData",receiptData);
   console.log("receipt",receipt);
   // console.log("title",title)
   // console.log("cat_id",cat_id)
@@ -99,6 +99,7 @@ const EditTransactionPage = ({
       setRecurringFrequency(receipt?.recur_id || "");
       setSelectedCategory(receipt.cat_id);
       setTransactionTitle(receipt.title);
+      setCurrency(2)
       console.log("selectedGroupOption:", selectedGroupOption);
     }
   }, [receipt]);
@@ -273,16 +274,16 @@ const EditTransactionPage = ({
   };
 
   const resetFormFields = () => {
-    setTransactionTitle(receiptData?.title || "");
-    setSelectedCategory(receiptData?.cat_id || "");
+    setTransactionTitle("");
+    setSelectedCategory("");
     setCategoryValue("");
-    setCurrency(receiptData?.currency_id || "");
-    setAmount(receiptData?.amount || "");
-    setSplitAmount(receiptData?.splitAmount || "");
-    setDescription(receiptData?.description || "");
-    setGroupOption(receiptData?.group_id || "");
-    setIconSelectedOption(receiptData?.icon_id || 1);
-    setRecurringFrequency(receiptData?.recur_id || "");
+    setCurrency("");
+    setAmount("");
+    setSplitAmount("");
+    setDescription("");
+    setGroupOption("");
+    setIconSelectedOption(1);
+    setRecurringFrequency("");
 
     setTransactionTitleFieldColour("gray");
     setSelectedCategoryFieldColour("gray");
@@ -308,8 +309,8 @@ const EditTransactionPage = ({
     closePopup();
     resetFormFields();
     setSuccessTransaction(true);
-    setRefreshEditButton(false);
-    dispatch(editTransaction());
+    // setRefreshEditButton(false);
+    // dispatch(editTransaction());
     setSuccessTransaction(true);
 
     // handleExpenseEdited();
@@ -504,7 +505,6 @@ const EditTransactionPage = ({
           selectedIconOption={selectedIconOption}
           selectedGroupOption={selectedGroupOption}
           selectedRecurringFrequency={selectedRecurringFrequency}
-          receiptData={receiptData}
           setShowErrorMessage={setShowErrorMessage}
           setShowSuccessMessage={setShowSuccessMessage}
           setShowLoadingMessage={setShowLoadingMessage}
