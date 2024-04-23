@@ -11,6 +11,7 @@ if (isHostedOnAWS()) {
 } else {
   apiHost = "http://13.239.22.94:5000";
   //apiHost = "http://172.20.0.1:5000";
+  //apiHost = "http://127.0.0.1:5000";
 }
 
 export const REACT_APP_apiHost = apiHost;

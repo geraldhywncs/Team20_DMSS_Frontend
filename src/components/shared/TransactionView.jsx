@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 function TransactionView({ userId, closePopup }) {
     const [receipts, setReceipts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [successTransaction, setSuccessTransaction] = useState(false);
+    const [refreshEditButton, setRefreshEditButton] = useState(true);
     const [error, setError] = useState(null);
     const transactionAdded = useSelector(state => state.transaction.transactionAdded);
     
@@ -34,6 +36,7 @@ function TransactionView({ userId, closePopup }) {
             const data = await getExpenseData(userId);
             console.log("Received data trans View:", data);
             setReceipts(data);
+            console.log("Receipts after update:", receipts);
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -41,8 +44,10 @@ function TransactionView({ userId, closePopup }) {
             console.error("Error fetching receipt data:", error);
       }
     }; 
+      setRefreshEditButton(true)
+      setSuccessTransaction(false)
       fetchData();
-    }, [userId, transactionAdded]);
+    }, [userId, transactionAdded, successTransaction, refreshEditButton]);
 
     const getMaterialIcon = (iconId) => {
       const iconMapping = {
@@ -98,8 +103,12 @@ function TransactionView({ userId, closePopup }) {
                         ))
                     )}
                 </div>
-                <EditTransactionButton receipt_id={receipt.receipt_id} userId={userId}/>
+                {console.log('In View',receipt)}
+                {refreshEditButton && (
+                <EditTransactionButton receipt_id={receipt.receipt_id} userId={userId} setSuccessTransaction={setSuccessTransaction} receipt={receipt} setRefreshEditButton={setRefreshEditButton}/>
+                )}
                 <div style={{ marginRight: '10px' }}></div>
+                
                 <DeleteTransactionButton receipt_id={receipt.receipt_id} className="red-btn" handleExpenseDeleted={handleExpenseDeleted}/>                  
             </div>
             )

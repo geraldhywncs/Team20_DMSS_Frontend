@@ -6,8 +6,8 @@ import { resetTransaction } from '../../redux/transactionReducer';
 import Button from "./Button";
 import { getReceiptData } from '../api/ReceiptInfo';
 
-const EditTransactionButton = ({ userId, receipt_id, receipt }) => {
-
+const EditTransactionButton = ({ userId, receipt_id, receipt, setSuccessTransaction, setRefreshEditButton }) => {
+    console.log('In EditTransactionButton',receipt)
     const [receiptData, setReceiptData] = useState([]);
     const [currencyData, setCurrencyData] = useState(null);
     const [currencyName, setCurrencyNameData] = useState(null);
@@ -81,9 +81,10 @@ const EditTransactionButton = ({ userId, receipt_id, receipt }) => {
                 <div className="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center overflow-y-auto">
                     <div className="modal-overlay fixed inset-0 bg-black opacity-30" onClick={closePopup}></div>
                     <div className="modal-content rounded-lg shadow h-full p-4">
+                        {console.log('In EditTransactionButton in button',receipt)}
                         <EditTransactionPage closePopup={closePopup} userId={userId}
                             receipt_id={receipt_id} receiptData = {receiptData} 
-                            currencyData = {currencyData} shareAmtData={shareAmtData} currencyName = {currencyName}/>
+                            currencyData = {currencyData} shareAmtData={shareAmtData} currencyName = {currencyName} setSuccessTransaction={setSuccessTransaction} receipt={receipt} setRefreshEditButton={setRefreshEditButton}/>
                     </div>
                 </div>
                 </div>

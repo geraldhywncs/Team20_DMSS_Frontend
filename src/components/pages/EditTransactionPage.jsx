@@ -33,6 +33,9 @@ const EditTransactionPage = ({
   receiptData,
   shareAmtData,
   currencyData,
+  setSuccessTransaction,
+  receipt,
+  setRefreshEditButton
 }) => {
   const dispatch = useDispatch();
   const {
@@ -49,40 +52,56 @@ const EditTransactionPage = ({
     created_user_id,
     status_code,
   } = receiptData;
+  console.log("receiptData",receiptData);
+  console.log("receipt",receipt);
+  // console.log("title",title)
+  // console.log("cat_id",cat_id)
+  // console.log("currencyid",currencyid)
+  // console.log("shareAmounts",shareAmounts)
+  // console.log("icon_id",icon_id)
+  // console.log("splitAmounts",splitAmounts)
+  // console.log("descriptions",descriptions)
+  // console.log("group_id",group_id)
+  // console.log("recur_id",recur_id)
+  // console.log("created_datetime",created_datetime)
+  // console.log("created_user_id",created_user_id)
+  // console.log("status_code",status_code)
 
   // console.log('EditTransactionPage', receiptData);
-  const [transactionTitle, setTransactionTitle] = useState(
-    receiptData?.sd || ""
-  );
+  const [transactionTitle, setTransactionTitle] = useState("");
   // console.log("title::", title);
-  const [selectedCategory, setSelectedCategory] = useState(
-    receiptData?.cat_id || ""
-  );
+  const [selectedCategory, setSelectedCategory] = useState("");
   // console.log("catID::", cat_id)
-  const [currency, setCurrency] = useState(receiptData?.currencyData || "");
+  const [currency, setCurrency] = useState(2);
   // console.log("currID::", currencyData)
-  const [amount, setAmount] = useState(receiptData?.shareAmtData || "");
-  // console.log("amounts::", shareAmtData)
-  const [selectedIconOption, setIconSelectedOption] = useState(
-    receiptData?.icon_id || 1
-  );
+  const [amount, setAmount] = useState("");
+  
+  const [selectedIconOption, setIconSelectedOption] = useState(1);
   // console.log("iconID::", icon_id)
   const [splitAmount, setSplitAmount] = useState(
-    receiptData?.splitAmount || ""
+    ""
   );
   // console.log("Splitamounts::", splitAmounts)
-  const [description, setDescription] = useState(
-    receiptData?.description || ""
-  );
+  const [description, setDescription] = useState("");
   // console.log("descriptions::", description)
-  const [selectedGroupOption, setGroupOption] = useState(
-    receiptData?.group_id || ""
-  );
+  const [selectedGroupOption, setGroupOption] = useState("");
   // console.log("groupID::", group_id)
-  const [selectedRecurringFrequency, setRecurringFrequency] = useState(
-    receiptData?.recur_id || ""
-  );
+  const [selectedRecurringFrequency, setRecurringFrequency] = useState("");
   // console.log("recID::", recur_id);
+
+  useEffect(() => {
+    // Only set the amount if receipt.total_amount exists
+    if (receipt && receipt.total_amount !== undefined) {
+      setAmount(receipt.total_amount);
+      setIconSelectedOption(receipt.icon_id);
+      setDescription(receipt.description);
+      setGroupOption(receipt?.group_id || "");
+      setRecurringFrequency(receipt?.recur_id || "");
+      setSelectedCategory(receipt.cat_id);
+      setTransactionTitle(receipt.title);
+      console.log("selectedGroupOption:", selectedGroupOption);
+    }
+  }, [receipt]);
 
   const [categoryValue, setCategoryValue] = useState("");
   const [transactionTitleFieldColour, setTransactionTitleFieldColour] =
@@ -112,41 +131,43 @@ const EditTransactionPage = ({
   const [categoryMessage, setCategoryMessage] = useState("");
   const [updateCategoryComponent, setUpdateCategoryComponent] = useState(false);
 
-  useEffect(() => {
-    setShowLoadingMessage(true);
-    if (receipt_id) {
-      getReceiptData(receipt_id)
-        .then((response) => {
-          // console.log('VALUES UPDATED')
-          const {
-            title,
-            description,
-            group_id,
-            currency_id,
-            icon_id,
-            cat_id,
-            amount,
-            splitAmount,
-            recur_id,
-          } = response;
-          // console.log('receiptData')
-          // console.log(response);
-          setTransactionTitle(title);
-          setSelectedCategory(cat_id);
-          setCurrency(response.expenses[0].currency_id);
-          setAmount(response.expenses[0].share_amount);
-          setSplitAmount(splitAmount);
-          setDescription(description);
-          setGroupOption(group_id);
-          setIconSelectedOption(icon_id);
-          setRecurringFrequency(recur_id);
-          setShowLoadingMessage(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching receipt data:", error);
-        });
-    }
-  }, [receipt_id]);
+  // useEffect(() => {
+  //   setShowLoadingMessage(true);
+  //   if (receipt_id) {
+  //     getReceiptData(receipt_id)
+  //       .then((response) => {
+  //         // console.log('VALUES UPDATED')
+  //         const {
+  //           title,
+  //           description,
+  //           group_id,
+  //           currency_id,
+  //           icon_id,
+  //           cat_id,
+  //           amount,
+  //           splitAmount,
+  //           recur_id,
+  //         } = response;
+  //         // console.log('receiptData')
+  //         // console.log(response);
+  //         console.log("hello:",response);
+  //         setTransactionTitle(title);
+  //         setSelectedCategory(cat_id);
+  //         setCurrency(response.expenses[0].currency_id);
+  //         // setAmount(response.expenses[0].share_amount);
+  //         setAmount(receipt.total_amount)
+  //         // setSplitAmount(splitAmount);
+  //         setDescription(description);
+  //         setGroupOption(group_id);
+  //         setIconSelectedOption(icon_id);
+  //         setRecurringFrequency(recur_id);
+  //         setShowLoadingMessage(false);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching receipt data:", error);
+  //       });
+  //   }
+  // }, [receipt_id]);
 
   const handleTransactionTitle = (e) => {
     if (e.target.value === "") {
@@ -167,7 +188,7 @@ const EditTransactionPage = ({
   };
 
   const handleAmountChange = (e) => {
-    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+    const numericValue = e.target.value.replace(/[^0-9.]/g, '');
     if (e.target.value === "") {
       setAmountFieldColour("red");
     } else {
@@ -286,6 +307,8 @@ const EditTransactionPage = ({
     setShowSuccessMessage(false);
     closePopup();
     resetFormFields();
+    setSuccessTransaction(true);
+    setRefreshEditButton(false);
     dispatch(editTransaction());
   };
 
@@ -434,6 +457,7 @@ const EditTransactionPage = ({
             fieldColour={splitAmountFieldColour}
             receipt_id={receipt_id}
             setShowLoadingMessage={setShowLoadingMessage}
+            receipt={receipt}
           />
 
           <GetRecurringFrequencySelection
@@ -466,6 +490,7 @@ const EditTransactionPage = ({
           setShowSuccessMessage={setShowSuccessMessage}
           setShowLoadingMessage={setShowLoadingMessage}
           receipt_id={receipt_id}
+          userId={userId}
         />
       </div>
     </div>
