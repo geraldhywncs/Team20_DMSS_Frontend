@@ -38,7 +38,7 @@ function EditTransaction({
   // const [result, setResult] = useState({ message: null, statusCode: null });
 
   const fetchData = async () => {
-    const apiEndpoint = process.env.REACT_APP_apiHost + "/expenses/update";
+    const apiEndpoint = REACT_APP_apiHost + "/expenses/update";
     let data = {}
     console.log('selectedGroupOption: ' + selectedGroupOption)
     console.log('selectedRecurringFrequency: ' + selectedRecurringFrequency)
