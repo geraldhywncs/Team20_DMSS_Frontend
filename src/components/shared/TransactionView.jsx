@@ -8,26 +8,25 @@ import LoadingMessage from "../shared/LoadingMessage";
 import { useSelector } from "react-redux";
 
 function TransactionView({ userId, closePopup }) {
-  const [receipts, setReceipts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [successTransaction, setSuccessTransaction] = useState(false);
-  const transactionAdded = useSelector(
-    (state) => state.transaction.transactionAdded
-  );
-  console.log("using Error", error);
-  const handleExpenseDeleted = async () => {
-    try {
-      console.log("Deleting expenses.................");
-      const data = await getExpenseData(userId);
-      setReceipts(data);
-      setLoading(false);
-      console.log("Receipts after deletion:", receipts);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error fetching receipt data:", error);
-      setError(error);
-    }
+    const [receipts, setReceipts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [successTransaction, setSuccessTransaction] = useState(false);
+    const [refreshEditButton, setRefreshEditButton] = useState(true);
+    const [error, setError] = useState(null);
+    const transactionAdded = useSelector(state => state.transaction.transactionAdded);
+    
+    const handleExpenseDeleted = async () => {  
+      try {
+          console.log("Deleting expenses.................");
+          const data = await getExpenseData(userId);
+          setReceipts(data);
+          setLoading(false);
+          console.log("Receipts after deletion:", receipts);
+      } catch (error) {
+          setLoading(false); 
+          console.error("Error fetching receipt data:", error);
+          setError(error);
+      }
   };
   // const handleExpenseEdited = async () => {
   //   try {
@@ -43,25 +42,25 @@ function TransactionView({ userId, closePopup }) {
   //   }
   // };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const data = await getExpenseData(userId);
-        console.log("Received data:", data);
-        setReceipts(data);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        setError(error);
-        console.error("Error fetching receipt data:", error);
+    useEffect(() => { 
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+            const data = await getExpenseData(userId);
+            console.log("Received data trans View:", data);
+            setReceipts(data);
+            console.log("Receipts after update:", receipts);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            setError(error);
+            console.error("Error fetching receipt data:", error);
       }
-
-      
-    };
-    fetchData();
-    setSuccessTransaction(false);
-  }, [userId, transactionAdded, successTransaction]);
+    }; 
+      setRefreshEditButton(true)
+      setSuccessTransaction(false)
+      fetchData();
+    }, [userId, transactionAdded, successTransaction, refreshEditButton]);
 
   const getMaterialIcon = (iconId) => {
     const iconMapping = {
@@ -133,22 +132,16 @@ function TransactionView({ userId, closePopup }) {
                     ))
                   )}
                 </div>
-                <EditTransactionButton
-                  receipt={receipt}
-                  receipt_id={receipt.receipt_id}
-                  userId={userId}
-                  // handleExpenseEdited={handleExpenseEdited}
-                  setSuccessTransaction={setSuccessTransaction}
-                />
-                <div style={{ marginRight: "10px" }}></div>
-                <DeleteTransactionButton
-                  receipt_id={receipt.receipt_id}
-                  className="red-btn"
-                  handleExpenseDeleted={handleExpenseDeleted}
-                />
-              </div>
-            ))
-          )}
+                {console.log('In View',receipt)}
+                {refreshEditButton && (
+                <EditTransactionButton receipt_id={receipt.receipt_id} userId={userId} setSuccessTransaction={setSuccessTransaction} receipt={receipt} setRefreshEditButton={setRefreshEditButton}/>
+                )}
+                <div style={{ marginRight: '10px' }}></div>
+                
+                <DeleteTransactionButton receipt_id={receipt.receipt_id} className="red-btn" handleExpenseDeleted={handleExpenseDeleted}/>                  
+            </div>
+            )
+        ))}
         </div>
       </div>
       <div className="margin-top: 10px"></div>

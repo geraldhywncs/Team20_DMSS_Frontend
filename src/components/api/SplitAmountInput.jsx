@@ -12,8 +12,7 @@ function SplitAmountInput({
   selectedGroupOption,
   amount,
   fieldColour,
-  receipt_id,
-  setShowLoadingMessage,
+  receipt
 }) {
   let debounceTimeout;
 
@@ -23,7 +22,7 @@ function SplitAmountInput({
     }, 500);
 
     return () => clearTimeout(debounceTimeout); // Clear the timeout on component unmount
-  }, [amount, selectedGroupOption]);
+  }, [amount, selectedGroupOption, receipt]);
 
   async function fetchData() {
     console.log("split amount called!! ", +receipt_id);

@@ -6,18 +6,14 @@ import { resetTransaction } from "../../redux/transactionReducer";
 import Button from "./Button";
 import { getReceiptData } from "../api/ReceiptInfo";
 
-const EditTransactionButton = ({
-  userId,
-  receipt_id,
-  receipt,
-  setSuccessTransaction
-}) => {
-  const [receiptData, setReceiptData] = useState([]);
-  const [currencyData, setCurrencyData] = useState(null);
-  const [currencyName, setCurrencyNameData] = useState(null);
-  const [shareAmtData, setShareAmtData] = useState(null);
-  const [popupVisible, setPopupVisible] = useState(false);
-  const dispatch = useDispatch();
+const EditTransactionButton = ({ userId, receipt_id, receipt, setSuccessTransaction, setRefreshEditButton }) => {
+    console.log('In EditTransactionButton',receipt)
+    const [receiptData, setReceiptData] = useState([]);
+    const [currencyData, setCurrencyData] = useState(null);
+    const [currencyName, setCurrencyNameData] = useState(null);
+    const [shareAmtData, setShareAmtData] = useState(null);
+    const [popupVisible, setPopupVisible] = useState(false);
+    const dispatch = useDispatch();
 
   const handleButtonClick = () => {
     if (receipt_id) {
@@ -89,38 +85,32 @@ const EditTransactionButton = ({
     setPopupVisible(false);
   };
 
-  return (
-    <div className="button-container">
-      <div class="flex justify-end">
-        <div class="w-36">
-          <Button color={"blue"} text={"Edit"} onClick={handleButtonClick} />
-        </div>
-      </div>
-
-      {/* {popupVisible && ( */}
-      <div className={`modal-container ${popupVisible ? "visible" : "hidden"}`}>
-        <div className="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center overflow-y-auto">
-          <div
-            className="modal-overlay fixed inset-0 bg-black opacity-30"
-            onClick={closePopup}
-          ></div>
-          <div className="modal-content rounded-lg shadow h-full p-4">
-            <EditTransactionPage
-                receipt = {receipt}
-              closePopup={closePopup}
-              userId={userId}
-              receipt_id={receipt_id}
-              receiptData={receiptData}
-              currencyData={currencyData}
-              shareAmtData={shareAmtData}
-              currencyName={currencyName}
-              setSuccessTransaction={setSuccessTransaction}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    return (
+            <div className="button-container">
+                <div class="flex justify-end">
+                    <div class="w-36">
+                    <Button
+                        color={"blue"}
+                        text={"Edit"}
+                        onClick={handleButtonClick}
+                    />
+                    </div>
+                </div>
+                
+                {/* {popupVisible && ( */}
+                <div className={`modal-container ${popupVisible ? 'visible' : 'hidden'}`}>
+                <div className="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center overflow-y-auto">
+                    <div className="modal-overlay fixed inset-0 bg-black opacity-30" onClick={closePopup}></div>
+                    <div className="modal-content rounded-lg shadow h-full p-4">
+                        {console.log('In EditTransactionButton in button',receipt)}
+                        <EditTransactionPage closePopup={closePopup} userId={userId}
+                            receipt_id={receipt_id} receiptData = {receiptData} 
+                            currencyData = {currencyData} shareAmtData={shareAmtData} currencyName = {currencyName} setSuccessTransaction={setSuccessTransaction} receipt={receipt} setRefreshEditButton={setRefreshEditButton}/>
+                    </div>
+                </div>
+                </div>
+            </div>
+    );
 };
 
 export default EditTransactionButton;
