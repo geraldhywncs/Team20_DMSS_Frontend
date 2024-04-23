@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   transactionAdded: false,
-  transactions: []
+  transactions: [],
 };
 
 const transactionSlice = createSlice({
@@ -14,10 +14,13 @@ const transactionSlice = createSlice({
       state.transactionAdded = true;
     },
     editTransaction: (state, action) => {
-      const index = state.transactions.findIndex(transaction => transaction.receipt_id === action.payload.receipt_id);
+      const index = state.transactions.findIndex(
+        (transaction) => transaction.receipt_id === action.payload.receipt_id
+      );
       if (index !== -1) {
         state.transactions[index] = action.payload.updatedTransaction;
       }
+      state.transactionAdded = true;
     },
     resetTransaction: (state) => {
       state.transactionAdded = false;
@@ -25,6 +28,7 @@ const transactionSlice = createSlice({
   },
 });
 
-export const { addTransaction,  editTransaction, resetTransaction } = transactionSlice.actions;
+export const { addTransaction, editTransaction, resetTransaction } =
+  transactionSlice.actions;
 
 export default transactionSlice.reducer;
