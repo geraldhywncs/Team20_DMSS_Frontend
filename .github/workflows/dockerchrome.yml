@@ -44,7 +44,7 @@ jobs:
 
       - name: npm install
         run: |
-          docker exec -u root selenium-browsers bash -c 'cd /app && npm install'
+          docker exec -u root selenium-browsers bash -c 'cd /app && npm install --force'
           # docker exec -u root selenium-browsers bash -c 'npm install'
 
       - name: npm run build
